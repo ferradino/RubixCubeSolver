@@ -1,7 +1,15 @@
-#include <stdio.h>
+#include "robot.h"
 
 int main(void) {
-  printf("Hello, World!\n");
+  printf("*** Starting Robot! ***\n");
+  startRobot();
+
+  printf("*** Spinning Cube! ***\n");
+  rotateCube();
+  
+  printf("*** Stopping Robot! ***\n");
+  stopRobot();
+  printf("*** Goodbye! ***\n");
 
   return 0;
 }
