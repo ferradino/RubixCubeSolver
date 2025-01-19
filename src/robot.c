@@ -9,14 +9,35 @@ void stopRobot() {
 }
 
 void rotateCube() { 
-  tacho_reset(OUTA);
-  tacho_set_speed_sp(OUTA, tacho_get_max_speed(OUTA, 0) * 0.75);
-  tacho_run_forever(OUTA);
-  sleep_ms(4000);
-  tacho_stop(OUTA);
+  int fd = open("/sys/class/tacho-motor/motor1/command", O_WRONLY);
+  write(fd, "reset\n", 6);
+
+  int fd2 = open("/sys/class/tacho-motor/motor1/speed_sp", O_WRONLY);
+  write(fd2, "500\n", 4);
+  close(fd2);
+
+  write(fd, "run-forever\n", 12);
+
+  sleep(4);
+  
+  write(fd, "stop\n", 5);
+  close(fd);
 }
 
 void flipCube(){
+  int fd = open("/sys/class/tacho-motor/motor0/command", O_WRONLY);
+  write(fd, "reset\n", 6);
+
+  int fd2 = open("/sys/class/tacho-motor/motor0/speed_sp", O_WRONLY);
+  write(fd2, "500\n", 4);
+  close(fd2);
+
+  write(fd, "run-forever\n", 12);
+
+  sleep(4);
+  
+  write(fd, "stop\n", 5);
+  close(fd);
 }
 
 void readColor() {
