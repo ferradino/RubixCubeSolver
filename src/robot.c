@@ -1,26 +1,23 @@
 #include "robot.h"
 
-bool startRobot() { 
-  return brick_init(); 
-}
+void startRobot() { }
 
-void stopRobot() { 
-  brick_uninit();
-}
+void stopRobot() { }
 
 void rotateCube() { 
   int fd = open("/sys/class/tacho-motor/motor1/command", O_WRONLY);
   write(fd, "reset\n", 6);
 
-  int fd2 = open("/sys/class/tacho-motor/motor1/speed_sp", O_WRONLY);
-  write(fd2, "500\n", 4);
+  int fd2 = open("/sys/class/tacho-motor/motor1/position_sp", O_WRONLY);
+  write(fd2, "180\n", 4);
   close(fd2);
 
-  write(fd, "run-forever\n", 12);
+  int fd3 = open("/sys/class/tacho-motor/motor1/speed_sp", O_WRONLY);
+  write(fd3, "350\n", 4);
+  close(fd3);
 
-  sleep(4);
-  
-  write(fd, "stop\n", 5);
+  write(fd, "run-to-rel-pos\n", 20);
+  sleep(5);
   close(fd);
 }
 
@@ -29,14 +26,24 @@ void flipCube(){
   write(fd, "reset\n", 6);
 
   int fd2 = open("/sys/class/tacho-motor/motor0/speed_sp", O_WRONLY);
-  write(fd2, "500\n", 4);
-  close(fd2);
+  write(fd2, "350\n", 4);
 
   write(fd, "run-forever\n", 12);
 
-  sleep(4);
-  
+  sleep(5);
+
   write(fd, "stop\n", 5);
+
+  write(fd2, "-350\n", 4);
+
+  write(fd, "run-forever\n", 12);
+
+  sleep(5);
+
+  write(fd, "stop\n", 5);
+
+  close(fd2);
+  
   close(fd);
 }
 

@@ -5,7 +5,7 @@
 #ifndef __ROBOT_H
 #define __ROBOT_H
 
-bool startRobot();
+void startRobot();
 void stopRobot();
 
 void rotateCube();
