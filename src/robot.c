@@ -1,22 +1,50 @@
 #include "robot.h"
 
-bool startRobot() { 
-  return brick_init(); 
-}
+void startRobot() { }
 
-void stopRobot() { 
-  brick_uninit();
-}
+void stopRobot() { }
 
 void rotateCube() { 
-  tacho_reset(OUTA);
-  tacho_set_speed_sp(OUTA, tacho_get_max_speed(OUTA, 0) * 0.75);
-  tacho_run_forever(OUTA);
-  sleep_ms(4000);
-  tacho_stop(OUTA);
+  int fd = open("/sys/class/tacho-motor/motor1/command", O_WRONLY);
+  write(fd, "reset\n", 6);
+
+  int fd2 = open("/sys/class/tacho-motor/motor1/position_sp", O_WRONLY);
+  write(fd2, "180\n", 4);
+  close(fd2);
+
+  int fd3 = open("/sys/class/tacho-motor/motor1/speed_sp", O_WRONLY);
+  write(fd3, "350\n", 4);
+  close(fd3);
+
+  write(fd, "run-to-rel-pos\n", 20);
+  sleep(5);
+  close(fd);
 }
 
 void flipCube(){
+  int fd = open("/sys/class/tacho-motor/motor0/command", O_WRONLY);
+  write(fd, "reset\n", 6);
+
+  int fd2 = open("/sys/class/tacho-motor/motor0/speed_sp", O_WRONLY);
+  write(fd2, "350\n", 4);
+
+  write(fd, "run-forever\n", 12);
+
+  sleep(5);
+
+  write(fd, "stop\n", 5);
+
+  write(fd2, "-350\n", 4);
+
+  write(fd, "run-forever\n", 12);
+
+  sleep(5);
+
+  write(fd, "stop\n", 5);
+
+  close(fd2);
+  
+  close(fd);
 }
 
 void readColor() {

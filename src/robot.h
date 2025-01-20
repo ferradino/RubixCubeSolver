@@ -1,10 +1,11 @@
-#include "ev3dev-c/source/ev3/brick.h"
-#include <stdio.h>
+#include <stdbool.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 #ifndef __ROBOT_H
 #define __ROBOT_H
 
-bool startRobot();
+void startRobot();
 void stopRobot();
 
 void rotateCube();
