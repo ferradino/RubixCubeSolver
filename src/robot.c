@@ -1,9 +1,5 @@
 #include "robot.h"
 
-void startRobot() { }
-
-void stopRobot() { }
-
 void rotateCube() { 
   int fd = open("/sys/class/tacho-motor/motor1/command", O_WRONLY);
   write(fd, "reset\n", 6);
@@ -27,15 +23,12 @@ void flipCube(){
 
   int fd2 = open("/sys/class/tacho-motor/motor0/speed_sp", O_WRONLY);
   write(fd2, "350\n", 4);
-
   write(fd, "run-forever\n", 12);
 
   sleep(5);
 
   write(fd, "stop\n", 5);
-
   write(fd2, "-350\n", 4);
-
   write(fd, "run-forever\n", 12);
 
   sleep(5);
@@ -43,9 +36,12 @@ void flipCube(){
   write(fd, "stop\n", 5);
 
   close(fd2);
-  
   close(fd);
 }
 
 void readColor() {
+  unsigned char buf;
+  int fd = open("/sys/class/lego-sensor/sensor0/value0", O_RDONLY);
+  read(fd, buf, 1);
+  close(fd);
 }
