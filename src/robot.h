@@ -1,15 +1,9 @@
-#include <stdbool.h>
-#include <unistd.h>
-#include <fcntl.h>
+#include "drivers/basket_motor.h"
 
 #ifndef __ROBOT_H
 #define __ROBOT_H
 
-void startRobot();
-void stopRobot();
-
+void robotInit();
 void rotateCube();
-void flipCube();
-void readColor();
 
 #endif
