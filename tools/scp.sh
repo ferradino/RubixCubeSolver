@@ -1,0 +1,1 @@
+scp ../build/bin/main robot@ev3dev.local:/home/robot
