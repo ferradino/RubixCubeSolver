@@ -1,6 +1,6 @@
 # Compiler and flags
 CC = arm-linux-gnueabi-gcc
-CFLAGS = -Wall -Wextra -I ./src
+CFLAGS = -Wall -Wextra -Werror -O2 -I ./src
 
 # Directories
 SRC_DIR = src

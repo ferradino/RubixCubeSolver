@@ -44,15 +44,15 @@ short get_motor_number(const char *port) {
 
 void motor_init(Motor *motor, const char *port) {
     motor->number = get_motor_number(port);
-    motor->speed = 300;
     snprintf(motor->command_file_path, sizeof(motor->command_file_path), "/sys/class/tacho-motor/motor%d/command", motor->number);
     snprintf(motor->speed_file_path, sizeof(motor->speed_file_path), "/sys/class/tacho-motor/motor%d/speed_sp", motor->number);
     snprintf(motor->position_file_path, sizeof(motor->position_file_path), "/sys/class/tacho-motor/motor%d/position_sp", motor->number);
+    snprintf(motor->state_file_path, sizeof(motor->state_file_path), "/sys/class/tacho-motor/motor%d/state", motor->number);
 
     printf("Motor initialized with number: %d\n", motor->number);
 }
 
-void set_speed(Motor *motor) {
+void set_speed(Motor *motor, int speed) {
     int fd = open(motor->speed_file_path, O_WRONLY);
 
     if (fd == -1) {
@@ -62,7 +62,7 @@ void set_speed(Motor *motor) {
     }
 
     char buffer[BUFFER_SIZE];
-    sprintf(buffer, "%d", motor->speed); 
+    sprintf(buffer, "%d", speed); 
     write(fd, buffer, BUFFER_SIZE);
     close(fd);
 }
@@ -94,4 +94,26 @@ void run_command(Motor *motor, const char *command) {
 
     write(fd, command, strlen(command));
     close(fd);
+    wait_for_motor_to_stop(motor);
+}
+
+void wait_for_motor_to_stop(Motor *motor) {
+    char running[BUFFER_SIZE] = "running";
+    char stalled[BUFFER_SIZE] = "stalled";
+    char state[BUFFER_SIZE];
+
+    do { 
+        int fd = open(motor->state_file_path, O_RDONLY);
+
+        if (fd == -1) {
+            fprintf(stderr, "Failed to open command file: %s\n", motor->command_file_path);
+            perror("Error");
+            exit(EXIT_FAILURE);
+        }
+
+        read(fd, state, BUFFER_SIZE);
+        state[strcspn(state, "\n")] = '\0';
+
+        close(fd);
+    } while (strcmp(state, running) == 0 && strcmp(state, stalled) != 0);
 }
