@@ -6,12 +6,17 @@ void read_rubix_cube_face(RubixCube *rubix_cube) {
 
     for (int i = 0; i < 4; i++) {
         color = read_edge_tile_color();
+        rotate_basket(C_QUARTER_TURN);
     }
+
+    rotate_basket(C_EIGTH_TURN);
 
     for (int i = 0; i < 4; i++) {
         color = read_corner_tile_color();
+        rotate_basket(C_QUARTER_TURN);
     }
 
+    rotate_basket(C_EIGTH_TURN);
 }
 
 void read_rubix_cube(RubixCube *rubix_cube) {

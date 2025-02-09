@@ -3,9 +3,9 @@
 #ifndef __COLOR_SENSOR_MOTOR_H
 #define __COLOR_SENSOR_MOTOR_H
 
-#define CENTER_TILE_POS 200
-#define EDGE_TILE_POS 150
-#define CORNER_TILE_POS 100
+#define CENTER_TILE_POS -735
+#define EDGE_TILE_POS -610
+#define CORNER_TILE_POS -585
 #define SENSOR_STARTING_POS 0
 
 Motor color_sensor_motor;

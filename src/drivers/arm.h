@@ -3,8 +3,8 @@
 #ifndef __ARM_MOTOR_H
 #define __ARM_MOTOR_H
 
-#define COVER_POS 200
-#define FLIP_POS 400
+#define COVER_POS -220
+#define FLIP_POS -80
 #define ARM_STARTING_POS 0
 
 Motor arm_motor;

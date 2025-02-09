@@ -6,9 +6,10 @@
 #ifndef __ROBOT_H
 #define __ROBOT_H
 
-#define C_QUARTER_TURN 270
-#define CC_QUARTER_TURN -270
-#define HALF_TURN 540
+#define C_EIGTH_TURN 130
+#define C_QUARTER_TURN 265
+#define CC_QUARTER_TURN -265
+#define HALF_TURN 535
 
 void robot_init();
 void rotate_basket(int degrees);
