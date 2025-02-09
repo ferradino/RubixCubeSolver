@@ -10,8 +10,8 @@
 #define HALF_TURN 540
 
 void robot_init();
-void rotate_basket();
-void rotate_cube();
+void rotate_basket(int rotation);
+void rotate_cube(int rotation);
 void flip_cube();
 
 enum Color read_center_tile_color();
