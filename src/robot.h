@@ -6,12 +6,13 @@
 #ifndef __ROBOT_H
 #define __ROBOT_H
 
-#define QUARTER_TURN 270
+#define C_QUARTER_TURN 270
+#define CC_QUARTER_TURN -270
 #define HALF_TURN 540
 
 void robot_init();
-void rotate_basket(int rotation);
-void rotate_cube(int rotation);
+void rotate_basket(int degrees);
+void rotate_cube(int degrees);
 void flip_cube();
 
 enum Color read_center_tile_color();

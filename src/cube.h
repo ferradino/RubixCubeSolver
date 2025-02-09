@@ -9,12 +9,12 @@ typedef struct {
 
 void read_rubix_cube(RubixCube *rubix_cube);
 
-
 /* 
 Rubix Cube Turns
-- All turn are based on a clockwise rotation (90 degress)
-- "Prime" turn indicates a counterclockwise rotation (90 degress)
-- "Double" turn is a double rotation (180 degrees)
+- All turns are based on a clockwise rotation
+- "Turn" indicates a clockwise rotation (90 degrees)
+- "Prime Turn" indicates a counterclockwise rotation (90 degress)
+- "Double Turn" is a double rotation (180 degrees)
 */
 void left_turn();
 void left_prime_turn();

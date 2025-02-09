@@ -7,13 +7,13 @@ void robot_init() {
   color_sensor_init();
 }
 
-void rotate_basket(int rotation) { 
-  rotate(rotation);
+void rotate_basket(int degrees) { 
+  rotate(degrees);
 }
 
-void rotate_cube(int rotation) {
+void rotate_cube(int degrees) {
   cover();
-  rotate(rotation);
+  rotate(degrees);
   open_arm();
 }
 

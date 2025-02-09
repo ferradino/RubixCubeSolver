@@ -1,1 +1,1 @@
-docker run --rm -it -v C:\Users\nferr\Developer\RubixCubeSolver\:/src -w /src ev3cc
+docker run --rm -it -v C:\\Users\\nferr\\Developer\\RubixCubeSolver\\:/src -w /src ev3cc
