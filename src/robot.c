@@ -1,24 +1,54 @@
 #include "robot.h"
 
-void robotInit() {
+void robot_init() {
   basket_motor_init();
   arm_motor_init();
   color_sensor_motor_init();
   color_sensor_init();
 }
 
-void rotateBasket() { 
+void rotate_basket() { 
   rotate(HALF_TURN);
 }
 
-void rotateCube() {
+void rotate_cube() {
   cover();
   rotate(QUARTER_TURN);
-  pull_back_arm();
+  open_arm();
 }
 
-void flipCube() {
+void flip_Cube() {
   cover();
-  rotate(QUARTER_TURN);
-  pull_back_arm();
+  flip();
+  open_arm();
+}
+
+enum Color read_center_tile_color() {
+  enum Color color;
+
+  hover_center_tile();
+  color = read_color();
+  open_color_sensor();
+
+  return color;
+}
+
+enum Color read_edge_tile_color() {
+  enum Color color;
+
+  hover_edge_tile();
+  color = read_color();
+  open_color_sensor();
+
+  return color;
+}
+
+enum Color read_corner_tile_color() {
+  enum Color color;
+
+  hover_corner_tile();
+  color = read_color();
+  open_color_sensor();
+
+  return color;
 }
