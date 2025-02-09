@@ -96,7 +96,7 @@ void down_prime_turn() {
     flip_cube();
 }
 
-void double_double_turn() {
+void down_double_turn() {
     flip_cube();
     flip_cube();
 

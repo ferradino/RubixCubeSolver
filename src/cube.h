@@ -26,13 +26,13 @@ void down_turn();
 void down_prime_turn();
 void down_double_turn();
 void up_turn();
-void up_prime_top();
-void up_double_rotation();
-void front_rotation();
-void front_prime_rotation();
-void front_double_rotation();
-void back_rotation();
-void back_prime_rotation();
-void back_double_rotation();
+void up_prime_turn();
+void up_double_turn();
+void front_turn();
+void front_prime_turn();
+void front_double_turn();
+void back_turn();
+void back_prime_turn();
+void back_double_turn();
 
 #endif
