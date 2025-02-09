@@ -11,10 +11,11 @@
 Motor color_sensor_motor;
 
 void color_sensor_motor_init();
+void reset_color_sensor_motor();
 void hover_center_tile();
 void hover_corner_tile();
 void hover_edge_tile();
-void pull_back_sensor();
+void open_color_sensor();
 
 #endif
 
