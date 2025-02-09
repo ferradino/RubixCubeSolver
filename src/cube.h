@@ -12,9 +12,9 @@ void read_rubix_cube(RubixCube *rubix_cube);
 
 /* 
 Rubix Cube Turns
-- All turn are based on a clockwise rotation
-- "Prime" turn indicates a counterclockwise rotation
-- "Double" turn is a double rotation
+- All turn are based on a clockwise rotation (90 degress)
+- "Prime" turn indicates a counterclockwise rotation (90 degress)
+- "Double" turn is a double rotation (180 degrees)
 */
 void left_turn();
 void left_prime_turn();
