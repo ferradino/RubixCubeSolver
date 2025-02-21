@@ -4,7 +4,7 @@
 #define __CUBE_H
 
 typedef struct {
-    int x;
+  unsigned char edges[12];
 } RubixCube;
 
 void read_rubix_cube(RubixCube *rubix_cube);

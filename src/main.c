@@ -4,18 +4,17 @@
 
 int main(void) {
   // Initialize the robot
-  printf("*** Starting Robot! ****\n");
+  printf("**** Starting Robot! ****\n");
   robot_init();
 
   // Read the Rubix Cube
-  printf("*** Reading In Cube! ****\n");
+  printf("**** Reading In Cube! ****\n");
 
   // Solve
-  printf("*** Solving Cube! ****\n");
-
+  printf("**** Solving Cube! ****\n");
 
   // Done
-  printf("*** Rubix Cube Has Been Solved! ****\n");
+  printf("**** Rubix Cube Has Been Solved! ****\n");
 
   return 0;
 }
