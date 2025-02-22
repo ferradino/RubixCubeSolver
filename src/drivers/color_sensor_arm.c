@@ -1,4 +1,4 @@
-#include "color_sensor_arm.h"
+#include "../../include/drivers/color_sensor_arm.h"
 
 void color_sensor_motor_init() {
     motor_init(&color_sensor_motor, "outC");

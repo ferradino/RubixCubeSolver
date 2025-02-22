@@ -1,4 +1,4 @@
-#include "arm.h"
+#include "../../include/drivers/arm.h"
 
 void arm_motor_init() {
     motor_init(&arm_motor, "outB");

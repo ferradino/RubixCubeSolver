@@ -1,221 +1,292 @@
-#include "cube.h"
+#include "../include/cube.h"
+#include <stdio.h>
 
-void read_rubix_cube_face(RubixCube *rubix_cube) {
-    enum Color color; 
+void read_rubix_cube_tile_colors(RubixCube *rubix_cube) {
+  enum Color color; 
+
+  for (int i = 0; i < NUM_FACES; i++) {
     color = read_center_tile_color();
+    printf("%d", color);
+    rubix_cube->tile_colors[i * 9] = color;
 
-    for (int i = 0; i < 4; i++) {
-        color = read_edge_tile_color();
-        rotate_basket(C_QUARTER_TURN);
+    for (int j = i * 9 + 1; i < i * 9 + 5; i++) {
+      color = read_edge_tile_color();
+      printf("%d", color);
+      rubix_cube->tile_colors[j] = color;
+      rotate_basket(C_QUARTER_TURN);
     }
 
     rotate_basket(C_EIGTH_TURN);
 
-    for (int i = 0; i < 4; i++) {
-        color = read_corner_tile_color();
-        rotate_basket(C_QUARTER_TURN);
+    for (int k = i * 9 + 5; i < i * 9 + 9; i++) {
+      color = read_corner_tile_color();
+      printf("%d", color);
+      rubix_cube->tile_colors[k] = color;
+      rotate_basket(C_QUARTER_TURN);
     }
 
     rotate_basket(C_EIGTH_TURN);
-}
 
-void read_rubix_cube(RubixCube *rubix_cube) {
-    read_rubix_cube_face(rubix_cube);
-
-    flip_cube();
-    flip_cube();
-
-    read_rubix_cube_face(rubix_cube);
-
-    flip_cube();
-    rotate_basket(HALF_TURN);
-
-    for (int i = 0; i < 4; i++) {
-        read_rubix_cube_face(rubix_cube);
-        flip_cube();
+    if (i == 0) {
+      flip_cube();
+      flip_cube();
+    } else if (i == 1) {
+      rotate_basket(HALF_TURN);
+      flip_cube();
+      rotate_basket(HALF_TURN);
+    } else {
+      rotate_basket(CC_QUARTER_TURN);
+      flip_cube();
+      rotate_basket(C_QUARTER_TURN);
     }
+  }
 
-    rotate_basket(CC_QUARTER_TURN);
-    flip_cube();
+  rotate_basket(HALF_TURN);
+  flip_cube();
+  rotate_basket(HALF_TURN);
+
+  set_edge_position_colors(rubix_cube);
+  set_corner_position_colors(rubix_cube);
 }
 
-void left_turn() {
-    rotate_basket(CC_QUARTER_TURN);
-    flip_cube();
+void set_edge_position_colors(RubixCube *rubix_cube) {
+  rubix_cube->edge_positions[UF].colors[0] = rubix_cube->tile_colors[1]; 
+  rubix_cube->edge_positions[UF].colors[1] = rubix_cube->tile_colors[21]; 
 
-    rotate_cube(C_QUARTER_TURN);
-    rotate_basket(CC_QUARTER_TURN);
+  rubix_cube->edge_positions[UR].colors[0] = rubix_cube->tile_colors[2];
+  rubix_cube->edge_positions[UR].colors[1] = rubix_cube->tile_colors[48];
 
-    rotate_basket(HALF_TURN);
-    flip_cube();
+  rubix_cube->edge_positions[UB].colors[0] = rubix_cube->tile_colors[3];
+  rubix_cube->edge_positions[UB].colors[1] = rubix_cube->tile_colors[39];
 
-    rotate_basket(CC_QUARTER_TURN);
+  rubix_cube->edge_positions[UL].colors[0] = rubix_cube->tile_colors[4];
+  rubix_cube->edge_positions[UL].colors[1] = rubix_cube->tile_colors[30];
+
+  rubix_cube->edge_positions[DF].colors[0] = rubix_cube->tile_colors[12];
+  rubix_cube->edge_positions[DF].colors[1] = rubix_cube->tile_colors[19];
+
+  rubix_cube->edge_positions[DR].colors[0] = rubix_cube->tile_colors[11];
+  rubix_cube->edge_positions[DR].colors[1] = rubix_cube->tile_colors[46];
+
+  rubix_cube->edge_positions[DB].colors[0] = rubix_cube->tile_colors[10];
+  rubix_cube->edge_positions[DB].colors[1] = rubix_cube->tile_colors[37];
+
+  rubix_cube->edge_positions[DL].colors[0] = rubix_cube->tile_colors[13];
+  rubix_cube->edge_positions[DL].colors[1] = rubix_cube->tile_colors[28];
+
+  rubix_cube->edge_positions[FL].colors[0] = rubix_cube->tile_colors[22];
+  rubix_cube->edge_positions[FL].colors[1] = rubix_cube->tile_colors[29];
+
+  rubix_cube->edge_positions[BL].colors[0] = rubix_cube->tile_colors[38];
+  rubix_cube->edge_positions[BL].colors[1] = rubix_cube->tile_colors[31];
+
+  rubix_cube->edge_positions[BR].colors[0] = rubix_cube->tile_colors[40];
+  rubix_cube->edge_positions[BR].colors[1] = rubix_cube->tile_colors[47];
+
+  rubix_cube->edge_positions[FR].colors[0] = rubix_cube->tile_colors[20];
+  rubix_cube->edge_positions[FR].colors[1] = rubix_cube->tile_colors[49];
 }
 
-void left_prime_turn() {
-    rotate_basket(CC_QUARTER_TURN);
-    flip_cube();
+void set_corner_position_colors(RubixCube *rubix_cube) {
+  rubix_cube->corner_positions[UFR].colors[0] = rubix_cube->tile_colors[5];
+  rubix_cube->corner_positions[UFR].colors[1] = rubix_cube->tile_colors[24];
+  rubix_cube->corner_positions[UFR].colors[2] = rubix_cube->tile_colors[52];
 
-    rotate_cube(CC_QUARTER_TURN);
-    rotate_basket(C_QUARTER_TURN);
+  rubix_cube->corner_positions[UFL].colors[0] = rubix_cube->tile_colors[8];
+  rubix_cube->corner_positions[UFL].colors[1] = rubix_cube->tile_colors[25];
+  rubix_cube->corner_positions[UFL].colors[2] = rubix_cube->tile_colors[33];
 
-    rotate_basket(HALF_TURN);
-    flip_cube();
+  rubix_cube->corner_positions[UBL].colors[0] = rubix_cube->tile_colors[7];
+  rubix_cube->corner_positions[UBL].colors[1] = rubix_cube->tile_colors[42];
+  rubix_cube->corner_positions[UBL].colors[2] = rubix_cube->tile_colors[34];
 
-    rotate_basket(CC_QUARTER_TURN);
+  rubix_cube->corner_positions[UBR].colors[0] = rubix_cube->tile_colors[6];
+  rubix_cube->corner_positions[UBR].colors[1] = rubix_cube->tile_colors[43];
+  rubix_cube->corner_positions[UBR].colors[2] = rubix_cube->tile_colors[31];
+
+  rubix_cube->corner_positions[DFR].colors[0] = rubix_cube->tile_colors[15];
+  rubix_cube->corner_positions[DFR].colors[1] = rubix_cube->tile_colors[23];
+  rubix_cube->corner_positions[DFR].colors[2] = rubix_cube->tile_colors[53];
+
+  rubix_cube->corner_positions[DFL].colors[0] = rubix_cube->tile_colors[16];
+  rubix_cube->corner_positions[DFL].colors[1] = rubix_cube->tile_colors[26];
+  rubix_cube->corner_positions[DFL].colors[2] = rubix_cube->tile_colors[22];
+
+  rubix_cube->corner_positions[DBL].colors[0] = rubix_cube->tile_colors[17];
+  rubix_cube->corner_positions[DBL].colors[1] = rubix_cube->tile_colors[41];
+  rubix_cube->corner_positions[DBL].colors[2] = rubix_cube->tile_colors[35];
+
+  rubix_cube->corner_positions[DBR].colors[0] = rubix_cube->tile_colors[12];
+  rubix_cube->corner_positions[DBR].colors[1] = rubix_cube->tile_colors[44];
+  rubix_cube->corner_positions[DBR].colors[2] = rubix_cube->tile_colors[50];
 }
 
-void left_double_turn() {
-    rotate_basket(CC_QUARTER_TURN);
-    flip_cube();
+void left_turn(RubixCube *rubix_cube) {
+  Edge edge_temp;  
+  Corner corner_temp;  
+  enum Color color_temp;
 
-    rotate_cube(HALF_TURN);
+  edge_temp = rubix_cube->edge_positions[UL];
 
-    flip_cube();
-    rotate_basket(-1 * HALF_TURN);
+  rubix_cube->edge_positions[UL] = rubix_cube->edge_positions[BL];
+  rubix_cube->edge_positions[BL] = rubix_cube->edge_positions[DL];
+  rubix_cube->edge_positions[DL] = rubix_cube->edge_positions[FL];
+  rubix_cube->edge_positions[FL] = edge_temp;
+
+  corner_temp = rubix_cube->corner_positions[UFL];
+
+  rubix_cube->corner_positions[UFL] = rubix_cube->corner_positions[UBL];
+  /* Fix colors for UFL corner */
+  color_temp = rubix_cube->corner_positions[UFL].colors[0];
+  rubix_cube->corner_positions[UFL].colors[0] = rubix_cube->corner_positions[UFL].colors[1];
+  rubix_cube->corner_positions[UFL].colors[0] = color_temp;
+
+  rubix_cube->corner_positions[UBL] = rubix_cube->corner_positions[DBL];
+  /* Fix colors for UBL corner */
+  color_temp = rubix_cube->corner_positions[UBL].colors[0];
+  rubix_cube->corner_positions[UBL].colors[0] = rubix_cube->corner_positions[UFL].colors[1];
+  rubix_cube->corner_positions[UBL].colors[0] = color_temp;
+
+  rubix_cube->corner_positions[DBL] = rubix_cube->corner_positions[DFL];
+  /* Fix colors for DBL corner */
+  color_temp = rubix_cube->corner_positions[DBL].colors[0];
+  rubix_cube->corner_positions[DBL].colors[0] = rubix_cube->corner_positions[DFL].colors[1];
+  rubix_cube->corner_positions[DBL].colors[0] = color_temp;
+
+  rubix_cube->corner_positions[DFL] = corner_temp;
+  /* Fix colors for DFL corner */
+  color_temp = rubix_cube->corner_positions[UFL].colors[0];
+  rubix_cube->corner_positions[DFL].colors[0] = rubix_cube->corner_positions[DFL].colors[1];
+  rubix_cube->corner_positions[DFL].colors[0] = color_temp;
 }
 
-void right_turn() {
-    rotate_basket(C_QUARTER_TURN);
-    flip_cube();
+void left_prime_turn(RubixCube *rubix_cube) {
+  Edge edge_temp;  
+  Corner corner_temp;  
+  enum Color color_temp;
 
-    rotate_cube(CC_QUARTER_TURN);
-    rotate_basket(C_QUARTER_TURN);
-
-    rotate_basket(HALF_TURN);
-    flip_cube();
-
-    rotate_basket(C_QUARTER_TURN);
+  for (int i = 0; i < 3; i++) {
+    left_turn(rubix_cube);
+  }
 }
 
-void right_prime_turn() {
-    rotate_basket(C_QUARTER_TURN);
-    flip_cube();
+void left_double_turn(RubixCube *rubix_cube) {
+  Edge edge_temp;  
+  Corner corner_temp;  
+  enum Color color_temp;
 
-    rotate_cube(C_QUARTER_TURN);
-    rotate_basket(CC_QUARTER_TURN);
-
-    rotate_basket(HALF_TURN);
-    flip_cube();
-
-    rotate_basket(C_QUARTER_TURN);
+  for (int i = 0; i < 2; i++) {
+    left_turn(rubix_cube);
+  }
 }
 
-void right_double_turn() {
-    rotate_basket(C_QUARTER_TURN);
-    flip_cube();
 
-    rotate_cube(HALF_TURN);
+void right_turn(RubixCube *rubix_cube) {}
 
-    flip_cube();
-    rotate_basket(C_QUARTER_TURN);
+void right_prime_turn(RubixCube *rubix_cube) {
+  Edge edge_temp;  
+  Corner corner_temp;  
+  enum Color color_temp;
+
+  for (int i = 0; i < 3; i++) {
+    left_turn(rubix_cube);
+  }
 }
 
-void down_turn() {
-    flip_cube();
-    flip_cube();
+void right_double_turn(RubixCube *rubix_cube) {
+  Edge edge_temp;  
+  Corner corner_temp;  
+  enum Color color_temp;
 
-    rotate_cube(C_QUARTER_TURN); 
-    rotate_basket(CC_QUARTER_TURN);
-
-    flip_cube();
-    flip_cube();
+  for (int i = 0; i < 2; i++) {
+    left_turn(rubix_cube);
+  }
 }
 
-void down_prime_turn() {
-    flip_cube();
-    flip_cube();
+void down_turn(RubixCube *rubix_cube) {}
 
-    rotate_cube(CC_QUARTER_TURN);
-    rotate_basket(C_QUARTER_TURN); 
+void down_prime_turn(RubixCube *rubix_cube) {
+  Edge edge_temp;  
+  Corner corner_temp;  
+  enum Color color_temp;
 
-    flip_cube();
-    flip_cube();
+  for (int i = 0; i < 3; i++) {
+    left_turn(rubix_cube);
+  }
 }
 
-void down_double_turn() {
-    flip_cube();
-    flip_cube();
+void down_double_turn(RubixCube *rubix_cube) {
+  Edge edge_temp;  
+  Corner corner_temp;  
+  enum Color color_temp;
 
-    rotate_cube(HALF_TURN); 
-    rotate_basket(HALF_TURN);
-
-    flip_cube();
-    flip_cube();
+  for (int i = 0; i < 2; i++) {
+    left_turn(rubix_cube);
+  }
 }
 
-void up_turn() { 
-   rotate_cube(C_QUARTER_TURN);
-   rotate_basket(CC_QUARTER_TURN);
+void up_turn(RubixCube *rubix_cube) { }
+
+void up_prime_turn(RubixCube *rubix_cube) {
+  Edge edge_temp;  
+  Corner corner_temp;  
+  enum Color color_temp;
+
+  for (int i = 0; i < 3; i++) {
+    left_turn(rubix_cube);
+  }
 }
 
-void up_prime_turn() {
-   rotate_cube(CC_QUARTER_TURN);
-   rotate_basket(C_QUARTER_TURN);
+void up_double_turn(RubixCube *rubix_cube) {
+  Edge edge_temp;  
+  Corner corner_temp;  
+  enum Color color_temp;
+
+  for (int i = 0; i < 2; i++) {
+    left_turn(rubix_cube);
+  }
 }
 
-void up_double_turn() {
-    rotate_cube(HALF_TURN);
-    rotate_basket(HALF_TURN);
+void front_turn(RubixCube *rubix_cube) { }
+
+void front_prime_turn(RubixCube *rubix_cube) {
+  Edge edge_temp;  
+  Corner corner_temp;  
+  enum Color color_temp;
+
+  for (int i = 0; i < 3; i++) {
+    left_turn(rubix_cube);
+  }
 }
 
-void front_turn() {
-    flip_cube();
+void front_double_turn(RubixCube *rubix_cube) {
+  Edge edge_temp;  
+  Corner corner_temp;  
+  enum Color color_temp;
 
-    rotate_cube(C_QUARTER_TURN);
-    rotate_basket(CC_QUARTER_TURN);
-
-    rotate_basket(HALF_TURN);
-    flip_cube();
+  for (int i = 0; i < 2; i++) {
+    left_turn(rubix_cube);
+  }
 }
 
-void front_prime_turn() {
-    flip_cube();
+void back_turn(RubixCube *rubix_cube) { }
 
-    rotate_cube(CC_QUARTER_TURN);
-    rotate_basket(C_QUARTER_TURN);
+void back_prime_turn(RubixCube *rubix_cube) {
+  Edge edge_temp;  
+  Corner corner_temp;  
+  enum Color color_temp;
 
-    rotate_basket(HALF_TURN);
-    flip_cube();
+  for (int i = 0; i < 3; i++) {
+    left_turn(rubix_cube);
+  }
 }
 
-void front_double_turn() {
-    flip_cube();
+void back_double_turn(RubixCube *rubix_cube) {
+  Edge edge_temp;  
+  Corner corner_temp;  
+  enum Color color_temp;
 
-    rotate_cube(HALF_TURN);
-    rotate_basket(HALF_TURN);
-
-    flip_cube();
-}
-
-void back_turn() {
-    rotate_basket(HALF_TURN);
-    flip_cube();
-
-    rotate_cube(C_QUARTER_TURN);
-    rotate_basket(CC_QUARTER_TURN);
-
-    rotate_basket(HALF_TURN);
-    flip_cube();
-}
-
-void back_prime_turn() {
-    rotate_basket(HALF_TURN);
-    flip_cube();
-
-    rotate_cube(CC_QUARTER_TURN);
-    rotate_basket(C_QUARTER_TURN);
-
-    rotate_basket(HALF_TURN);
-    flip_cube();
-}
-
-void back_double_turn() {
-    rotate_basket(HALF_TURN);
-    flip_cube();
-
-    rotate_cube(HALF_TURN);
-
-    rotate_basket(HALF_TURN);
-    flip_cube();
+  for (int i = 0; i < 2; i++) {
+    left_turn(rubix_cube);
+  }
 }

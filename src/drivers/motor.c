@@ -3,7 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include "motor.h"
+#include "../../include/drivers/motor.h"
 
 short get_motor_number(const char *port) {
     char motor_address_path[BUFFER_SIZE];

@@ -13,5 +13,6 @@ void arm_motor_init();
 void cover();
 void flip();
 void open_arm();
+void reset_arm();
 
 #endif

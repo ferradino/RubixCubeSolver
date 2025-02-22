@@ -3,7 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include "color_sensor.h"
+#include "../../include/drivers/color_sensor.h"
 
 short get_sensor_number(const char *port) {
     char color_sensor_address_path[BUFFER_SIZE];
