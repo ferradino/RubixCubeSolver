@@ -90,6 +90,19 @@ void read_rubix_cube_tile_colors(RubixCube *rubix_cube);
 void set_edge_position_colors(RubixCube *rubix_cube);
 void set_corner_position_colors(RubixCube *rubix_cube);
 
+/* Get orientation values for edges
+ *  1 - a quarter turn on all three axes is required to put edge in proper position and orientation
+ *  0 - if this is not required
+*/
+void get_edge_orientation(RubixCube *rubix_cube);
+
+/* Get orientation values for corners 
+ *  0 - corner's white/yellow sticker is on the white or yellow face
+ *  1 - the white/yellow sticker is clockwise rotation from the white/yellow face
+ *  2 - 2 if the white/yellow sticker is a counterclockwise rotation white/yellow face
+*/
+void get_corner_orientation(RubixCube *rubix_cube);
+
 /* 
  * Rubix Cube Turns
  *  - All turns are based on a clockwise rotation

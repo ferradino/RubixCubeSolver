@@ -121,6 +121,10 @@ void set_corner_position_colors(RubixCube *rubix_cube) {
   rubix_cube->corner_positions[DBR].colors[2] = rubix_cube->tile_colors[50];
 }
 
+void get_edge_orientation(RubixCube *rubix_cube) {}
+
+void get_corner_orientation(RubixCube *rubix_cube) {}
+
 void left_turn(RubixCube *rubix_cube) {
   Edge edge_temp;  
   Corner corner_temp;  
