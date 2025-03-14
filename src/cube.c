@@ -162,6 +162,13 @@ void left_turn(RubixCube *rubix_cube) {
   color_temp = rubix_cube->corner_positions[DFL].colors[0];
   rubix_cube->corner_positions[DFL].colors[0] = rubix_cube->corner_positions[DFL].colors[1];
   rubix_cube->corner_positions[DFL].colors[1] = color_temp;
+
+
+  /* Updated Cube Orientation */
+  rubix_cube->edge_orientation[UFL] = 0;
+  rubix_cube->corner_orientation[UBL] = 0;
+  rubix_cube->corner_orientation[DBL] = 0;
+  rubix_cube->corner_orientation[DFL] = 0;
 }
 
 void left_prime_turn(RubixCube *rubix_cube) {
@@ -222,6 +229,12 @@ void right_turn(RubixCube *rubix_cube) {
   color_temp = rubix_cube->corner_positions[UBR].colors[0];
   rubix_cube->corner_positions[UBR].colors[0] = rubix_cube->corner_positions[DFL].colors[1];
   rubix_cube->corner_positions[UBR].colors[0] = color_temp;
+
+  /* Updated Cube Orientation */
+  rubix_cube->corner_orientation[UFR] = 0;
+  rubix_cube->corner_orientation[UBR] = 0;
+  rubix_cube->corner_orientation[DBR] = 0;
+  rubix_cube->corner_orientation[DFR] = 0;
 }
 
 void right_prime_turn(RubixCube *rubix_cube) {
@@ -281,6 +294,12 @@ void down_turn(RubixCube *rubix_cube) {
   color_temp = rubix_cube->corner_positions[DBR].colors[1];
   rubix_cube->corner_positions[DBR].colors[1] = rubix_cube->corner_positions[DBR].colors[2];
   rubix_cube->corner_positions[DBR].colors[2] = color_temp;
+
+  /* Updated Cube Orientation */
+  rubix_cube->corner_orientation[DFR] = 0;
+  rubix_cube->corner_orientation[DFL] = 0;
+  rubix_cube->corner_orientation[DBL] = 0;
+  rubix_cube->corner_orientation[DBR] = 0;
 }
 
 void down_prime_turn(RubixCube *rubix_cube) {
@@ -340,6 +359,12 @@ void up_turn(RubixCube *rubix_cube) {
   color_temp = rubix_cube->corner_positions[UFL].colors[1];
   rubix_cube->corner_positions[UFL].colors[1] = rubix_cube->corner_positions[UFL].colors[2];
   rubix_cube->corner_positions[UFL].colors[2] = color_temp;
+
+  /* Updated Cube Orientation */
+  rubix_cube->corner_orientation[UFL] = 0;
+  rubix_cube->corner_orientation[UFR] = 0;
+  rubix_cube->corner_orientation[UBR] = 0;
+  rubix_cube->corner_orientation[UBL] = 0;
 }
 
 void up_prime_turn(RubixCube *rubix_cube) {
@@ -399,6 +424,12 @@ void front_turn(RubixCube *rubix_cube) {
   color_temp = rubix_cube->corner_positions[UFR].colors[0];
   rubix_cube->corner_positions[UFR].colors[0] = rubix_cube->corner_positions[UFL].colors[2];
   rubix_cube->corner_positions[UFR].colors[2] = color_temp;
+
+  /* Updated Cube Orientation */
+  rubix_cube->corner_orientation[UFL] = 0;
+  rubix_cube->corner_orientation[DFL] = 0;
+  rubix_cube->corner_orientation[DFR] = 0;
+  rubix_cube->corner_orientation[UFR] = 0;
 }
 
 void front_prime_turn(RubixCube *rubix_cube) {
@@ -458,6 +489,12 @@ void back_turn(RubixCube *rubix_cube) {
   color_temp = rubix_cube->corner_positions[DBL].colors[0];
   rubix_cube->corner_positions[DBL].colors[0] = rubix_cube->corner_positions[DBL].colors[2];
   rubix_cube->corner_positions[DBL].colors[2] = color_temp;
+
+  /* Updated Cube Orientation */
+  rubix_cube->corner_orientation[UBL] = 0;
+  rubix_cube->corner_orientation[UBR] = 0;
+  rubix_cube->corner_orientation[DBR] = 0;
+  rubix_cube->corner_orientation[DBL] = 0;
 }
 
 void back_prime_turn(RubixCube *rubix_cube) {

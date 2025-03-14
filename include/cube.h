@@ -21,7 +21,6 @@ enum FACE { U, D, F, L, B, R };
 enum CORNER_POS { UFR, UFL, UBL, UBR, DFR, DFL, DBL, DBR };
 enum EDGE_POS { UF, UL, UB, UR, DF, DL, DB, DR, FL, BL, BR, FR};
 
-
 /* 
  * Edge Structure to hold the 2 color values 
  *  1st Color - Either U or D or F or B
