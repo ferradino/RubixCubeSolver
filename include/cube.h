@@ -21,30 +21,6 @@ enum FACE { U, D, F, L, B, R };
 enum CORNER_POS { UFR, UFL, UBL, UBR, DFR, DFL, DBL, DBR };
 enum EDGE_POS { UF, UL, UB, UR, DF, DL, DB, DR, FL, BL, BR, FR};
 
-
-/* 
- * Edge Structure to hold the 2 color values 
- *  1st Color - Either U or D or F or B
- *  2nd Color - Either F or B or L or R
- *
- *  This will be based on the position it is located in array
- */
-typedef struct {
-  enum Color colors[2];
-} Edge;
-
-/* 
- * Corner Structure to hold the 3 color values
- *  1st Color - Either U or D face
- *  2nd Color - Either F or B face
- *  3nd Color - Either L or R face
- *
- * This will be based on the position it is located in array
- */
-typedef struct {
-  enum Color colors[3];
-} Corner;
-
 /*
  * Cube Structure:
  * 5 Arrays
@@ -72,9 +48,9 @@ typedef struct {
  *    - 46-53 will be right tiles
  */
 typedef struct {
-  Edge edge_positions[NUM_EDGES];
+  enum EDGE_POS edge_positions[NUM_EDGES];
+  enum CORNER_POS corner_positions[NUM_CORNERS];
   unsigned char edge_orientation[NUM_EDGES];
-  Corner corner_positions[NUM_CORNERS];
   unsigned char corner_orientation[NUM_CORNERS];
   enum Color tile_colors[NUM_TILES];
 } RubixCube;
@@ -85,23 +61,6 @@ void rubix_cube_init(RubixCube *rubix_cube);
 
 /* Read in all the faces and their colors */
 void read_rubix_cube_tile_colors(RubixCube *rubix_cube);
-
-/* Take read in colors and set position colors */
-void set_edge_position_colors(RubixCube *rubix_cube);
-void set_corner_position_colors(RubixCube *rubix_cube);
-
-/* Get orientation values for edges
- *  1 - a quarter turn on all three axes is required to put edge in proper position and orientation
- *  0 - if this is not required
-*/
-void get_edge_orientation(RubixCube *rubix_cube);
-
-/* Get orientation values for corners 
- *  0 - corner's white/yellow sticker is on the white or yellow face
- *  1 - the white/yellow sticker is clockwise rotation from the white/yellow face
- *  2 - 2 if the white/yellow sticker is a counterclockwise rotation white/yellow face
-*/
-void get_corner_orientation(RubixCube *rubix_cube);
 
 /* 
  * Rubix Cube Turns
