@@ -18,7 +18,28 @@
  *   - R : right
  */
 enum FACE { U, D, F, L, B, R };
+
+/*
+ * Tile Notation
+ *  the first char represents the face the tile is on
+ *  the second/third char represents 
+ *    TL - top-left, 
+ *    T - top, 
+ *    TR - top-right, 
+ *    R - right, 
+ *    BR - bottom-right, 
+ *    B - bottom, 
+ *    BL - bottom-left, 
+ *    L - left
+*/
 enum TILES { wC, wB, wR, wT, wL, wBL, wBR, wTR, wTL, yC, yB, yR, yT, yL, yBL, yBR, yTR, yTL, bC, bB, bR, bT, bL, bBL, bBR, bTR, bTL, oC, oB, oR, oT, oL, oBL, oBR, oTR, oTL, gC, gB, gR, gT, gL, gBL, gBR, gTR, gTL, rC, rB, rR, rT, rL, rBL, rBR, rTR, rTL };
+
+/*
+ * Cube Edge and Corner Notation
+ *  - This follows from the Cube Face Notation from above
+ *  - Corners are represented by 3 chars (3 faces)
+ *  - Edges are respresented by 2 chars (2 faces)
+*/
 enum CORNER_POS { UFR, UFL, UBL, UBR, DFR, DFL, DBL, DBR };
 enum EDGE_POS { UF, UL, UB, UR, DF, DL, DB, DR, FL, BL, BR, FR};
 

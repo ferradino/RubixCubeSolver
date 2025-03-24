@@ -1,8 +1,71 @@
 #include "../include/cube.h"
 #include <stdio.h>
 
-void get_initial_position(RubixCube *rubix_cube) {}
-void get_initial_orientation(RubixCube *rubix_cube) {}
+/* !!!! NEED to FINISH this !!!! */
+enum CORNER_POS get_corner(enum Color c1, enum Color c2, enum Color c3) {
+  enum CORNER_POS pos = -1;
+
+  if ((c1 == WHITE && c2 == BLUE) || (c1 == BLUE || c2 == WHITE)) {
+    pos = UFR;
+  } else if ((c1 == WHITE && c2 == RED) || (c1 == RED && c2 == WHITE)) {
+    pos = UFL;
+  } else if ((c1 == WHITE && c2 == GREEN) || (c1 == GREEN && c2 == WHITE)) {
+    pos = UBL;
+  } else if ((c1 == WHITE && c2 == ORANGE) || (c1 == ORANGE && c2 == WHITE)) {
+    pos = UBR;
+  } else if ((c1 == YELLOW && c2 == BLUE) || (c1 == BLUE && c2 == YELLOW)) {
+    pos = DFR;
+  } else if ((c1 == YELLOW && c2 == RED) || (c1 == RED && c2 == YELLOW)) {
+    pos = DFL;
+  } else if ((c1 == YELLOW && c2 == GREEN) || (c1 == GREEN && c2 == YELLOW)) {
+    pos = DBL;
+  } else if ((c1 == YELLOW && c2 == ORANGE) || (c1 == ORANGE && c2 == YELLOW)) {
+    pos = DBR;
+  }
+
+  return pos;
+
+}
+
+enum EDGE_POS get_edge(enum Color c1, enum Color c2) {
+  enum EDGE_POS pos = -1;
+
+  if ((c1 == WHITE && c2 == BLUE) || (c1 == BLUE || c2 == WHITE)) {
+    pos = UF;
+  } else if ((c1 == WHITE && c2 == RED) || (c1 == RED && c2 == WHITE)) {
+    pos = UL;
+  } else if ((c1 == WHITE && c2 == GREEN) || (c1 == GREEN && c2 == WHITE)) {
+    pos = UB;
+  } else if ((c1 == WHITE && c2 == ORANGE) || (c1 == ORANGE && c2 == WHITE)) {
+    pos = UR;
+  } else if ((c1 == YELLOW && c2 == BLUE) || (c1 == BLUE && c2 == YELLOW)) {
+    pos = DF;
+  } else if ((c1 == YELLOW && c2 == RED) || (c1 == RED && c2 == YELLOW)) {
+    pos = DL;
+  } else if ((c1 == YELLOW && c2 == GREEN) || (c1 == GREEN && c2 == YELLOW)) {
+    pos = DB;
+  } else if ((c1 == YELLOW && c2 == ORANGE) || (c1 == ORANGE && c2 == YELLOW)) {
+    pos = DR;
+  } else if ((c1 == BLUE && c2 == RED) || (c1 == RED && c2 == BLUE)) {
+    pos = FL;
+  } else if ((c1 == RED && c2 == GREEN) || (c1 == GREEN && c2 == RED)) {
+    pos = BL;
+  } else if ((c1 == GREEN && c2 == ORANGE) || (c1 == ORANGE && c2 == GREEN)) {
+    pos = BR;
+  } else if ((c1 == BLUE && c2 == ORANGE) || (c1 == ORANGE && c2 == BLUE)) {
+    pos = FR;
+  }
+
+  return pos;
+}
+
+void get_initial_position(RubixCube *rubix_cube) {
+
+}
+
+void get_initial_orientation(RubixCube *rubix_cube) {
+
+}
 
 void rubix_cube_init(RubixCube *rubix_cube) {
   read_rubix_cube_tile_colors(rubix_cube);
@@ -74,7 +137,7 @@ void left_turn(RubixCube *rubix_cube) {
   rubix_cube->edge_positions[BL] = rubix_cube->edge_positions[DL];
   rubix_cube->edge_positions[DL] = rubix_cube->edge_positions[FL];
   rubix_cube->edge_positions[FL] = edge_pos_temp ;
-  
+
   /* Update corner orientation */
   corner_temp = rubix_cube->corner_orientation[UFL];
   rubix_cube->corner_orientation[UFL] = (rubix_cube->corner_orientation[UBL] + 1) % 3;
@@ -146,7 +209,7 @@ void right_turn(RubixCube *rubix_cube) {
   rubix_cube->edge_positions[BR] = rubix_cube->edge_positions[DR];
   rubix_cube->edge_positions[DR] = rubix_cube->edge_positions[FL];
   rubix_cube->edge_positions[FR] = edge_pos_temp ;
-  
+
   /* Update corner orientation */
   corner_temp = rubix_cube->corner_orientation[UFR];
   rubix_cube->corner_orientation[UFR] = (rubix_cube->corner_orientation[DFR] + 2) % 3;
@@ -439,7 +502,7 @@ void back_turn(RubixCube *rubix_cube) {
   rubix_cube->edge_positions[BR] = rubix_cube->edge_positions[DB];
   rubix_cube->edge_positions[DB] = rubix_cube->edge_positions[BL];
   rubix_cube->edge_positions[BL] = edge_pos_temp ;
-  
+
   /* Update corner orientation */
   corner_temp = rubix_cube->corner_orientation[UBL];
   rubix_cube->corner_orientation[UBL] = (rubix_cube->corner_orientation[UBR] + 1) % 3;
