@@ -18,6 +18,7 @@
  *   - R : right
  */
 enum FACE { U, D, F, L, B, R };
+enum TILES { wC, wB, wR, wT, wL, wBL, wBR, wTR, wTL, yC, yB, yR, yT, yL, yBL, yBR, yTR, yTL, bC, bB, bR, bT, bL, bBL, bBR, bTR, bTL, oC, oB, oR, oT, oL, oBL, oBR, oTR, oTL, gC, gB, gR, gT, gL, gBL, gBR, gTR, gTL, rC, rB, rR, rT, rL, rBL, rBR, rTR, rTL };
 enum CORNER_POS { UFR, UFL, UBL, UBR, DFR, DFL, DBL, DBR };
 enum EDGE_POS { UF, UL, UB, UR, DF, DL, DB, DR, FL, BL, BR, FR};
 
