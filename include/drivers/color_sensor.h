@@ -3,41 +3,39 @@
 
 #define BUFFER_SIZE 256
 
-enum Color {
+typedef enum {
     WHITE,
     YELLOW,
     BLUE,
     RED,
     GREEN,
     ORANGE,
-};
+} color_t;
 
-typedef struct {
+typedef struct RGB {
     int red_value;
     int green_value;
     int blue_value;
-} RGB;
+} rgb_t;
 
-typedef struct {
+typedef struct HSV {
     int hue;
     int saturation;
     int value;
-} HSV;
+} hsv_t;
 
-typedef struct {
+typedef struct ColorSenor {
     int number;
-    RGB rgb_value;
-    HSV hsv_value;
-    enum Color color;
+    rgb_t rgb_value;
+    hsv_t hsv_value;
+    color_t color;
     char mode_file_path[256];
     char red_value_file_path[256];
     char green_value_file_path[256];
     char blue_value_file_path[256];
-} ColorSensor;
+} color_sensor_t;
 
-ColorSensor color_sensor;
-
-void color_sensor_init();
-enum Color read_color();
+color_sensor_t color_sensor_init();
+color_t read_color(color_sensor_t *sensor);
 
 #endif

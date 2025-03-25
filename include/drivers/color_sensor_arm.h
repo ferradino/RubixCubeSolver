@@ -8,14 +8,10 @@
 #define CORNER_TILE_POS -585
 #define SENSOR_STARTING_POS 0
 
-Motor color_sensor_motor;
-
-void color_sensor_motor_init();
-void reset_color_sensor_motor();
-void hover_center_tile();
-void hover_corner_tile();
-void hover_edge_tile();
-void open_color_sensor();
+void hover_center_tile(motor_t *motor);
+void hover_corner_tile(motor_t *motor);
+void hover_edge_tile(motor_t *motor);
+void open_color_sensor(motor_t *motor);
 
 #endif
 

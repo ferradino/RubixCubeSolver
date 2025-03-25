@@ -7,12 +7,8 @@
 #define FLIP_POS -80
 #define ARM_STARTING_POS 0
 
-Motor arm_motor;
-
-void arm_motor_init();
-void cover();
-void flip();
-void open_arm();
-void reset_arm();
+void cover(motor_t *motor);
+void flip(motor_t *motor);
+void open_arm(motor_t *motor);
 
 #endif

@@ -42,17 +42,19 @@ short get_motor_number(const char *port) {
     return motor_number;
 }
 
-void motor_init(Motor *motor, const char *port) {
-    motor->number = get_motor_number(port);
-    snprintf(motor->command_file_path, sizeof(motor->command_file_path), "/sys/class/tacho-motor/motor%d/command", motor->number);
-    snprintf(motor->speed_file_path, sizeof(motor->speed_file_path), "/sys/class/tacho-motor/motor%d/speed_sp", motor->number);
-    snprintf(motor->position_file_path, sizeof(motor->position_file_path), "/sys/class/tacho-motor/motor%d/position_sp", motor->number);
-    snprintf(motor->state_file_path, sizeof(motor->state_file_path), "/sys/class/tacho-motor/motor%d/state", motor->number);
+motor_t motor_init(const char *port) {
+  motor_t motor = {
+    .number = get_motor_number(port),
+    .command_file_path = snprintf(motor.command_file_path, sizeof(motor.command_file_path), "/sys/class/tacho-motor/motor%d/command", motor.number),
+    .speed_file_path = snprintf(motor.speed_file_path, sizeof(motor.speed_file_path), "/sys/class/tacho-motor/motor%d/speed_sp", motor.number), 
+    .position_file_path = snprintf(motor.position_file_path, sizeof(motor.position_file_path), "/sys/class/tacho-motor/motor%d/position_sp", motor.number),
+    .state_file_path = snprintf(motor.state_file_path, sizeof(motor.state_file_path), "/sys/class/tacho-motor/motor%d/state", motor.number),
+  };
 
-    printf("Motor initialized with number: %d\n", motor->number);
+  return motor;
 }
 
-void set_speed(Motor *motor, int speed) {
+void set_speed(motor_t *motor, int speed) {
     int fd = open(motor->speed_file_path, O_WRONLY);
 
     if (fd == -1) {
@@ -67,7 +69,7 @@ void set_speed(Motor *motor, int speed) {
     close(fd);
 }
 
-void set_run_to_position(Motor *motor, const int degrees) {
+void set_run_to_position(motor_t *motor, const int degrees) {
     int fd = open(motor->position_file_path, O_WRONLY);
     
     if (fd == -1) {
@@ -83,7 +85,7 @@ void set_run_to_position(Motor *motor, const int degrees) {
     close(fd);
 }
 
-void run_command(Motor *motor, const char *command) {
+void run_command(motor_t *motor, const char *command) {
     int fd = open(motor->command_file_path, O_WRONLY);
 
     if (fd == -1) {
@@ -97,7 +99,7 @@ void run_command(Motor *motor, const char *command) {
     wait_for_motor_to_stop(motor);
 }
 
-void wait_for_motor_to_stop(Motor *motor) {
+void wait_for_motor_to_stop(motor_t *motor) {
     char running[BUFFER_SIZE] = "running";
     char stalled[BUFFER_SIZE] = "stalled";
     char state[BUFFER_SIZE];

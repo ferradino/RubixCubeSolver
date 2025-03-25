@@ -11,14 +11,26 @@
 #define CC_QUARTER_TURN -265
 #define HALF_TURN 535
 
-void robot_init();
+#define ARM_MOTOR_PORT "OUTA"
+#define BASKET_MOTOR_PORT "OUTB"
+#define COLOR_SENSOR_MOTOR_PORT "OUTC"
+#define COLOR_SENSOR_PORT "INA"
+
+typedef struct Robot {
+  color_sensor_t color_sensor;
+  motor_t color_sensor_motor;
+  motor_t basket_motor;
+  motor_t arm_motor;
+} robot_t;
+
+robot_t robot_init();
 void rotate_basket(int degrees);
 void rotate_cube(int degrees);
 void flip_cube();
 
-enum Color read_center_tile_color();
-enum Color read_edge_tile_color();
-enum Color read_corner_tile_color();
+color_t read_center_tile_color();
+color_t read_edge_tile_color();
+color_t read_corner_tile_color();
 
 /* 
  * Rubix Cube Turns

@@ -29,7 +29,7 @@ short get_sensor_number(const char *port) {
 
         if (strcmp(curr_port, port) == 0) {
             sensor_number = i;
-            printf("Found color_sensor connected to port: %s\n", port);
+            printf("Found sensor-> connected to port: %s\n", port);
             break;
         }
     }
@@ -42,41 +42,47 @@ short get_sensor_number(const char *port) {
     return sensor_number;
 }
 
-void color_sensor_init() {
+color_sensor_t color_sensor_init() {
     const char* sensor_port = "in4";
-    color_sensor.number = get_sensor_number(sensor_port);
-    snprintf(color_sensor.mode_file_path, sizeof(color_sensor.mode_file_path), "/sys/class/lego-sensor/sensor%d/mode", color_sensor.number);
-    snprintf(color_sensor.red_value_file_path, sizeof(color_sensor.red_value_file_path), "/sys/class/lego-sensor/sensor%d/value0", color_sensor.number);
-    snprintf(color_sensor.green_value_file_path, sizeof(color_sensor.green_value_file_path), "/sys/class/lego-sensor/sensor%d/value1", color_sensor.number);
-    snprintf(color_sensor.blue_value_file_path, sizeof(color_sensor.blue_value_file_path), "/sys/class/lego-sensor/sensor%d/value2", color_sensor.number);
 
-    printf("Sensor initialized with number: %d\n", color_sensor.number);
+    color_sensor_t sensor = {
+      .number = get_sensor_number(sensor_port),
+      .mode_file_path = snprintf(sensor.mode_file_path, sizeof(sensor.mode_file_path), "/sys/class/lego-sensor/sensor%d/mode", sensor.number), 
+      .red_value_file_path = snprintf(sensor.red_value_file_path, sizeof(sensor.red_value_file_path), "/sys/class/lego-sensor/sensor%d/value0", sensor.number), 
+      .green_value_file_path = snprintf(sensor.green_value_file_path, sizeof(sensor.green_value_file_path), "/sys/class/lego-sensor/sensor%d/value1", sensor.number),
+      .blue_value_file_path = snprintf(sensor.blue_value_file_path, sizeof(sensor.blue_value_file_path), "/sys/class/lego-sensor/sensor%d/value2", sensor.number),
+
+    };
+    
+    printf("Sensor initialized with number: %d\n", sensor.number);
+
+    return sensor;
 }
 
-void read_color_values() {
+void read_color_values(color_sensor_t *sensor) {
     int fd, fd1, fd2;
     char r[BUFFER_SIZE];
     char g[BUFFER_SIZE];
     char b[BUFFER_SIZE];
 
-    fd = open(color_sensor.red_value_file_path, O_RDONLY);
-    fd1 = open(color_sensor.green_value_file_path, O_RDONLY);
-    fd2 = open(color_sensor.blue_value_file_path, O_RDONLY);
+    fd = open(sensor->red_value_file_path, O_RDONLY);
+    fd1 = open(sensor->green_value_file_path, O_RDONLY);
+    fd2 = open(sensor->blue_value_file_path, O_RDONLY);
 
     if (fd == -1) {
-        fprintf(stderr, "Failed to open red value file: %s\n", color_sensor.red_value_file_path);
+        fprintf(stderr, "Failed to open red value file: %s\n", sensor->red_value_file_path);
         perror("Error");
         exit(EXIT_FAILURE);
     } 
 
     if (fd1 == -1) {
-        fprintf(stderr, "Failed to open green value file: %s\n", color_sensor.green_value_file_path);
+        fprintf(stderr, "Failed to open green value file: %s\n", sensor->green_value_file_path);
         perror("Error");
         exit(EXIT_FAILURE);
     } 
 
     if  (fd2 == -1) {
-        fprintf(stderr, "Failed to open blue value file: %s\n", color_sensor.blue_value_file_path);
+        fprintf(stderr, "Failed to open blue value file: %s\n", sensor->blue_value_file_path);
         perror("Error");
         exit(EXIT_FAILURE);
     }
@@ -89,15 +95,15 @@ void read_color_values() {
     close(fd1);
     close(fd2);
 
-    color_sensor.rgb_value.red_value = atoi(r);
-    color_sensor.rgb_value.green_value = atoi(g);
-    color_sensor.rgb_value.blue_value = atoi(b);
+    sensor->rgb_value.red_value = atoi(r);
+    sensor->rgb_value.green_value = atoi(g);
+    sensor->rgb_value.blue_value = atoi(b);
 }
 
-void convert_RGB_to_HSV() {
-    float r = color_sensor.rgb_value.red_value / 255;
-    float g = color_sensor.rgb_value.green_value / 255;
-    float b = color_sensor.rgb_value.blue_value / 255;
+void convert_RGB_to_HSV(color_sensor_t *sensor) {
+    float r = sensor->rgb_value.red_value / 255.0;
+    float g = sensor->rgb_value.green_value / 255.0;
+    float b = sensor->rgb_value.blue_value / 255.0;
 
     float max = r > g ? (r > b ? r : b) : (g > b ? g : b);
     float min = r < g ? (r < b ? r : b) : (g < b ? g : b);
@@ -105,46 +111,46 @@ void convert_RGB_to_HSV() {
     float diff = max - min;
 
     if (max == min) {
-        color_sensor.hsv_value.hue = 0;
+        sensor->hsv_value.hue = 0;
     } else if (max == r) {
-        color_sensor.hsv_value.hue = (int)(60 * ((g - b) / diff) + 360) % 360;
+        sensor->hsv_value.hue = (int)(60 * ((g - b) / diff) + 360) % 360;
     } else if (max == g) {
-        color_sensor.hsv_value.hue = (int)(60 * ((b - r) / diff) + 120) % 360;
+        sensor->hsv_value.hue = (int)(60 * ((b - r) / diff) + 120) % 360;
     } else {
-        color_sensor.hsv_value.hue = (int)(60 * ((r - g) / diff) + 240) % 360;
+        sensor->hsv_value.hue = (int)(60 * ((r - g) / diff) + 240) % 360;
     }
 
     if (max == 0) {
-        color_sensor.hsv_value.saturation = 0;
+        sensor->hsv_value.saturation = 0;
     } else {
-        color_sensor.hsv_value.saturation = (diff / max) * 100;
+        sensor->hsv_value.saturation = (diff / max) * 100;
     }
 
-    color_sensor.hsv_value.value = max * 100;
+    sensor->hsv_value.value = max * 100;
 }
 
-void convert_HSV_to_color() {
-   if (color_sensor.hsv_value.hue < 10 && color_sensor.hsv_value.saturation < 10) {
-        color_sensor.color = WHITE;
-    } else if (color_sensor.hsv_value.hue < 10 && color_sensor.hsv_value.saturation > 90) {
-        color_sensor.color = RED;
-    } else if (color_sensor.hsv_value.hue > 24 && color_sensor.hsv_value.hue < 46) {
-        color_sensor.color = ORANGE;
-    } else if (color_sensor.hsv_value.hue > 54 && color_sensor.hsv_value.hue < 66) {
-        color_sensor.color = YELLOW;
-    } else if (color_sensor.hsv_value.hue > 114 && color_sensor.hsv_value.hue < 126) {
-        color_sensor.color = GREEN;
-    } else if (color_sensor.hsv_value.hue > 234 && color_sensor.hsv_value.hue < 246) {
-        color_sensor.color = BLUE;
+void convert_HSV_to_color(color_sensor_t *sensor) {
+   if (sensor->hsv_value.hue < 10 && sensor->hsv_value.saturation < 10) {
+        sensor->color = WHITE;
+    } else if (sensor->hsv_value.hue < 10 && sensor->hsv_value.saturation > 90) {
+        sensor->color = RED;
+    } else if (sensor->hsv_value.hue > 24 && sensor->hsv_value.hue < 46) {
+        sensor->color = ORANGE;
+    } else if (sensor->hsv_value.hue > 54 && sensor->hsv_value.hue < 66) {
+        sensor->color = YELLOW;
+    } else if (sensor->hsv_value.hue > 114 && sensor->hsv_value.hue < 126) {
+        sensor->color = GREEN;
+    } else if (sensor->hsv_value.hue > 234 && sensor->hsv_value.hue < 246) {
+        sensor->color = BLUE;
     } else {
-        color_sensor.color = WHITE;
+        sensor->color = WHITE;
     }
 }
 
-enum Color read_color() {
-    read_color_values();
-    convert_RGB_to_HSV();
-    convert_HSV_to_color();
+color_t read_color(color_sensor_t *sensor) {
+    read_color_values(sensor);
+    convert_RGB_to_HSV(sensor);
+    convert_HSV_to_color(sensor);
 
-    return color_sensor.color;
+    return sensor->color;
 }

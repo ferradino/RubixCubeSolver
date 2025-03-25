@@ -3,9 +3,6 @@
 #ifndef __BASKET_MOTOR_H
 #define __BASKET_MOTOR_H
 
-Motor basket_motor;
-
-void basket_motor_init();
-void rotate(int degrees);
+void rotate(motor_t *motor, int degrees);
 
 #endif
