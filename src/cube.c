@@ -1,6 +1,78 @@
 #include "../include/cube.h"
 #include <stdio.h>
 
+/* !!!! NEED to FINISH this !!!! */
+enum CORNER_POS get_corner(enum Color c1, enum Color c2, enum Color c3) {
+  enum CORNER_POS pos = -1;
+
+  if ((c1 == WHITE && c2 == BLUE) || (c1 == BLUE || c2 == WHITE)) {
+    pos = UFR;
+  } else if ((c1 == WHITE && c2 == RED) || (c1 == RED && c2 == WHITE)) {
+    pos = UFL;
+  } else if ((c1 == WHITE && c2 == GREEN) || (c1 == GREEN && c2 == WHITE)) {
+    pos = UBL;
+  } else if ((c1 == WHITE && c2 == ORANGE) || (c1 == ORANGE && c2 == WHITE)) {
+    pos = UBR;
+  } else if ((c1 == YELLOW && c2 == BLUE) || (c1 == BLUE && c2 == YELLOW)) {
+    pos = DFR;
+  } else if ((c1 == YELLOW && c2 == RED) || (c1 == RED && c2 == YELLOW)) {
+    pos = DFL;
+  } else if ((c1 == YELLOW && c2 == GREEN) || (c1 == GREEN && c2 == YELLOW)) {
+    pos = DBL;
+  } else if ((c1 == YELLOW && c2 == ORANGE) || (c1 == ORANGE && c2 == YELLOW)) {
+    pos = DBR;
+  }
+
+  return pos;
+
+}
+
+enum EDGE_POS get_edge(enum Color c1, enum Color c2) {
+  enum EDGE_POS pos = -1;
+
+  if ((c1 == WHITE && c2 == BLUE) || (c1 == BLUE || c2 == WHITE)) {
+    pos = UF;
+  } else if ((c1 == WHITE && c2 == RED) || (c1 == RED && c2 == WHITE)) {
+    pos = UL;
+  } else if ((c1 == WHITE && c2 == GREEN) || (c1 == GREEN && c2 == WHITE)) {
+    pos = UB;
+  } else if ((c1 == WHITE && c2 == ORANGE) || (c1 == ORANGE && c2 == WHITE)) {
+    pos = UR;
+  } else if ((c1 == YELLOW && c2 == BLUE) || (c1 == BLUE && c2 == YELLOW)) {
+    pos = DF;
+  } else if ((c1 == YELLOW && c2 == RED) || (c1 == RED && c2 == YELLOW)) {
+    pos = DL;
+  } else if ((c1 == YELLOW && c2 == GREEN) || (c1 == GREEN && c2 == YELLOW)) {
+    pos = DB;
+  } else if ((c1 == YELLOW && c2 == ORANGE) || (c1 == ORANGE && c2 == YELLOW)) {
+    pos = DR;
+  } else if ((c1 == BLUE && c2 == RED) || (c1 == RED && c2 == BLUE)) {
+    pos = FL;
+  } else if ((c1 == RED && c2 == GREEN) || (c1 == GREEN && c2 == RED)) {
+    pos = BL;
+  } else if ((c1 == GREEN && c2 == ORANGE) || (c1 == ORANGE && c2 == GREEN)) {
+    pos = BR;
+  } else if ((c1 == BLUE && c2 == ORANGE) || (c1 == ORANGE && c2 == BLUE)) {
+    pos = FR;
+  }
+
+  return pos;
+}
+
+void get_initial_position(RubixCube *rubix_cube) {
+
+}
+
+void get_initial_orientation(RubixCube *rubix_cube) {
+
+}
+
+void rubix_cube_init(RubixCube *rubix_cube) {
+  read_rubix_cube_tile_colors(rubix_cube);
+  get_initial_position(rubix_cube);
+  get_initial_orientation(rubix_cube);
+}
+
 void read_rubix_cube_tile_colors(RubixCube *rubix_cube) {
   enum Color color; 
 
@@ -35,157 +107,83 @@ void read_rubix_cube_tile_colors(RubixCube *rubix_cube) {
       flip_cube();
       rotate_basket(HALF_TURN);
     } else {
-      rotate_basket(CC_QUARTER_TURN);
-      flip_cube();
       rotate_basket(C_QUARTER_TURN);
+      flip_cube();
+      rotate_basket(CC_QUARTER_TURN);
     }
   }
 
   rotate_basket(HALF_TURN);
   flip_cube();
-  rotate_basket(HALF_TURN);
-
-  set_edge_position_colors(rubix_cube);
-  set_corner_position_colors(rubix_cube);
+  rotate_basket(CC_QUARTER_TURN);
 }
-
-void set_edge_position_colors(RubixCube *rubix_cube) {
-  rubix_cube->edge_positions[UF].colors[0] = rubix_cube->tile_colors[1]; 
-  rubix_cube->edge_positions[UF].colors[1] = rubix_cube->tile_colors[21]; 
-
-  rubix_cube->edge_positions[UR].colors[0] = rubix_cube->tile_colors[2];
-  rubix_cube->edge_positions[UR].colors[1] = rubix_cube->tile_colors[48];
-
-  rubix_cube->edge_positions[UB].colors[0] = rubix_cube->tile_colors[3];
-  rubix_cube->edge_positions[UB].colors[1] = rubix_cube->tile_colors[39];
-
-  rubix_cube->edge_positions[UL].colors[0] = rubix_cube->tile_colors[4];
-  rubix_cube->edge_positions[UL].colors[1] = rubix_cube->tile_colors[30];
-
-  rubix_cube->edge_positions[DF].colors[0] = rubix_cube->tile_colors[12];
-  rubix_cube->edge_positions[DF].colors[1] = rubix_cube->tile_colors[19];
-
-  rubix_cube->edge_positions[DR].colors[0] = rubix_cube->tile_colors[11];
-  rubix_cube->edge_positions[DR].colors[1] = rubix_cube->tile_colors[46];
-
-  rubix_cube->edge_positions[DB].colors[0] = rubix_cube->tile_colors[10];
-  rubix_cube->edge_positions[DB].colors[1] = rubix_cube->tile_colors[37];
-
-  rubix_cube->edge_positions[DL].colors[0] = rubix_cube->tile_colors[13];
-  rubix_cube->edge_positions[DL].colors[1] = rubix_cube->tile_colors[28];
-
-  rubix_cube->edge_positions[FL].colors[0] = rubix_cube->tile_colors[22];
-  rubix_cube->edge_positions[FL].colors[1] = rubix_cube->tile_colors[29];
-
-  rubix_cube->edge_positions[BL].colors[0] = rubix_cube->tile_colors[38];
-  rubix_cube->edge_positions[BL].colors[1] = rubix_cube->tile_colors[31];
-
-  rubix_cube->edge_positions[BR].colors[0] = rubix_cube->tile_colors[40];
-  rubix_cube->edge_positions[BR].colors[1] = rubix_cube->tile_colors[47];
-
-  rubix_cube->edge_positions[FR].colors[0] = rubix_cube->tile_colors[20];
-  rubix_cube->edge_positions[FR].colors[1] = rubix_cube->tile_colors[49];
-}
-
-void set_corner_position_colors(RubixCube *rubix_cube) {
-  rubix_cube->corner_positions[UFR].colors[0] = rubix_cube->tile_colors[5];
-  rubix_cube->corner_positions[UFR].colors[1] = rubix_cube->tile_colors[24];
-  rubix_cube->corner_positions[UFR].colors[2] = rubix_cube->tile_colors[52];
-
-  rubix_cube->corner_positions[UFL].colors[0] = rubix_cube->tile_colors[8];
-  rubix_cube->corner_positions[UFL].colors[1] = rubix_cube->tile_colors[25];
-  rubix_cube->corner_positions[UFL].colors[2] = rubix_cube->tile_colors[33];
-
-  rubix_cube->corner_positions[UBL].colors[0] = rubix_cube->tile_colors[7];
-  rubix_cube->corner_positions[UBL].colors[1] = rubix_cube->tile_colors[42];
-  rubix_cube->corner_positions[UBL].colors[2] = rubix_cube->tile_colors[34];
-
-  rubix_cube->corner_positions[UBR].colors[0] = rubix_cube->tile_colors[6];
-  rubix_cube->corner_positions[UBR].colors[1] = rubix_cube->tile_colors[43];
-  rubix_cube->corner_positions[UBR].colors[2] = rubix_cube->tile_colors[31];
-
-  rubix_cube->corner_positions[DFR].colors[0] = rubix_cube->tile_colors[15];
-  rubix_cube->corner_positions[DFR].colors[1] = rubix_cube->tile_colors[23];
-  rubix_cube->corner_positions[DFR].colors[2] = rubix_cube->tile_colors[53];
-
-  rubix_cube->corner_positions[DFL].colors[0] = rubix_cube->tile_colors[16];
-  rubix_cube->corner_positions[DFL].colors[1] = rubix_cube->tile_colors[26];
-  rubix_cube->corner_positions[DFL].colors[2] = rubix_cube->tile_colors[22];
-
-  rubix_cube->corner_positions[DBL].colors[0] = rubix_cube->tile_colors[17];
-  rubix_cube->corner_positions[DBL].colors[1] = rubix_cube->tile_colors[41];
-  rubix_cube->corner_positions[DBL].colors[2] = rubix_cube->tile_colors[35];
-
-  rubix_cube->corner_positions[DBR].colors[0] = rubix_cube->tile_colors[12];
-  rubix_cube->corner_positions[DBR].colors[1] = rubix_cube->tile_colors[44];
-  rubix_cube->corner_positions[DBR].colors[2] = rubix_cube->tile_colors[50];
-}
-
-void get_edge_orientation(RubixCube *rubix_cube) {}
-
-void get_corner_orientation(RubixCube *rubix_cube) {}
 
 void left_turn(RubixCube *rubix_cube) {
-  Edge edge_temp;  
-  Corner corner_temp;  
+  enum EDGE_POS edge_pos_temp;
+  enum CORNER_POS corner_pos_temp;
+  unsigned char corner_temp;  
   enum Color color_temp;
 
-  edge_temp = rubix_cube->edge_positions[UL];
+  /* Update Corner Position */
+  corner_pos_temp = rubix_cube->corner_positions[UFL];
+  rubix_cube->corner_positions[UFL] = rubix_cube->corner_positions[UBL];
+  rubix_cube->corner_positions[UBL] = rubix_cube->corner_positions[DBL];
+  rubix_cube->corner_positions[DBL] = rubix_cube->corner_positions[DFL];
+  rubix_cube->corner_positions[DFL] = corner_pos_temp;
 
+  /* Update Edge Position */
+  edge_pos_temp = rubix_cube->edge_positions[UL];
   rubix_cube->edge_positions[UL] = rubix_cube->edge_positions[BL];
   rubix_cube->edge_positions[BL] = rubix_cube->edge_positions[DL];
   rubix_cube->edge_positions[DL] = rubix_cube->edge_positions[FL];
-  rubix_cube->edge_positions[FL] = edge_temp;
+  rubix_cube->edge_positions[FL] = edge_pos_temp ;
 
-  corner_temp = rubix_cube->corner_positions[UFL];
+  /* Update corner orientation */
+  corner_temp = rubix_cube->corner_orientation[UFL];
+  rubix_cube->corner_orientation[UFL] = (rubix_cube->corner_orientation[UBL] + 1) % 3;
+  rubix_cube->corner_orientation[UBL] = (rubix_cube->corner_orientation[DBL] + 2) % 3;
+  rubix_cube->corner_orientation[DBL] = (rubix_cube->corner_orientation[DFL] + 2) % 3;
+  rubix_cube->corner_orientation[DFL] = (corner_temp + 1) % 3;
 
-  rubix_cube->corner_positions[UFL] = rubix_cube->corner_positions[UBL];
-  /* Fix colors for UFL corner */
-  color_temp = rubix_cube->corner_positions[UFL].colors[0];
-  rubix_cube->corner_positions[UFL].colors[0] = rubix_cube->corner_positions[UFL].colors[1];
-  rubix_cube->corner_positions[UFL].colors[1] = color_temp;
+  /* Update tile color */
+  color_temp = rubix_cube->tile_colors[wBL];
+  rubix_cube->tile_colors[wBL] = rubix_cube->tile_colors[gTR];
+  rubix_cube->tile_colors[gTR] = rubix_cube->tile_colors[yBL];
+  rubix_cube->tile_colors[yBL] = rubix_cube->tile_colors[bBL];
+  rubix_cube->tile_colors[bBL] = color_temp;
 
-  rubix_cube->corner_positions[UBL] = rubix_cube->corner_positions[DBL];
-  /* Fix colors for UBL corner */
-  color_temp = rubix_cube->corner_positions[UBL].colors[0];
-  rubix_cube->corner_positions[UBL].colors[0] = rubix_cube->corner_positions[UFL].colors[1];
-  rubix_cube->corner_positions[UBL].colors[1] = color_temp;
+  color_temp = rubix_cube->tile_colors[wTL];
+  rubix_cube->tile_colors[wTL] = rubix_cube->tile_colors[gBR];
+  rubix_cube->tile_colors[gBR] = rubix_cube->tile_colors[yTL];
+  rubix_cube->tile_colors[yTL] = rubix_cube->tile_colors[bTL];
+  rubix_cube->tile_colors[bTL] = color_temp;
 
-  rubix_cube->corner_positions[DBL] = rubix_cube->corner_positions[DFL];
-  /* Fix colors for DBL corner */
-  color_temp = rubix_cube->corner_positions[DBL].colors[0];
-  rubix_cube->corner_positions[DBL].colors[0] = rubix_cube->corner_positions[DFL].colors[1];
-  rubix_cube->corner_positions[DBL].colors[1] = color_temp;
+  color_temp = rubix_cube->tile_colors[wL];
+  rubix_cube->tile_colors[wL] = rubix_cube->tile_colors[gR];
+  rubix_cube->tile_colors[gR] = rubix_cube->tile_colors[yL];
+  rubix_cube->tile_colors[yL] = rubix_cube->tile_colors[bL];
+  rubix_cube->tile_colors[bL] = color_temp;
 
-  rubix_cube->corner_positions[DFL] = corner_temp;
-  /* Fix colors for DFL corner */
-  color_temp = rubix_cube->corner_positions[DFL].colors[0];
-  rubix_cube->corner_positions[DFL].colors[0] = rubix_cube->corner_positions[DFL].colors[1];
-  rubix_cube->corner_positions[DFL].colors[1] = color_temp;
+  color_temp = rubix_cube->tile_colors[rT];
+  rubix_cube->tile_colors[rT] = rubix_cube->tile_colors[rL];
+  rubix_cube->tile_colors[rL] = rubix_cube->tile_colors[rB];
+  rubix_cube->tile_colors[rB] = rubix_cube->tile_colors[rR];
+  rubix_cube->tile_colors[rR] = color_temp;
 
-
-  /* Updated Cube Orientation */
-  rubix_cube->edge_orientation[UFL] = 0;
-  rubix_cube->corner_orientation[UBL] = 0;
-  rubix_cube->corner_orientation[DBL] = 0;
-  rubix_cube->corner_orientation[DFL] = 0;
+  color_temp = rubix_cube->tile_colors[rTL];
+  rubix_cube->tile_colors[rTL] = rubix_cube->tile_colors[rBL];
+  rubix_cube->tile_colors[rBL] = rubix_cube->tile_colors[rBR];
+  rubix_cube->tile_colors[rBR] = rubix_cube->tile_colors[rTR];
+  rubix_cube->tile_colors[rTR] = color_temp;
 }
 
 void left_prime_turn(RubixCube *rubix_cube) {
-  Edge edge_temp;  
-  Corner corner_temp;  
-  enum Color color_temp;
-
   for (int i = 0; i < 3; i++) {
     left_turn(rubix_cube);
   }
 }
 
 void left_double_turn(RubixCube *rubix_cube) {
-  Edge edge_temp;  
-  Corner corner_temp;  
-  enum Color color_temp;
-
   for (int i = 0; i < 2; i++) {
     left_turn(rubix_cube);
   }
@@ -193,326 +191,372 @@ void left_double_turn(RubixCube *rubix_cube) {
 
 
 void right_turn(RubixCube *rubix_cube) {
-  Edge edge_temp;  
-  Corner corner_temp;  
+  enum EDGE_POS edge_pos_temp;
+  enum CORNER_POS corner_pos_temp;
+  unsigned char corner_temp;  
   enum Color color_temp;
 
-  edge_temp = rubix_cube->edge_positions[UR];
+  /* Update Corner Position */
+  corner_pos_temp = rubix_cube->corner_positions[UFR];
+  rubix_cube->corner_positions[UFR] = rubix_cube->corner_positions[UBR];
+  rubix_cube->corner_positions[UBR] = rubix_cube->corner_positions[DBR];
+  rubix_cube->corner_positions[DBR] = rubix_cube->corner_positions[DFR];
+  rubix_cube->corner_positions[DFR] = corner_pos_temp;
 
-  rubix_cube->edge_positions[UR] = rubix_cube->edge_positions[FR];
-  rubix_cube->edge_positions[FR] = rubix_cube->edge_positions[DR];
-  rubix_cube->edge_positions[DR] = rubix_cube->edge_positions[BR];
-  rubix_cube->edge_positions[BR] = edge_temp;
+  /* Update Edge Position */
+  edge_pos_temp = rubix_cube->edge_positions[UR];
+  rubix_cube->edge_positions[UR] = rubix_cube->edge_positions[BR];
+  rubix_cube->edge_positions[BR] = rubix_cube->edge_positions[DR];
+  rubix_cube->edge_positions[DR] = rubix_cube->edge_positions[FL];
+  rubix_cube->edge_positions[FR] = edge_pos_temp ;
 
-  corner_temp = rubix_cube->corner_positions[UFR];
+  /* Update corner orientation */
+  corner_temp = rubix_cube->corner_orientation[UFR];
+  rubix_cube->corner_orientation[UFR] = (rubix_cube->corner_orientation[DFR] + 2) % 3;
+  rubix_cube->corner_orientation[DFR] = (rubix_cube->corner_orientation[DBR] + 2) % 3;
+  rubix_cube->corner_orientation[DBR] = (rubix_cube->corner_orientation[UBR] + 1) % 3;
+  rubix_cube->corner_orientation[UBR] = (corner_temp + 1) % 3;
 
-  rubix_cube->corner_positions[UFR] = rubix_cube->corner_positions[DFR];
-  /* Fix colors for UFR corner */
-  color_temp = rubix_cube->corner_positions[UFR].colors[0];
-  rubix_cube->corner_positions[UFR].colors[0] = rubix_cube->corner_positions[UFR].colors[1];
-  rubix_cube->corner_positions[UFR].colors[0] = color_temp;
+  /* Update tile color */
+  color_temp = rubix_cube->tile_colors[wTR];
+  rubix_cube->tile_colors[wTR] = rubix_cube->tile_colors[bTR];
+  rubix_cube->tile_colors[bTR] = rubix_cube->tile_colors[yTR];
+  rubix_cube->tile_colors[yTR] = rubix_cube->tile_colors[gBL];
+  rubix_cube->tile_colors[gBL] = color_temp;
 
-  rubix_cube->corner_positions[DFR] = rubix_cube->corner_positions[DBR];
-  /* Fix colors for DFR corner */
-  color_temp = rubix_cube->corner_positions[DFR].colors[0];
-  rubix_cube->corner_positions[DFR].colors[0] = rubix_cube->corner_positions[DFR].colors[1];
-  rubix_cube->corner_positions[DFR].colors[0] = color_temp;
+  color_temp = rubix_cube->tile_colors[wBR];
+  rubix_cube->tile_colors[wBR] = rubix_cube->tile_colors[bBR];
+  rubix_cube->tile_colors[bBR] = rubix_cube->tile_colors[yBR];
+  rubix_cube->tile_colors[yBR] = rubix_cube->tile_colors[gTL];
+  rubix_cube->tile_colors[gTL] = color_temp;
 
-  rubix_cube->corner_positions[DBR] = rubix_cube->corner_positions[UBR];
-  /* Fix colors for DBR corner */
-  color_temp = rubix_cube->corner_positions[DBR].colors[0];
-  rubix_cube->corner_positions[DBR].colors[0] = rubix_cube->corner_positions[DBR].colors[1];
-  rubix_cube->corner_positions[DBL].colors[0] = color_temp;
+  color_temp = rubix_cube->tile_colors[wR];
+  rubix_cube->tile_colors[wR] = rubix_cube->tile_colors[bR];
+  rubix_cube->tile_colors[bR] = rubix_cube->tile_colors[yR];
+  rubix_cube->tile_colors[yR] = rubix_cube->tile_colors[gL];
+  rubix_cube->tile_colors[gL] = color_temp;
 
-  rubix_cube->corner_positions[UBR] = corner_temp;
-  /* Fix colors for UBR corner */
-  color_temp = rubix_cube->corner_positions[UBR].colors[0];
-  rubix_cube->corner_positions[UBR].colors[0] = rubix_cube->corner_positions[DFL].colors[1];
-  rubix_cube->corner_positions[UBR].colors[0] = color_temp;
+  color_temp = rubix_cube->tile_colors[oTL];
+  rubix_cube->tile_colors[oTL] = rubix_cube->tile_colors[oBL];
+  rubix_cube->tile_colors[oBL] = rubix_cube->tile_colors[oBR];
+  rubix_cube->tile_colors[oBR] = rubix_cube->tile_colors[oTR];
+  rubix_cube->tile_colors[oTR] = color_temp;
 
-  /* Updated Cube Orientation */
-  rubix_cube->corner_orientation[UFR] = 0;
-  rubix_cube->corner_orientation[UBR] = 0;
-  rubix_cube->corner_orientation[DBR] = 0;
-  rubix_cube->corner_orientation[DFR] = 0;
+  color_temp = rubix_cube->tile_colors[oT];
+  rubix_cube->tile_colors[oT] = rubix_cube->tile_colors[oL];
+  rubix_cube->tile_colors[oL] = rubix_cube->tile_colors[oB];
+  rubix_cube->tile_colors[oB] = rubix_cube->tile_colors[oR];
+  rubix_cube->tile_colors[oR] = color_temp;
 }
 
 void right_prime_turn(RubixCube *rubix_cube) {
-  Edge edge_temp;  
-  Corner corner_temp;  
-  enum Color color_temp;
-
   for (int i = 0; i < 3; i++) {
-    left_turn(rubix_cube);
+    right_turn(rubix_cube);
   }
 }
 
 void right_double_turn(RubixCube *rubix_cube) {
-  Edge edge_temp;  
-  Corner corner_temp;  
-  enum Color color_temp;
-
   for (int i = 0; i < 2; i++) {
-    left_turn(rubix_cube);
+    right_turn(rubix_cube);
   }
 }
 
 void down_turn(RubixCube *rubix_cube) {
-  Edge edge_temp;  
-  Corner corner_temp;  
+  enum EDGE_POS edge_pos_temp;
+  enum CORNER_POS corner_pos_temp;
+  unsigned char edge_temp;  
   enum Color color_temp;
 
-  edge_temp = rubix_cube->edge_positions[DF];
+  /* Update Corner Position */
+  corner_pos_temp = rubix_cube->corner_positions[DFL];
+  rubix_cube->corner_positions[DFL] = rubix_cube->corner_positions[DBL];
+  rubix_cube->corner_positions[DBL] = rubix_cube->corner_positions[DBR];
+  rubix_cube->corner_positions[DBR] = rubix_cube->corner_positions[DFR];
+  rubix_cube->corner_positions[DFR] = corner_pos_temp;
 
+  /* Update Edge Position */
+  edge_pos_temp = rubix_cube->edge_positions[DF];
   rubix_cube->edge_positions[DF] = rubix_cube->edge_positions[DL];
   rubix_cube->edge_positions[DL] = rubix_cube->edge_positions[DB];
   rubix_cube->edge_positions[DB] = rubix_cube->edge_positions[DR];
-  rubix_cube->edge_positions[DF] = edge_temp;
+  rubix_cube->edge_positions[DR] = edge_pos_temp ;
 
-  corner_temp = rubix_cube->corner_positions[DFR];
+  /* Update edge orientation */
+  edge_temp = rubix_cube->edge_orientation[DF];
+  rubix_cube->edge_orientation[DF] = (rubix_cube->edge_orientation[DL] + 1) % 2;
+  rubix_cube->edge_orientation[DL] = (rubix_cube->edge_orientation[DB] + 1) % 2;
+  rubix_cube->edge_orientation[DB] = (rubix_cube->edge_orientation[DR] + 1) % 2;
+  rubix_cube->edge_orientation[DR] = (edge_temp + 1) % 2;
 
-  rubix_cube->corner_positions[DFR] = rubix_cube->corner_positions[DFL];
-  /* Fix colors for DFR corner */
-  color_temp = rubix_cube->corner_positions[DFR].colors[1];
-  rubix_cube->corner_positions[DFR].colors[1] = rubix_cube->corner_positions[DFL].colors[2];
-  rubix_cube->corner_positions[UFL].colors[2] = color_temp;
+  /* Update tile color */
+  color_temp = rubix_cube->tile_colors[bBR];
+  rubix_cube->tile_colors[bBR] = rubix_cube->tile_colors[rBR];
+  rubix_cube->tile_colors[rBR] = rubix_cube->tile_colors[gBR];
+  rubix_cube->tile_colors[gBR] = rubix_cube->tile_colors[oBR];
+  rubix_cube->tile_colors[oBR] = color_temp;
 
-  rubix_cube->corner_positions[DFL] = rubix_cube->corner_positions[DBL];
-  /* Fix colors for DFL corner */
-  color_temp = rubix_cube->corner_positions[DFL].colors[1];
-  rubix_cube->corner_positions[DFL].colors[1] = rubix_cube->corner_positions[DFL].colors[2];
-  rubix_cube->corner_positions[DFL].colors[2] = color_temp;
+  color_temp = rubix_cube->tile_colors[bBL];
+  rubix_cube->tile_colors[bBL] = rubix_cube->tile_colors[rBL];
+  rubix_cube->tile_colors[rBL] = rubix_cube->tile_colors[gBL];
+  rubix_cube->tile_colors[gBL] = rubix_cube->tile_colors[oBL];
+  rubix_cube->tile_colors[oBL] = color_temp;
 
-  rubix_cube->corner_positions[DBL] = rubix_cube->corner_positions[DBR];
-  /* Fix colors for DBL corner */
-  color_temp = rubix_cube->corner_positions[DBL].colors[1];
-  rubix_cube->corner_positions[DBL].colors[1] = rubix_cube->corner_positions[DBL].colors[2];
-  rubix_cube->corner_positions[DBL].colors[2] = color_temp;
+  color_temp = rubix_cube->tile_colors[bB];
+  rubix_cube->tile_colors[bB] = rubix_cube->tile_colors[rB];
+  rubix_cube->tile_colors[rB] = rubix_cube->tile_colors[gB];
+  rubix_cube->tile_colors[gB] = rubix_cube->tile_colors[oR];
+  rubix_cube->tile_colors[oR] = color_temp;
 
-  rubix_cube->corner_positions[DBR] = corner_temp;
-  /* Fix colors for DBR corner */
-  color_temp = rubix_cube->corner_positions[DBR].colors[1];
-  rubix_cube->corner_positions[DBR].colors[1] = rubix_cube->corner_positions[DBR].colors[2];
-  rubix_cube->corner_positions[DBR].colors[2] = color_temp;
+  color_temp = rubix_cube->tile_colors[yTL];
+  rubix_cube->tile_colors[yTL] = rubix_cube->tile_colors[yBL];
+  rubix_cube->tile_colors[yBL] = rubix_cube->tile_colors[yBR];
+  rubix_cube->tile_colors[yBR] = rubix_cube->tile_colors[yTR];
+  rubix_cube->tile_colors[yTR] = color_temp;
 
-  /* Updated Cube Orientation */
-  rubix_cube->corner_orientation[DFR] = 0;
-  rubix_cube->corner_orientation[DFL] = 0;
-  rubix_cube->corner_orientation[DBL] = 0;
-  rubix_cube->corner_orientation[DBR] = 0;
+  color_temp = rubix_cube->tile_colors[yT];
+  rubix_cube->tile_colors[yT] = rubix_cube->tile_colors[yL];
+  rubix_cube->tile_colors[yL] = rubix_cube->tile_colors[yB];
+  rubix_cube->tile_colors[yB] = rubix_cube->tile_colors[yR];
+  rubix_cube->tile_colors[yR] = color_temp;
 }
 
 void down_prime_turn(RubixCube *rubix_cube) {
-  Edge edge_temp;  
-  Corner corner_temp;  
-  enum Color color_temp;
-
   for (int i = 0; i < 3; i++) {
-    left_turn(rubix_cube);
+    down_turn(rubix_cube);
   }
 }
 
 void down_double_turn(RubixCube *rubix_cube) {
-  Edge edge_temp;  
-  Corner corner_temp;  
-  enum Color color_temp;
-
   for (int i = 0; i < 2; i++) {
-    left_turn(rubix_cube);
+    down_turn(rubix_cube);
   }
 }
 
 void up_turn(RubixCube *rubix_cube) { 
-  Edge edge_temp;  
-  Corner corner_temp;  
+  enum EDGE_POS edge_pos_temp;
+  enum CORNER_POS corner_pos_temp;
+  unsigned char edge_temp;  
   enum Color color_temp;
 
-  edge_temp = rubix_cube->edge_positions[UL];
+  /* Update Corner Position */
+  corner_pos_temp = rubix_cube->corner_positions[UFL];
+  rubix_cube->corner_positions[UFL] = rubix_cube->corner_positions[UFR];
+  rubix_cube->corner_positions[UFR] = rubix_cube->corner_positions[UBR];
+  rubix_cube->corner_positions[UBR] = rubix_cube->corner_positions[UBL];
+  rubix_cube->corner_positions[UBL] = corner_pos_temp;
 
-  rubix_cube->edge_positions[UL] = rubix_cube->edge_positions[UF];
+  /* Update Edge Position */
+  edge_pos_temp = rubix_cube->edge_positions[UF];
   rubix_cube->edge_positions[UF] = rubix_cube->edge_positions[UR];
   rubix_cube->edge_positions[UR] = rubix_cube->edge_positions[UB];
-  rubix_cube->edge_positions[UB] = edge_temp;
+  rubix_cube->edge_positions[UB] = rubix_cube->edge_positions[UL];
+  rubix_cube->edge_positions[UL] = edge_pos_temp ;
 
-  corner_temp = rubix_cube->corner_positions[UFL];
+  /* Update edge orientation */
+  edge_temp = rubix_cube->edge_orientation[UF];
+  rubix_cube->edge_orientation[UF] = (rubix_cube->edge_orientation[UR] + 1) % 2;
+  rubix_cube->edge_orientation[UR] = (rubix_cube->edge_orientation[UB] + 1) % 2;
+  rubix_cube->edge_orientation[UB] = (rubix_cube->edge_orientation[UL] + 1) % 2;
+  rubix_cube->edge_orientation[UL] = (edge_temp + 1) % 2;
 
-  rubix_cube->corner_positions[UFL] = rubix_cube->corner_positions[UFR];
-  /* Fix colors for UFL corner */
-  color_temp = rubix_cube->corner_positions[UFL].colors[1];
-  rubix_cube->corner_positions[UFL].colors[1] = rubix_cube->corner_positions[UFL].colors[2];
-  rubix_cube->corner_positions[UFL].colors[2] = color_temp;
+  /* Update tile color */
+  color_temp = rubix_cube->tile_colors[bTL];
+  rubix_cube->tile_colors[bTL] = rubix_cube->tile_colors[oTL];
+  rubix_cube->tile_colors[oTL] = rubix_cube->tile_colors[gTL];
+  rubix_cube->tile_colors[gTL] = rubix_cube->tile_colors[rTL];
+  rubix_cube->tile_colors[rTL] = color_temp;
 
-  rubix_cube->corner_positions[UFR] = rubix_cube->corner_positions[UBR];
-  /* Fix colors for UBL corner */
-  color_temp = rubix_cube->corner_positions[UBL].colors[1];
-  rubix_cube->corner_positions[UBL].colors[1] = rubix_cube->corner_positions[UFL].colors[2];
-  rubix_cube->corner_positions[UBL].colors[2] = color_temp;
+  color_temp = rubix_cube->tile_colors[bTR];
+  rubix_cube->tile_colors[bTR] = rubix_cube->tile_colors[oTR];
+  rubix_cube->tile_colors[oTR] = rubix_cube->tile_colors[gTR];
+  rubix_cube->tile_colors[gTR] = rubix_cube->tile_colors[rTR];
+  rubix_cube->tile_colors[rTR] = color_temp;
 
-  rubix_cube->corner_positions[UBR] = rubix_cube->corner_positions[UBL];
-  /* Fix colors for UBR corner */
-  color_temp = rubix_cube->corner_positions[UBL].colors[1];
-  rubix_cube->corner_positions[UBL].colors[1] = rubix_cube->corner_positions[UFL].colors[2];
-  rubix_cube->corner_positions[UBL].colors[2] = color_temp;
+  color_temp = rubix_cube->tile_colors[bT];
+  rubix_cube->tile_colors[bT] = rubix_cube->tile_colors[oT];
+  rubix_cube->tile_colors[oT] = rubix_cube->tile_colors[gT];
+  rubix_cube->tile_colors[gT] = rubix_cube->tile_colors[rT];
+  rubix_cube->tile_colors[rT] = color_temp;
 
-  rubix_cube->corner_positions[DBL] = corner_temp;
-  /* Fix colors for UFR corner */
-  color_temp = rubix_cube->corner_positions[UFL].colors[1];
-  rubix_cube->corner_positions[UFL].colors[1] = rubix_cube->corner_positions[UFL].colors[2];
-  rubix_cube->corner_positions[UFL].colors[2] = color_temp;
+  color_temp = rubix_cube->tile_colors[wTL];
+  rubix_cube->tile_colors[wTL] = rubix_cube->tile_colors[wBL];
+  rubix_cube->tile_colors[wBL] = rubix_cube->tile_colors[wBR];
+  rubix_cube->tile_colors[wBR] = rubix_cube->tile_colors[wTR];
+  rubix_cube->tile_colors[wTR] = color_temp;
 
-  /* Updated Cube Orientation */
-  rubix_cube->corner_orientation[UFL] = 0;
-  rubix_cube->corner_orientation[UFR] = 0;
-  rubix_cube->corner_orientation[UBR] = 0;
-  rubix_cube->corner_orientation[UBL] = 0;
+  color_temp = rubix_cube->tile_colors[wT];
+  rubix_cube->tile_colors[wT] = rubix_cube->tile_colors[wL];
+  rubix_cube->tile_colors[wL] = rubix_cube->tile_colors[wB];
+  rubix_cube->tile_colors[wB] = rubix_cube->tile_colors[wR];
+  rubix_cube->tile_colors[wR] = color_temp;
 }
 
 void up_prime_turn(RubixCube *rubix_cube) {
-  Edge edge_temp;  
-  Corner corner_temp;  
-  enum Color color_temp;
-
   for (int i = 0; i < 3; i++) {
-    left_turn(rubix_cube);
+    up_turn(rubix_cube);
   }
 }
 
 void up_double_turn(RubixCube *rubix_cube) {
-  Edge edge_temp;  
-  Corner corner_temp;  
-  enum Color color_temp;
-
   for (int i = 0; i < 2; i++) {
-    left_turn(rubix_cube);
+    up_turn(rubix_cube);
   }
 }
 
 void front_turn(RubixCube *rubix_cube) {
-  Edge edge_temp;  
-  Corner corner_temp;  
+  enum EDGE_POS edge_pos_temp;
+  enum CORNER_POS corner_pos_temp;
+  unsigned char edge_temp;  
+  unsigned char corner_temp;  
   enum Color color_temp;
 
-  edge_temp = rubix_cube->edge_positions[UF];
+  /* Update Corner Position */
+  corner_pos_temp = rubix_cube->corner_positions[UFL];
+  rubix_cube->corner_positions[UFL] = rubix_cube->corner_positions[DFL];
+  rubix_cube->corner_positions[DFL] = rubix_cube->corner_positions[DFR];
+  rubix_cube->corner_positions[DFR] = rubix_cube->corner_positions[UFR];
+  rubix_cube->corner_positions[UFR] = corner_pos_temp;
 
+  /* Update Edge Position */
+  edge_pos_temp = rubix_cube->edge_positions[UF];
   rubix_cube->edge_positions[UF] = rubix_cube->edge_positions[FL];
   rubix_cube->edge_positions[FL] = rubix_cube->edge_positions[DF];
   rubix_cube->edge_positions[DF] = rubix_cube->edge_positions[FR];
-  rubix_cube->edge_positions[FR] = edge_temp;
+  rubix_cube->edge_positions[FR] = edge_pos_temp ;
 
-  corner_temp = rubix_cube->corner_positions[UFL];
+  /* Update corner orientation */
+  corner_temp = rubix_cube->corner_orientation[UFL];
+  rubix_cube->corner_orientation[UFL] = (rubix_cube->corner_orientation[DFL] + 2) % 3;
+  rubix_cube->corner_orientation[DFL] = (rubix_cube->corner_orientation[DFR] + 2) % 3;
+  rubix_cube->corner_orientation[DFR] = (rubix_cube->corner_orientation[UFR] + 1) % 3;
+  rubix_cube->corner_orientation[UFR] = (corner_temp + 1) % 3;
 
-  rubix_cube->corner_positions[UFL] = rubix_cube->corner_positions[DFL];
-  /* Fix colors for UFL corner */
-  color_temp = rubix_cube->corner_positions[UFL].colors[0];
-  rubix_cube->corner_positions[UFL].colors[0] = rubix_cube->corner_positions[UFL].colors[2];
-  rubix_cube->corner_positions[UFL].colors[2] = color_temp;
+  /* Update edge orientation */
+  edge_temp = rubix_cube->edge_orientation[UF];
+  rubix_cube->edge_orientation[UF] = (rubix_cube->edge_orientation[FL] + 1) % 2;
+  rubix_cube->edge_orientation[FL] = (rubix_cube->edge_orientation[DF] + 1) % 2;
+  rubix_cube->edge_orientation[DF] = (rubix_cube->edge_orientation[FR] + 1) % 2;
+  rubix_cube->edge_orientation[FR] = (edge_temp + 1) % 2;
 
-  rubix_cube->corner_positions[DFL] = rubix_cube->corner_positions[DFR];
-  /* Fix colors for DFL corner */
-  color_temp = rubix_cube->corner_positions[DFL].colors[0];
-  rubix_cube->corner_positions[DFL].colors[0] = rubix_cube->corner_positions[DFL].colors[2];
-  rubix_cube->corner_positions[DFL].colors[2] = color_temp;
+  /* Update tile color */
+  color_temp = rubix_cube->tile_colors[wBL];
+  rubix_cube->tile_colors[wBL] = rubix_cube->tile_colors[rBR];
+  rubix_cube->tile_colors[rBR] = rubix_cube->tile_colors[yTR];
+  rubix_cube->tile_colors[yTR] = rubix_cube->tile_colors[oTL];
+  rubix_cube->tile_colors[oTL] = color_temp;
 
-  rubix_cube->corner_positions[DFR] = rubix_cube->corner_positions[UFR];
-  /* Fix colors for DFR corner */
-  color_temp = rubix_cube->corner_positions[DFR].colors[0];
-  rubix_cube->corner_positions[DFR].colors[0] = rubix_cube->corner_positions[DFR].colors[2];
-  rubix_cube->corner_positions[DFR].colors[2] = color_temp;
+  color_temp = rubix_cube->tile_colors[wBR];
+  rubix_cube->tile_colors[wBR] = rubix_cube->tile_colors[rTR];
+  rubix_cube->tile_colors[rTR] = rubix_cube->tile_colors[yTL];
+  rubix_cube->tile_colors[yTL] = rubix_cube->tile_colors[oBL];
+  rubix_cube->tile_colors[oBL] = color_temp;
 
-  rubix_cube->corner_positions[UFR] = corner_temp;
-  /* Fix colors for UFR corner */
-  color_temp = rubix_cube->corner_positions[UFR].colors[0];
-  rubix_cube->corner_positions[UFR].colors[0] = rubix_cube->corner_positions[UFL].colors[2];
-  rubix_cube->corner_positions[UFR].colors[2] = color_temp;
+  color_temp = rubix_cube->tile_colors[wB];
+  rubix_cube->tile_colors[wB] = rubix_cube->tile_colors[rR];
+  rubix_cube->tile_colors[rR] = rubix_cube->tile_colors[yT];
+  rubix_cube->tile_colors[yT] = rubix_cube->tile_colors[oL];
+  rubix_cube->tile_colors[oL] = color_temp;
 
-  /* Updated Cube Orientation */
-  rubix_cube->corner_orientation[UFL] = 0;
-  rubix_cube->corner_orientation[DFL] = 0;
-  rubix_cube->corner_orientation[DFR] = 0;
-  rubix_cube->corner_orientation[UFR] = 0;
+  color_temp = rubix_cube->tile_colors[bTL];
+  rubix_cube->tile_colors[bTL] = rubix_cube->tile_colors[bBL];
+  rubix_cube->tile_colors[bBL] = rubix_cube->tile_colors[bBR];
+  rubix_cube->tile_colors[bBR] = rubix_cube->tile_colors[bTR];
+  rubix_cube->tile_colors[bTR] = color_temp;
+
+  color_temp = rubix_cube->tile_colors[bT];
+  rubix_cube->tile_colors[bT] = rubix_cube->tile_colors[bL];
+  rubix_cube->tile_colors[bL] = rubix_cube->tile_colors[bB];
+  rubix_cube->tile_colors[bB] = rubix_cube->tile_colors[bR];
+  rubix_cube->tile_colors[bR] = color_temp;
 }
 
 void front_prime_turn(RubixCube *rubix_cube) {
-  Edge edge_temp;  
-  Corner corner_temp;  
-  enum Color color_temp;
-
   for (int i = 0; i < 3; i++) {
-    left_turn(rubix_cube);
+    front_turn(rubix_cube);
   }
 }
 
 void front_double_turn(RubixCube *rubix_cube) {
-  Edge edge_temp;  
-  Corner corner_temp;  
-  enum Color color_temp;
-
   for (int i = 0; i < 2; i++) {
-    left_turn(rubix_cube);
+    front_turn(rubix_cube);
   }
 }
 
 void back_turn(RubixCube *rubix_cube) {
-  Edge edge_temp;  
-  Corner corner_temp;  
+  enum EDGE_POS edge_pos_temp;
+  enum CORNER_POS corner_pos_temp;
+  unsigned char edge_temp;  
+  unsigned char corner_temp;  
   enum Color color_temp;
 
-  edge_temp = rubix_cube->edge_positions[UB];
+  /* Update Corner Position */
+  corner_pos_temp = rubix_cube->corner_positions[UBL];
+  rubix_cube->corner_positions[UBL] = rubix_cube->corner_positions[UBR];
+  rubix_cube->corner_positions[UBR] = rubix_cube->corner_positions[DBR];
+  rubix_cube->corner_positions[DBR] = rubix_cube->corner_positions[DBL];
+  rubix_cube->corner_positions[DBL] = corner_pos_temp;
 
+  /* Update Edge Position */
+  edge_pos_temp = rubix_cube->edge_positions[UB];
   rubix_cube->edge_positions[UB] = rubix_cube->edge_positions[BR];
   rubix_cube->edge_positions[BR] = rubix_cube->edge_positions[DB];
   rubix_cube->edge_positions[DB] = rubix_cube->edge_positions[BL];
-  rubix_cube->edge_positions[BL] = edge_temp;
+  rubix_cube->edge_positions[BL] = edge_pos_temp ;
 
-  corner_temp = rubix_cube->corner_positions[UBL];
+  /* Update corner orientation */
+  corner_temp = rubix_cube->corner_orientation[UBL];
+  rubix_cube->corner_orientation[UBL] = (rubix_cube->corner_orientation[UBR] + 1) % 3;
+  rubix_cube->corner_orientation[UBR] = (rubix_cube->corner_orientation[DBR] + 2) % 3;
+  rubix_cube->corner_orientation[DBR] = (rubix_cube->corner_orientation[DBL] + 2) % 3;
+  rubix_cube->corner_orientation[DBL] = (corner_temp + 1) % 3;
 
-  rubix_cube->corner_positions[UBL] = rubix_cube->corner_positions[UBR];
-  /* Fix colors for UBL corner */
-  color_temp = rubix_cube->corner_positions[UBL].colors[0];
-  rubix_cube->corner_positions[UBL].colors[0] = rubix_cube->corner_positions[UBL].colors[2];
-  rubix_cube->corner_positions[UBL].colors[2] = color_temp;
+  /* Update edge orientation */
+  edge_temp = rubix_cube->edge_orientation[UB];
+  rubix_cube->edge_orientation[UB] = (rubix_cube->edge_orientation[BR] + 1) % 2;
+  rubix_cube->edge_orientation[BR] = (rubix_cube->edge_orientation[DB] + 1) % 2;
+  rubix_cube->edge_orientation[DB] = (rubix_cube->edge_orientation[BL] + 1) % 2;
+  rubix_cube->edge_orientation[BL] = (edge_temp + 1) % 2;
 
-  rubix_cube->corner_positions[UBR] = rubix_cube->corner_positions[DBR];
-  /* Fix colors for UBR corner */
-  color_temp = rubix_cube->corner_positions[UBR].colors[0];
-  rubix_cube->corner_positions[UBR].colors[0] = rubix_cube->corner_positions[UBR].colors[2];
-  rubix_cube->corner_positions[UBR].colors[2] = color_temp;
+  /* Update tile color */
+  color_temp = rubix_cube->tile_colors[wTL];
+  rubix_cube->tile_colors[wTL] = rubix_cube->tile_colors[oTR];
+  rubix_cube->tile_colors[oTR] = rubix_cube->tile_colors[yBR];
+  rubix_cube->tile_colors[yBR] = rubix_cube->tile_colors[rBL];
+  rubix_cube->tile_colors[rBL] = color_temp;
 
-  rubix_cube->corner_positions[DBR] = rubix_cube->corner_positions[DBL];
-  /* Fix colors for DBR corner */
-  color_temp = rubix_cube->corner_positions[DBR].colors[0];
-  rubix_cube->corner_positions[DBR].colors[0] = rubix_cube->corner_positions[DBR].colors[2];
-  rubix_cube->corner_positions[DBR].colors[2] = color_temp;
+  color_temp = rubix_cube->tile_colors[wTR];
+  rubix_cube->tile_colors[wTR] = rubix_cube->tile_colors[oBR];
+  rubix_cube->tile_colors[oBR] = rubix_cube->tile_colors[yBL];
+  rubix_cube->tile_colors[yBL] = rubix_cube->tile_colors[rTL];
+  rubix_cube->tile_colors[rTL] = color_temp;
 
-  rubix_cube->corner_positions[DBL] = corner_temp;
-  /* Fix colors for DBL corner */
-  color_temp = rubix_cube->corner_positions[DBL].colors[0];
-  rubix_cube->corner_positions[DBL].colors[0] = rubix_cube->corner_positions[DBL].colors[2];
-  rubix_cube->corner_positions[DBL].colors[2] = color_temp;
+  color_temp = rubix_cube->tile_colors[wT];
+  rubix_cube->tile_colors[wT] = rubix_cube->tile_colors[oR];
+  rubix_cube->tile_colors[oR] = rubix_cube->tile_colors[yB];
+  rubix_cube->tile_colors[yB] = rubix_cube->tile_colors[rL];
+  rubix_cube->tile_colors[rL] = color_temp;
 
-  /* Updated Cube Orientation */
-  rubix_cube->corner_orientation[UBL] = 0;
-  rubix_cube->corner_orientation[UBR] = 0;
-  rubix_cube->corner_orientation[DBR] = 0;
-  rubix_cube->corner_orientation[DBL] = 0;
+  color_temp = rubix_cube->tile_colors[gTL];
+  rubix_cube->tile_colors[gTL] = rubix_cube->tile_colors[gBL];
+  rubix_cube->tile_colors[gBL] = rubix_cube->tile_colors[gBR];
+  rubix_cube->tile_colors[gBR] = rubix_cube->tile_colors[gTR];
+  rubix_cube->tile_colors[gTR] = color_temp;
+
+  color_temp = rubix_cube->tile_colors[gT];
+  rubix_cube->tile_colors[gT] = rubix_cube->tile_colors[gL];
+  rubix_cube->tile_colors[gL] = rubix_cube->tile_colors[gB];
+  rubix_cube->tile_colors[gB] = rubix_cube->tile_colors[gR];
+  rubix_cube->tile_colors[gR] = color_temp;
 }
 
 void back_prime_turn(RubixCube *rubix_cube) {
-  Edge edge_temp;  
-  Corner corner_temp;  
-  enum Color color_temp;
-
   for (int i = 0; i < 3; i++) {
-    left_turn(rubix_cube);
+    back_turn(rubix_cube);
   }
 }
 
 void back_double_turn(RubixCube *rubix_cube) {
-  Edge edge_temp;  
-  Corner corner_temp;  
-  enum Color color_temp;
-
   for (int i = 0; i < 2; i++) {
-    left_turn(rubix_cube);
+    back_turn(rubix_cube);
   }
 }
