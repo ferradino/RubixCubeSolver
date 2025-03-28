@@ -1,36 +1,34 @@
 #include "../include/cube.h"
 #include <stdio.h>
 
-/* !!!! NEED to FINISH this !!!! */
-enum CORNER_POS get_corner(enum Color c1, enum Color c2, enum Color c3) {
-  enum CORNER_POS pos = -1;
+corner_t get_corner_position(color_t c1,  color_t c2,  color_t c3) {
+  corner_t pos = -1;
 
-  if ((c1 == WHITE && c2 == BLUE) || (c1 == BLUE || c2 == WHITE)) {
+  if ((c1 == WHITE && c2 == BLUE && c3 == ORANGE) || (c1 == WHITE && c2 == ORANGE && c3 == BLUE) || (c1 == BLUE && c2 == ORANGE && c3 == WHITE) || (c1 == BLUE && c2 == WHITE && c3 == ORANGE) || (c1 == ORANGE && c2 == BLUE && c3 == WHITE) || (c1 == ORANGE && c2 == WHITE && c3 == BLUE)) {
     pos = UFR;
-  } else if ((c1 == WHITE && c2 == RED) || (c1 == RED && c2 == WHITE)) {
+  } else if ((c1 == WHITE && c2 == BLUE && c3 == RED) || (c1 == WHITE && c2 == RED && c3 == BLUE) || (c1 == BLUE && c2 == RED && c3 == WHITE) || (c1 == BLUE && c2 == WHITE && c3 == RED) || (c1 == RED && c2 == BLUE && c3 == WHITE) || (c1 == RED && c2 == WHITE && c3 == BLUE)) {
     pos = UFL;
-  } else if ((c1 == WHITE && c2 == GREEN) || (c1 == GREEN && c2 == WHITE)) {
+  } else if ((c1 == WHITE && c2 == GREEN && c3 == RED) || (c1 == WHITE && c2 == RED && c3 == GREEN) || (c1 == GREEN && c2 == RED && c3 == WHITE) || (c1 == GREEN && c2 == WHITE && c3 == RED) || (c1 == RED && c2 == GREEN && c3 == WHITE) || (c1 == RED && c2 == WHITE && c3 == GREEN)) {
     pos = UBL;
-  } else if ((c1 == WHITE && c2 == ORANGE) || (c1 == ORANGE && c2 == WHITE)) {
+  } else if ((c1 == WHITE && c2 == GREEN && c3 == ORANGE) || (c1 == WHITE && c2 == ORANGE && c3 == GREEN) || (c1 == GREEN && c2 == ORANGE && c3 == WHITE) || (c1 == GREEN && c2 == WHITE && c3 == ORANGE) || (c1 == ORANGE && c2 == GREEN && c3 == WHITE) || (c1 == ORANGE && c2 == WHITE && c3 == GREEN)) {
     pos = UBR;
-  } else if ((c1 == YELLOW && c2 == BLUE) || (c1 == BLUE && c2 == YELLOW)) {
+  } else if ((c1 == YELLOW && c2 == BLUE && c3 == ORANGE) || (c1 == YELLOW && c2 == ORANGE && c3 == BLUE) || (c1 == BLUE && c2 == ORANGE && c3 == YELLOW) || (c1 == BLUE && c2 == YELLOW && c3 == ORANGE) || (c1 == ORANGE && c2 == BLUE && c3 == YELLOW) || (c1 == ORANGE && c2 == YELLOW && c3 == BLUE)) {
     pos = DFR;
-  } else if ((c1 == YELLOW && c2 == RED) || (c1 == RED && c2 == YELLOW)) {
+  } else if ((c1 == YELLOW && c2 == BLUE && c3 == RED) || (c1 == YELLOW && c2 == RED && c3 == BLUE) || (c1 == BLUE && c2 == RED && c3 == YELLOW) || (c1 == BLUE && c2 == YELLOW && c3 == RED) || (c1 == RED && c2 == BLUE && c3 == YELLOW) || (c1 == RED && c2 == YELLOW && c3 == BLUE)) {
     pos = DFL;
-  } else if ((c1 == YELLOW && c2 == GREEN) || (c1 == GREEN && c2 == YELLOW)) {
+  } else if ((c1 == YELLOW && c2 == GREEN && c3 == RED) || (c1 == YELLOW && c2 == RED && c3 == GREEN) || (c1 == GREEN && c2 == RED && c3 == YELLOW) || (c1 == GREEN && c2 == YELLOW && c3 == RED) || (c1 == RED && c2 == GREEN && c3 == YELLOW) || (c1 == RED && c2 == YELLOW && c3 == GREEN)) {
     pos = DBL;
-  } else if ((c1 == YELLOW && c2 == ORANGE) || (c1 == ORANGE && c2 == YELLOW)) {
+  } else if ((c1 == YELLOW && c2 == GREEN && c3 == ORANGE) || (c1 == YELLOW && c2 == ORANGE && c3 == GREEN) || (c1 == GREEN && c2 == ORANGE && c3 == YELLOW) || (c1 == GREEN && c2 == YELLOW && c3 == ORANGE) || (c1 == ORANGE && c2 == GREEN && c3 == YELLOW) || (c1 == ORANGE && c2 == YELLOW && c3 == GREEN)) {
     pos = DBR;
   }
 
   return pos;
-
 }
 
-enum EDGE_POS get_edge(enum Color c1, enum Color c2) {
-  enum EDGE_POS pos = -1;
+edge_t get_edge_position(color_t c1,  color_t c2) {
+  edge_t pos = -1;
 
-  if ((c1 == WHITE && c2 == BLUE) || (c1 == BLUE || c2 == WHITE)) {
+  if ((c1 == WHITE && c2 == BLUE) || (c1 == BLUE && c2 == WHITE)) {
     pos = UF;
   } else if ((c1 == WHITE && c2 == RED) || (c1 == RED && c2 == WHITE)) {
     pos = UL;
@@ -59,70 +57,249 @@ enum EDGE_POS get_edge(enum Color c1, enum Color c2) {
   return pos;
 }
 
-void get_initial_position(RubixCube *rubix_cube) {
+void get_initial_positions(rubix_cube_t *rubix_cube) {
+  /* Edge Positions */
+  rubix_cube->edge_positions[UF] = get_edge_position(rubix_cube->tile_colors[wB], rubix_cube->tile_colors[bT]);
+  rubix_cube->edge_positions[UL] = get_edge_position(rubix_cube->tile_colors[wL], rubix_cube->tile_colors[rT]);
+  rubix_cube->edge_positions[UB] = get_edge_position(rubix_cube->tile_colors[wT], rubix_cube->tile_colors[gT]);
+  rubix_cube->edge_positions[UR] = get_edge_position(rubix_cube->tile_colors[wR], rubix_cube->tile_colors[oT]);
 
+  rubix_cube->edge_positions[DF] = get_edge_position(rubix_cube->tile_colors[yT], rubix_cube->tile_colors[bB]);
+  rubix_cube->edge_positions[DL] = get_edge_position(rubix_cube->tile_colors[yL], rubix_cube->tile_colors[rB]);
+  rubix_cube->edge_positions[DB] = get_edge_position(rubix_cube->tile_colors[yB], rubix_cube->tile_colors[gB]);
+  rubix_cube->edge_positions[DR] = get_edge_position(rubix_cube->tile_colors[yR], rubix_cube->tile_colors[oB]);
+
+  rubix_cube->edge_positions[FL] = get_edge_position(rubix_cube->tile_colors[bL], rubix_cube->tile_colors[rR]);
+  rubix_cube->edge_positions[BL] = get_edge_position(rubix_cube->tile_colors[gR], rubix_cube->tile_colors[rL]);
+  rubix_cube->edge_positions[BR] = get_edge_position(rubix_cube->tile_colors[gL], rubix_cube->tile_colors[oR]);
+  rubix_cube->edge_positions[FR] = get_edge_position(rubix_cube->tile_colors[bR], rubix_cube->tile_colors[oL]);
+
+  /* Corner Positions */
+  rubix_cube->corner_positions[UFR] = get_corner_position(rubix_cube->tile_colors[wBR], rubix_cube->tile_colors[bTR], rubix_cube->tile_colors[oTL]);
+  rubix_cube->corner_positions[UFL] = get_corner_position(rubix_cube->tile_colors[wBL], rubix_cube->tile_colors[bTL], rubix_cube->tile_colors[rTR]);
+  rubix_cube->corner_positions[UBL] = get_corner_position(rubix_cube->tile_colors[wTL], rubix_cube->tile_colors[gTR], rubix_cube->tile_colors[rTL]);
+  rubix_cube->corner_positions[UBR] = get_corner_position(rubix_cube->tile_colors[wTR], rubix_cube->tile_colors[gTL], rubix_cube->tile_colors[oTR]);
+
+  rubix_cube->corner_positions[DFR] = get_corner_position(rubix_cube->tile_colors[yTR], rubix_cube->tile_colors[bBR], rubix_cube->tile_colors[oBL]);
+  rubix_cube->corner_positions[DFL] = get_corner_position(rubix_cube->tile_colors[yTL], rubix_cube->tile_colors[bBL], rubix_cube->tile_colors[rBR]);
+  rubix_cube->corner_positions[DBL] = get_corner_position(rubix_cube->tile_colors[yBL], rubix_cube->tile_colors[gBR], rubix_cube->tile_colors[rBL]);
+  rubix_cube->corner_positions[DBR] = get_corner_position(rubix_cube->tile_colors[yBR], rubix_cube->tile_colors[gBL], rubix_cube->tile_colors[oBR]);
 }
 
-void get_initial_orientation(RubixCube *rubix_cube) {
+unsigned char get_edge_orientation(const edge_t edge, const color_t tile_colors[NUM_TILES]) {
+  unsigned char ori = -1;
+  
+  switch (edge) {
+    case UF:
+      ori = 0;
+      break;
+    case UL:
+      ori = 0;
+      break;
+    case UB:
+      ori = 0;
+      break;
+    case UR:
+      ori = 0;
+      break;
+    case DF:
+      ori = 0;
+      break;
+    case DL:
+      ori = 0;
+      break;
+    case DB:
+      ori = 0;
+      break;
+    case DR:
+      ori = 0;
+      break;
+    case FL:
+      if (tile_colors[bL] == RED || tile_colors[bL] == ORANGE || tile_colors[rR] == BLUE || tile_colors[rR] == GREEN) {
+        ori = 1;
+      } else {
+        ori = 0;
+      }
+      break;
+    case BL:
+      if (tile_colors[gR] == RED || tile_colors[gR] == ORANGE || tile_colors[rL] == BLUE || tile_colors[rL] == GREEN) {
+        ori = 1;
+      } else {
+        ori = 0;
+      }
+      break;
+    case BR:
+      if (tile_colors[gL] == RED || tile_colors[gL] == ORANGE || tile_colors[oR] == BLUE || tile_colors[oR] == GREEN) {
+        ori = 1;
+      } else {
+        ori = 0;
+      }
+      break;
+    case FR:
+      if (tile_colors[bR] == RED || tile_colors[bR] == ORANGE || tile_colors[oL] == BLUE || tile_colors[oL] == GREEN) {
+        ori = 1;
+      } else {
+        ori = 0;
+      }
+      break;
+  }
 
+  return ori;
 }
 
-void rubix_cube_init(RubixCube *rubix_cube) {
-  read_rubix_cube_tile_colors(rubix_cube);
-  get_initial_position(rubix_cube);
-  get_initial_orientation(rubix_cube);
+unsigned char get_corner_orientation(const corner_t corner, const color_t tile_colors[NUM_TILES]) {
+  unsigned char ori = -1;
+
+  switch (corner) {
+    case UFR:
+      if (tile_colors[wBR] == WHITE || tile_colors[wBR] == YELLOW) {
+        ori = 0;
+      } else if (tile_colors[oTL] == WHITE || tile_colors[oTL] == YELLOW) {
+        ori = 1;
+      } else {
+        ori = 2;
+      }
+      break;
+    case UFL:
+      if (tile_colors[wBL] == WHITE || tile_colors[wBL] == YELLOW) {
+        ori = 0;
+      } else if (tile_colors[rTR] == WHITE || tile_colors[rTR] == YELLOW) {
+        ori = 1;
+      } else {
+        ori = 2;
+      }
+      break;
+    case UBL:
+      if (tile_colors[wTL] == WHITE || tile_colors[wTL] == YELLOW) {
+        ori = 0;
+      } else if (tile_colors[rTL] == WHITE || tile_colors[oTL] == YELLOW) {
+        ori = 1;
+      } else {
+        ori = 2;
+      }
+      break;
+    case UBR:
+      if (tile_colors[wTR] == WHITE || tile_colors[wTR] == YELLOW) {
+        ori = 0;
+      } else if (tile_colors[oTR] == WHITE || tile_colors[oTR] == YELLOW) {
+        ori = 1;
+      } else {
+        ori = 2;
+      }
+      break;
+    case DFR:
+      if (tile_colors[yTR] == WHITE || tile_colors[yTR] == YELLOW) {
+        ori = 0;
+      } else if (tile_colors[oBL] == WHITE || tile_colors[oBL] == YELLOW) {
+        ori = 1;
+      } else {
+        ori = 2;
+      }
+      break;
+    case DFL:
+      if (tile_colors[yTL] == WHITE || tile_colors[yTL] == YELLOW) {
+        ori = 0;
+      } else if (tile_colors[rBR] == WHITE || tile_colors[rBR] == YELLOW) {
+        ori = 1;
+      } else {
+        ori = 2;
+      }
+      break;
+    case DBL:
+      if (tile_colors[yBL] == WHITE || tile_colors[yBL] == YELLOW) {
+        ori = 0;
+      } else if (tile_colors[rBL] == WHITE || tile_colors[rBL] == YELLOW) {
+        ori = 1;
+      } else {
+        ori = 2;
+      }
+      break;
+    case DBR:
+      if (tile_colors[yBR] == WHITE || tile_colors[yBR] == YELLOW) {
+        ori = 0;
+      } else if (tile_colors[oBR] == WHITE || tile_colors[oBR] == YELLOW) {
+        ori = 1;
+      } else {
+        ori = 2;
+      }
+      break;
+  }
+
+  return ori;
 }
 
-void read_rubix_cube_tile_colors(RubixCube *rubix_cube) {
-  enum Color color; 
+void get_initial_orientations(rubix_cube_t *rubix_cube) {
+  for (int i = 0; i < NUM_EDGES; i++) {
+    rubix_cube->edge_orientation[i] = get_edge_orientation(i, rubix_cube->tile_colors);
+  }
+
+  for (int i = 0; i < NUM_CORNERS; i++) {
+    rubix_cube->corner_orientation[i] = get_corner_orientation(i, rubix_cube->tile_colors);
+  }
+}
+
+void read_rubix_cube_tile_colors(robot_t *robot, rubix_cube_t *rubix_cube) {
+  motor_t *arm = &(robot->arm_motor);
+  motor_t *basket = &(robot->basket_motor);
+  color_t color; 
 
   for (int i = 0; i < NUM_FACES; i++) {
-    color = read_center_tile_color();
+    color = read_center_tile_color(robot);
     printf("%d", color);
     rubix_cube->tile_colors[i * 9] = color;
 
-    for (int j = i * 9 + 1; i < i * 9 + 5; i++) {
-      color = read_edge_tile_color();
+    for (int j = i * 9 + 1; i < i * 9 + 5; j++) {
+      color = read_edge_tile_color(robot);
       printf("%d", color);
       rubix_cube->tile_colors[j] = color;
-      rotate_basket(C_QUARTER_TURN);
+      rotate_basket(basket, C_QUARTER_TURN);
     }
 
-    rotate_basket(C_EIGTH_TURN);
+    rotate_basket(basket, C_EIGTH_TURN);
 
-    for (int k = i * 9 + 5; i < i * 9 + 9; i++) {
-      color = read_corner_tile_color();
+    for (int k = i * 9 + 5; i < i * 9 + 9; k++) {
+      color = read_corner_tile_color(robot);
       printf("%d", color);
       rubix_cube->tile_colors[k] = color;
-      rotate_basket(C_QUARTER_TURN);
+      rotate_basket(basket, C_QUARTER_TURN);
     }
 
-    rotate_basket(C_EIGTH_TURN);
+    rotate_basket(basket, C_EIGTH_TURN);
 
     if (i == 0) {
-      flip_cube();
-      flip_cube();
+      flip_cube(arm);
+      flip_cube(arm);
     } else if (i == 1) {
-      rotate_basket(HALF_TURN);
-      flip_cube();
-      rotate_basket(HALF_TURN);
+      rotate_basket(basket, HALF_TURN);
+      flip_cube(arm);
+      rotate_basket(basket, HALF_TURN);
     } else {
-      rotate_basket(C_QUARTER_TURN);
-      flip_cube();
-      rotate_basket(CC_QUARTER_TURN);
+      rotate_basket(basket, C_QUARTER_TURN);
+      flip_cube(arm);
+      rotate_basket(basket, CC_QUARTER_TURN);
     }
   }
 
-  rotate_basket(HALF_TURN);
-  flip_cube();
-  rotate_basket(CC_QUARTER_TURN);
+  rotate_basket(basket, HALF_TURN);
+  flip_cube(arm);
+  rotate_basket(basket, CC_QUARTER_TURN);
 }
 
-void left_turn(RubixCube *rubix_cube) {
-  enum EDGE_POS edge_pos_temp;
-  enum CORNER_POS corner_pos_temp;
+rubix_cube_t rubix_cube_init(robot_t *robot) {
+  rubix_cube_t rubix_cube = {0};
+
+  get_initial_positions(&rubix_cube);
+  // get_initial_orientations(&rubix_cube);
+  read_rubix_cube_tile_colors(robot, &rubix_cube);
+
+  return rubix_cube;
+}
+
+void c_left_turn(rubix_cube_t *rubix_cube) {
+  edge_t edge_pos_temp;
+  corner_t corner_pos_temp;
   unsigned char corner_temp;  
-  enum Color color_temp;
+  color_t color_temp;
 
   /* Update Corner Position */
   corner_pos_temp = rubix_cube->corner_positions[UFL];
@@ -177,24 +354,24 @@ void left_turn(RubixCube *rubix_cube) {
   rubix_cube->tile_colors[rTR] = color_temp;
 }
 
-void left_prime_turn(RubixCube *rubix_cube) {
+void c_left_prime_turn(rubix_cube_t *rubix_cube) {
   for (int i = 0; i < 3; i++) {
-    left_turn(rubix_cube);
+    c_left_turn(rubix_cube);
   }
 }
 
-void left_double_turn(RubixCube *rubix_cube) {
+void c_left_double_turn(rubix_cube_t *rubix_cube) {
   for (int i = 0; i < 2; i++) {
-    left_turn(rubix_cube);
+    c_left_turn(rubix_cube);
   }
 }
 
 
-void right_turn(RubixCube *rubix_cube) {
-  enum EDGE_POS edge_pos_temp;
-  enum CORNER_POS corner_pos_temp;
+void c_right_turn(rubix_cube_t *rubix_cube) {
+  edge_t edge_pos_temp;
+  corner_t corner_pos_temp;
   unsigned char corner_temp;  
-  enum Color color_temp;
+  color_t color_temp;
 
   /* Update Corner Position */
   corner_pos_temp = rubix_cube->corner_positions[UFR];
@@ -207,7 +384,7 @@ void right_turn(RubixCube *rubix_cube) {
   edge_pos_temp = rubix_cube->edge_positions[UR];
   rubix_cube->edge_positions[UR] = rubix_cube->edge_positions[BR];
   rubix_cube->edge_positions[BR] = rubix_cube->edge_positions[DR];
-  rubix_cube->edge_positions[DR] = rubix_cube->edge_positions[FL];
+  rubix_cube->edge_positions[DR] = rubix_cube->edge_positions[FR];
   rubix_cube->edge_positions[FR] = edge_pos_temp ;
 
   /* Update corner orientation */
@@ -249,23 +426,23 @@ void right_turn(RubixCube *rubix_cube) {
   rubix_cube->tile_colors[oR] = color_temp;
 }
 
-void right_prime_turn(RubixCube *rubix_cube) {
+void c_right_prime_turn(rubix_cube_t *rubix_cube) {
   for (int i = 0; i < 3; i++) {
-    right_turn(rubix_cube);
+    c_right_turn(rubix_cube);
   }
 }
 
-void right_double_turn(RubixCube *rubix_cube) {
+void c_right_double_turn(rubix_cube_t *rubix_cube) {
   for (int i = 0; i < 2; i++) {
-    right_turn(rubix_cube);
+    c_right_turn(rubix_cube);
   }
 }
 
-void down_turn(RubixCube *rubix_cube) {
-  enum EDGE_POS edge_pos_temp;
-  enum CORNER_POS corner_pos_temp;
+void c_down_turn(rubix_cube_t *rubix_cube) {
+  edge_t edge_pos_temp;
+  corner_t corner_pos_temp;
   unsigned char edge_temp;  
-  enum Color color_temp;
+  color_t color_temp;
 
   /* Update Corner Position */
   corner_pos_temp = rubix_cube->corner_positions[DFL];
@@ -320,23 +497,23 @@ void down_turn(RubixCube *rubix_cube) {
   rubix_cube->tile_colors[yR] = color_temp;
 }
 
-void down_prime_turn(RubixCube *rubix_cube) {
+void c_down_prime_turn(rubix_cube_t *rubix_cube) {
   for (int i = 0; i < 3; i++) {
-    down_turn(rubix_cube);
+    c_down_turn(rubix_cube);
   }
 }
 
-void down_double_turn(RubixCube *rubix_cube) {
+void c_down_double_turn(rubix_cube_t *rubix_cube) {
   for (int i = 0; i < 2; i++) {
-    down_turn(rubix_cube);
+    c_down_turn(rubix_cube);
   }
 }
 
-void up_turn(RubixCube *rubix_cube) { 
-  enum EDGE_POS edge_pos_temp;
-  enum CORNER_POS corner_pos_temp;
+void c_up_turn(rubix_cube_t *rubix_cube) { 
+  edge_t edge_pos_temp;
+  corner_t corner_pos_temp;
   unsigned char edge_temp;  
-  enum Color color_temp;
+  color_t color_temp;
 
   /* Update Corner Position */
   corner_pos_temp = rubix_cube->corner_positions[UFL];
@@ -391,24 +568,24 @@ void up_turn(RubixCube *rubix_cube) {
   rubix_cube->tile_colors[wR] = color_temp;
 }
 
-void up_prime_turn(RubixCube *rubix_cube) {
+void c_up_prime_turn(rubix_cube_t *rubix_cube) {
   for (int i = 0; i < 3; i++) {
-    up_turn(rubix_cube);
+    c_up_turn(rubix_cube);
   }
 }
 
-void up_double_turn(RubixCube *rubix_cube) {
+void c_up_double_turn(rubix_cube_t *rubix_cube) {
   for (int i = 0; i < 2; i++) {
-    up_turn(rubix_cube);
+    c_up_turn(rubix_cube);
   }
 }
 
-void front_turn(RubixCube *rubix_cube) {
-  enum EDGE_POS edge_pos_temp;
-  enum CORNER_POS corner_pos_temp;
+void c_front_turn(rubix_cube_t *rubix_cube) {
+  edge_t edge_pos_temp;
+  corner_t corner_pos_temp;
   unsigned char edge_temp;  
   unsigned char corner_temp;  
-  enum Color color_temp;
+  color_t color_temp;
 
   /* Update Corner Position */
   corner_pos_temp = rubix_cube->corner_positions[UFL];
@@ -470,24 +647,24 @@ void front_turn(RubixCube *rubix_cube) {
   rubix_cube->tile_colors[bR] = color_temp;
 }
 
-void front_prime_turn(RubixCube *rubix_cube) {
+void c_front_prime_turn(rubix_cube_t *rubix_cube) {
   for (int i = 0; i < 3; i++) {
-    front_turn(rubix_cube);
+    c_front_turn(rubix_cube);
   }
 }
 
-void front_double_turn(RubixCube *rubix_cube) {
+void c_front_double_turn(rubix_cube_t *rubix_cube) {
   for (int i = 0; i < 2; i++) {
-    front_turn(rubix_cube);
+    c_front_turn(rubix_cube);
   }
 }
 
-void back_turn(RubixCube *rubix_cube) {
-  enum EDGE_POS edge_pos_temp;
-  enum CORNER_POS corner_pos_temp;
+void c_back_turn(rubix_cube_t *rubix_cube) {
+  edge_t edge_pos_temp;
+  corner_t corner_pos_temp;
   unsigned char edge_temp;  
   unsigned char corner_temp;  
-  enum Color color_temp;
+  color_t color_temp;
 
   /* Update Corner Position */
   corner_pos_temp = rubix_cube->corner_positions[UBL];
@@ -549,14 +726,14 @@ void back_turn(RubixCube *rubix_cube) {
   rubix_cube->tile_colors[gR] = color_temp;
 }
 
-void back_prime_turn(RubixCube *rubix_cube) {
+void c_back_prime_turn(rubix_cube_t *rubix_cube) {
   for (int i = 0; i < 3; i++) {
-    back_turn(rubix_cube);
+    c_back_turn(rubix_cube);
   }
 }
 
-void back_double_turn(RubixCube *rubix_cube) {
+void c_back_double_turn(rubix_cube_t *rubix_cube) {
   for (int i = 0; i < 2; i++) {
-    back_turn(rubix_cube);
+    c_back_turn(rubix_cube);
   }
 }

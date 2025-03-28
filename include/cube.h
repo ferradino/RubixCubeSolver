@@ -1,7 +1,7 @@
-#include "robot.h"
-
 #ifndef __CUBE_H
 #define __CUBE_H
+
+#include "robot.h"
 
 #define NUM_FACES 6
 #define NUM_EDGES 12
@@ -17,7 +17,7 @@
  *   - L : left
  *   - R : right
  */
-enum FACE { U, D, F, L, B, R };
+typedef enum FACE { U, D, F, L, B, R } face_t;
 
 /*
  * Tile Notation
@@ -31,17 +31,17 @@ enum FACE { U, D, F, L, B, R };
  *    B - bottom, 
  *    BL - bottom-left, 
  *    L - left
-*/
-enum TILES { wC, wB, wR, wT, wL, wBL, wBR, wTR, wTL, yC, yB, yR, yT, yL, yBL, yBR, yTR, yTL, bC, bB, bR, bT, bL, bBL, bBR, bTR, bTL, oC, oB, oR, oT, oL, oBL, oBR, oTR, oTL, gC, gB, gR, gT, gL, gBL, gBR, gTR, gTL, rC, rB, rR, rT, rL, rBL, rBR, rTR, rTL };
+ */
+typedef enum TILES { wC, wB, wR, wT, wL, wBL, wBR, wTR, wTL, yC, yB, yR, yT, yL, yBL, yBR, yTR, yTL, bC, bB, bR, bT, bL, bBL, bBR, bTR, bTL, oC, oB, oR, oT, oL, oBL, oBR, oTR, oTL, gC, gB, gR, gT, gL, gBL, gBR, gTR, gTL, rC, rB, rR, rT, rL, rBL, rBR, rTR, rTL } tiles_t;
 
 /*
  * Cube Edge and Corner Notation
  *  - This follows from the Cube Face Notation from above
  *  - Corners are represented by 3 chars (3 faces)
  *  - Edges are respresented by 2 chars (2 faces)
-*/
-enum CORNER_POS { UFR, UFL, UBL, UBR, DFR, DFL, DBL, DBR };
-enum EDGE_POS { UF, UL, UB, UR, DF, DL, DB, DR, FL, BL, BR, FR};
+ */
+typedef enum corner_t { UFR, UFL, UBL, UBR, DFR, DFL, DBL, DBR } corner_t;
+typedef enum edge_t { UF, UL, UB, UR, DF, DL, DB, DR, FL, BL, BR, FR} edge_t;
 
 /*
  * Cube Structure:
@@ -69,20 +69,20 @@ enum EDGE_POS { UF, UL, UB, UR, DF, DL, DB, DR, FL, BL, BR, FR};
  *    - 36-45 will be back tiles
  *    - 46-53 will be right tiles
  */
-typedef struct {
-  enum EDGE_POS edge_positions[NUM_EDGES];
-  enum CORNER_POS corner_positions[NUM_CORNERS];
+typedef struct RubixCube {
+  edge_t edge_positions[NUM_EDGES];
+  corner_t corner_positions[NUM_CORNERS];
   unsigned char edge_orientation[NUM_EDGES];
   unsigned char corner_orientation[NUM_CORNERS];
-  enum Color tile_colors[NUM_TILES];
-} RubixCube;
+  color_t tile_colors[NUM_TILES];
+} rubix_cube_t;
 
 
 /* Initialize Rubix Cube */
-void rubix_cube_init(RubixCube *rubix_cube);
+rubix_cube_t rubix_cube_init(robot_t *robot);
 
 /* Read in all the faces and their colors */
-void read_rubix_cube_tile_colors(RubixCube *rubix_cube);
+void read_rubix_cube_tile_colors(robot_t *robot, rubix_cube_t *rubix_cube);
 
 /* 
  * Rubix Cube Turns
@@ -91,23 +91,23 @@ void read_rubix_cube_tile_colors(RubixCube *rubix_cube);
  *  - "Prime Turn" indicates a counterclockwise rotation (90 degress)
  *  - "Double Turn" is a double rotation (180 degrees)
  */
-void left_turn(RubixCube *rubix_cube);
-void left_prime_turn(RubixCube *rubix_cube);
-void left_double_turn(RubixCube *rubix_cube);
-void right_turn(RubixCube *rubix_cube);
-void right_prime_turn(RubixCube *rubix_cube);
-void right_double_turn(RubixCube *rubix_cube);
-void down_turn(RubixCube *rubix_cube);
-void down_prime_turn(RubixCube *rubix_cube);
-void down_double_turn(RubixCube *rubix_cube);
-void up_turn(RubixCube *rubix_cube);
-void up_prime_turn(RubixCube *rubix_cube);
-void up_double_turn(RubixCube *rubix_cube);
-void front_turn(RubixCube *rubix_cube);
-void front_prime_turn(RubixCube *rubix_cube);
-void front_double_turn(RubixCube *rubix_cube);
-void back_turn(RubixCube *rubix_cube);
-void back_prime_turn(RubixCube *rubix_cube);
-void back_double_turn(RubixCube *rubix_cube);
+void c_left_turn(rubix_cube_t *rubix_cube);
+void c_left_prime_turn(rubix_cube_t *rubix_cube);
+void c_left_double_turn(rubix_cube_t *rubix_cube);
+void c_right_turn(rubix_cube_t *rubix_cube);
+void c_right_prime_turn(rubix_cube_t *rubix_cube);
+void c_right_double_turn(rubix_cube_t *rubix_cube);
+void c_down_turn(rubix_cube_t *rubix_cube);
+void c_down_prime_turn(rubix_cube_t *rubix_cube);
+void c_down_double_turn(rubix_cube_t *rubix_cube);
+void c_up_turn(rubix_cube_t *rubix_cube);
+void c_up_prime_turn(rubix_cube_t *rubix_cube);
+void c_up_double_turn(rubix_cube_t *rubix_cube);
+void c_front_turn(rubix_cube_t *rubix_cube);
+void c_front_prime_turn(rubix_cube_t *rubix_cube);
+void c_front_double_turn(rubix_cube_t *rubix_cube);
+void c_back_turn(rubix_cube_t *rubix_cube);
+void c_back_prime_turn(rubix_cube_t *rubix_cube);
+void c_back_double_turn(rubix_cube_t *rubix_cube);
 
 #endif

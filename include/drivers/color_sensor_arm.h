@@ -1,7 +1,7 @@
-#include "motor.h"
-
 #ifndef __COLOR_SENSOR_MOTOR_H
 #define __COLOR_SENSOR_MOTOR_H
+
+#include "motor.h"
 
 #define CENTER_TILE_POS -735
 #define EDGE_TILE_POS -610

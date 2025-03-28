@@ -1,18 +1,18 @@
+#ifndef __ROBOT_H
+#define __ROBOT_H
+
 #include "drivers/basket.h"
 #include "drivers/arm.h"
 #include "drivers/color_sensor_arm.h"
 #include "drivers/color_sensor.h"
-
-#ifndef __ROBOT_H
-#define __ROBOT_H
 
 #define C_EIGTH_TURN 130
 #define C_QUARTER_TURN 265
 #define CC_QUARTER_TURN -265
 #define HALF_TURN 535
 
-#define ARM_MOTOR_PORT "OUTA"
-#define BASKET_MOTOR_PORT "OUTB"
+#define BASKET_MOTOR_PORT "OUTA"
+#define ARM_MOTOR_PORT "OUTB"
 #define COLOR_SENSOR_MOTOR_PORT "OUTC"
 #define COLOR_SENSOR_PORT "INA"
 
@@ -24,13 +24,13 @@ typedef struct Robot {
 } robot_t;
 
 robot_t robot_init();
-void rotate_basket(int degrees);
-void rotate_cube(int degrees);
-void flip_cube();
+void rotate_basket(motor_t *motor, int degrees);
+void flip_cube(motor_t *motor);
+void rotate_cube(robot_t *robot, int degrees);
 
-color_t read_center_tile_color();
-color_t read_edge_tile_color();
-color_t read_corner_tile_color();
+color_t read_center_tile_color(robot_t *robot);
+color_t read_edge_tile_color(robot_t *robot);
+color_t read_corner_tile_color(robot_t *robot);
 
 /* 
  * Rubix Cube Turns
@@ -39,23 +39,24 @@ color_t read_corner_tile_color();
  *  - "Prime Turn" indicates a counterclockwise rotation (90 degress)
  *  - "Double Turn" is a double rotation (180 degrees)
 */
-void r_left_turn();
-void r_left_prime_turn();
-void r_left_double_turn();
-void r_right_turn();
-void r_right_prime_turn();
-void r_right_double_turn();
-void r_down_turn();
-void r_down_prime_turn();
-void r_down_double_turn();
-void r_up_turn();
-void r_up_prime_turn();
-void r_up_double_turn();
-void r_front_turn();
-void r_front_prime_turn();
-void r_front_double_turn();
-void r_back_turn();
-void r_back_prime_turn();
-void r_back_double_turn();
+void solve_cube(char** moves, robot_t *robot);
+void r_left_turn(robot_t *robot);
+void r_left_prime_turn(robot_t *robot);
+void r_left_double_turn(robot_t *robot);
+void r_right_turn(robot_t *robot);
+void r_right_prime_turn(robot_t *robot);
+void r_right_double_turn(robot_t *robot);
+void r_down_turn(robot_t *robot);
+void r_down_prime_turn(robot_t *robot);
+void r_down_double_turn(robot_t *robot);
+void r_up_turn(robot_t *robot);
+void r_up_prime_turn(robot_t *robot);
+void r_up_double_turn(robot_t *robot);
+void r_front_turn(robot_t *robot);
+void r_front_prime_turn(robot_t *robot);
+void r_front_double_turn(robot_t *robot);
+void r_back_turn(robot_t *robot);
+void r_back_prime_turn(robot_t *robot);
+void r_back_double_turn(robot_t *robot);
 
 #endif

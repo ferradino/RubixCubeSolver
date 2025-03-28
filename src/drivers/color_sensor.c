@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <assert.h>
 #include "../../include/drivers/color_sensor.h"
 
 short get_sensor_number(const char *port) {
@@ -20,8 +21,11 @@ short get_sensor_number(const char *port) {
             exit(EXIT_FAILURE);
         }
 
-        read(fd, address, 256);
+        ssize_t num_bytes = read(fd, address, 256);
+        assert(num_bytes >= 0);
         close(fd);
+
+        address[num_bytes] = '\0';
 
         char *curr_port = strstr(address, ":");
         curr_port++;
@@ -42,17 +46,15 @@ short get_sensor_number(const char *port) {
     return sensor_number;
 }
 
-color_sensor_t color_sensor_init() {
-    const char* sensor_port = "in4";
-
+color_sensor_t color_sensor_init(const char* port) {
     color_sensor_t sensor = {
-      .number = get_sensor_number(sensor_port),
-      .mode_file_path = snprintf(sensor.mode_file_path, sizeof(sensor.mode_file_path), "/sys/class/lego-sensor/sensor%d/mode", sensor.number), 
-      .red_value_file_path = snprintf(sensor.red_value_file_path, sizeof(sensor.red_value_file_path), "/sys/class/lego-sensor/sensor%d/value0", sensor.number), 
-      .green_value_file_path = snprintf(sensor.green_value_file_path, sizeof(sensor.green_value_file_path), "/sys/class/lego-sensor/sensor%d/value1", sensor.number),
-      .blue_value_file_path = snprintf(sensor.blue_value_file_path, sizeof(sensor.blue_value_file_path), "/sys/class/lego-sensor/sensor%d/value2", sensor.number),
-
+      .number = get_sensor_number(port),
     };
+
+    snprintf(sensor.mode_file_path, sizeof(sensor.mode_file_path), "/sys/class/lego-sensor/sensor%d/mode", sensor.number);
+    snprintf(sensor.red_value_file_path, sizeof(sensor.red_value_file_path), "/sys/class/lego-sensor/sensor%d/value0", sensor.number);
+    snprintf(sensor.green_value_file_path, sizeof(sensor.green_value_file_path), "/sys/class/lego-sensor/sensor%d/value1", sensor.number);
+    snprintf(sensor.blue_value_file_path, sizeof(sensor.blue_value_file_path), "/sys/class/lego-sensor/sensor%d/value2", sensor.number);
     
     printf("Sensor initialized with number: %d\n", sensor.number);
 

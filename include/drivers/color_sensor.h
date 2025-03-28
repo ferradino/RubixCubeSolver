@@ -35,7 +35,7 @@ typedef struct ColorSenor {
     char blue_value_file_path[256];
 } color_sensor_t;
 
-color_sensor_t color_sensor_init();
+color_sensor_t color_sensor_init(const char* port);
 color_t read_color(color_sensor_t *sensor);
 
 #endif

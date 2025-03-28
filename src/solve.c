@@ -1,7 +1,7 @@
 #include "../include/solve.h"
 
-char* solve(RubixCube *rubix_cube);
-void stage1(RubixCube *rubix_cube);
-void stage2(RubixCube *rubix_cube);
-void stage3(RubixCube *rubix_cube);
-void stage4(RubixCube *rubix_cube);
+char** solve(rubix_cube_t *rubix_cube);
+void stage1(rubix_cube_t *rubix_cube);
+void stage2(rubix_cube_t *rubix_cube);
+void stage3(rubix_cube_t *rubix_cube);
+void stage4(rubix_cube_t *rubix_cube);

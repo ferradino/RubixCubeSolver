@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <assert.h>
 #include "../../include/drivers/motor.h"
 
 short get_motor_number(const char *port) {
@@ -20,8 +21,11 @@ short get_motor_number(const char *port) {
             exit(EXIT_FAILURE);
         }
 
-        read(fd, address, 256);
+        ssize_t num_bytes = read(fd, address, 256);
+        assert(num_bytes >= 0);
         close(fd);
+
+        address[num_bytes] = '\0';
 
         char *curr_port = strstr(address, ":");
         curr_port++;
@@ -45,11 +49,14 @@ short get_motor_number(const char *port) {
 motor_t motor_init(const char *port) {
   motor_t motor = {
     .number = get_motor_number(port),
-    .command_file_path = snprintf(motor.command_file_path, sizeof(motor.command_file_path), "/sys/class/tacho-motor/motor%d/command", motor.number),
-    .speed_file_path = snprintf(motor.speed_file_path, sizeof(motor.speed_file_path), "/sys/class/tacho-motor/motor%d/speed_sp", motor.number), 
-    .position_file_path = snprintf(motor.position_file_path, sizeof(motor.position_file_path), "/sys/class/tacho-motor/motor%d/position_sp", motor.number),
-    .state_file_path = snprintf(motor.state_file_path, sizeof(motor.state_file_path), "/sys/class/tacho-motor/motor%d/state", motor.number),
   };
+
+  snprintf(motor.command_file_path, sizeof(motor.command_file_path), "/sys/class/tacho-motor/motor%d/command", motor.number);
+  snprintf(motor.speed_file_path, sizeof(motor.speed_file_path), "/sys/class/tacho-motor/motor%d/speed_sp", motor.number);
+  snprintf(motor.position_file_path, sizeof(motor.position_file_path), "/sys/class/tacho-motor/motor%d/position_sp", motor.number);
+  snprintf(motor.state_file_path, sizeof(motor.state_file_path), "/sys/class/tacho-motor/motor%d/state", motor.number);
+  
+  run_command(&motor, "reset");  
 
   return motor;
 }
