@@ -19,9 +19,13 @@ unsigned short get_index(const unsigned char perm[NUM_EDGES]) {
     return idx;
 }
 
-void generate_stage1_tables(rubix_cube_t cube) {
+void generate_stage_one_tables(rubix_cube_t cube) {
     moves_t moves[PART1_MOVES] = { L, R, F, B, U, D }; 
-    unsigned char permutations[PART1_NUM_PERMUTATIONS] = { 0 };
+    unsigned char permutations[PART1_NUM_PERMUTATIONS];
+
+    for (int i = 0; i < PART1_NUM_PERMUTATIONS; i++) {
+      permutations[i] = UNVISITED;
+    }
 
     queue_t queue;
     initQueue(&queue);
@@ -66,5 +70,7 @@ void gen_tables(void) {
         }
     }
 
-    generate_stage1_tables(cube);
+    printf("calling gen 1 tables");
+
+    generate_stage_one_tables(cube);
 }

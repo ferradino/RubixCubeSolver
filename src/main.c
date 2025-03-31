@@ -25,7 +25,9 @@ int main(void) {
   printf("**** Rubix Cube Has Been Solved! ****\n");
   */
 
+  printf("Calling gen tables()");
   gen_tables();
+  printf("Left gen tables()");
 
   return 0;
 }

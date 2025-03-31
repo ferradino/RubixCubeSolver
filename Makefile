@@ -2,7 +2,7 @@
 # CC = arm-linux-gnueabi-gcc
 CC = gcc
 # CFLAGS = -Wall -Wextra -Werror -O2 -I ./src -I ./include -I ./external
-CFLAGS = -O2 -I ./src -I ./include -I ./external
+CFLAGS = -O2 -g -I ./src -I ./include -I ./external
 
 # Directories
 SRC_DIR = src

@@ -11,7 +11,7 @@
 enum STATUS { UNVISITED, VISITED };
 
 void gen_tables(void);
-void generate_stage_one_tables(rubix_cube_t cube);
+void generate_stage1_tables(rubix_cube_t cube);
 
 unsigned short get_index(const unsigned char perm[NUM_EDGES]);
 void write_table_to_file(const unsigned char table[PART1_NUM_PERMUTATIONS]);
