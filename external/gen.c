@@ -21,7 +21,7 @@ unsigned short get_index(const unsigned char perm[NUM_EDGES]) {
 
 void generate_stage_one_tables(rubix_cube_t cube) {
     moves_t moves[PART1_MOVES] = { L, R, F, B, U, D }; 
-    moves_t lookup[PART1_NUM_PERMUTATIONS];
+    unsigned char lookup[PART1_NUM_PERMUTATIONS];
     unsigned char permutations[PART1_NUM_PERMUTATIONS];
 
     for (int i = 0; i < PART1_NUM_PERMUTATIONS; i++) {
@@ -54,6 +54,8 @@ void generate_stage_one_tables(rubix_cube_t cube) {
             }
         }
     }
+
+    write_table_to_file(lookup);
 }
 
 void gen_tables(void) {
