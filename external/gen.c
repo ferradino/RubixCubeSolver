@@ -38,6 +38,8 @@ void generate_stage1_tables(rubix_cube_t cube) {
         for (int i = 0; i < PART1_MOVES; i++) {
             tmp2 = tmp;
 
+            make_move(&tmp2, moves[i]);
+
             idx = get_index(tmp2.edge_orientation);
 
             if (permutations[idx] == UNVISITED) {
