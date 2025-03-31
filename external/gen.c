@@ -21,6 +21,7 @@ unsigned short get_index(const unsigned char perm[NUM_EDGES]) {
 
 void generate_stage_one_tables(rubix_cube_t cube) {
     moves_t moves[PART1_MOVES] = { L, R, F, B, U, D }; 
+    moves_t lookup[PART1_NUM_PERMUTATIONS];
     unsigned char permutations[PART1_NUM_PERMUTATIONS];
 
     for (int i = 0; i < PART1_NUM_PERMUTATIONS; i++) {
@@ -47,7 +48,8 @@ void generate_stage_one_tables(rubix_cube_t cube) {
             idx = get_index(tmp2.edge_orientation);
 
             if (permutations[idx] == UNVISITED) {
-                permutations[idx] = 1;  // Mark as visited
+                permutations[idx] = 1;
+                lookup[idx] = (moves[i] + 2);
                 enqueue(&queue, tmp2);
             }
         }
