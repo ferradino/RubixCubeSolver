@@ -248,7 +248,7 @@ void read_rubix_cube_tile_colors(robot_t *robot, rubix_cube_t *rubix_cube) {
     printf("%d", color);
     rubix_cube->tile_colors[i * 9] = color;
 
-    for (int j = i * 9 + 1; i < i * 9 + 5; j++) {
+    for (int j = i * 9 + 1; j < i * 9 + 5; j++) {
       color = read_edge_tile_color(robot);
       printf("%d", color);
       rubix_cube->tile_colors[j] = color;
@@ -257,7 +257,7 @@ void read_rubix_cube_tile_colors(robot_t *robot, rubix_cube_t *rubix_cube) {
 
     rotate_basket(basket, C_EIGTH_TURN);
 
-    for (int k = i * 9 + 5; i < i * 9 + 9; k++) {
+    for (int k = i * 9 + 5; k < i * 9 + 9; k++) {
       color = read_corner_tile_color(robot);
       printf("%d", color);
       rubix_cube->tile_colors[k] = color;
@@ -289,10 +289,33 @@ rubix_cube_t rubix_cube_init(robot_t *robot) {
   rubix_cube_t rubix_cube = {0};
 
   get_initial_positions(&rubix_cube);
-  // get_initial_orientations(&rubix_cube);
+  get_initial_orientations(&rubix_cube);
   read_rubix_cube_tile_colors(robot, &rubix_cube);
 
   return rubix_cube;
+}
+
+void make_move(rubix_cube_t *rubix_cube, moves_t move) {
+  switch (move) {
+    case U: c_up_turn(rubix_cube); break;
+    case U2: c_up_double_turn(rubix_cube); break;
+    case Up: c_up_prime_turn(rubix_cube); break;
+    case D: c_down_turn(rubix_cube); break;
+    case D2: c_down_double_turn(rubix_cube); break;
+    case Dp: c_down_prime_turn(rubix_cube); break;
+    case R: c_right_turn(rubix_cube); break;
+    case R2: c_right_double_turn(rubix_cube); break;
+    case Rp: c_right_prime_turn(rubix_cube); break;
+    case L: c_left_turn(rubix_cube); break;
+    case L2: c_left_double_turn(rubix_cube); break;
+    case Lp: c_left_prime_turn(rubix_cube); break;
+    case F: c_front_turn(rubix_cube); break;
+    case F2: c_front_double_turn(rubix_cube); break;
+    case Fp: c_front_prime_turn(rubix_cube); break;
+    case B: c_back_turn(rubix_cube); break;
+    case B2: c_back_double_turn(rubix_cube); break;
+    case Bp: c_back_prime_turn(rubix_cube); break;
+  }
 }
 
 void c_left_turn(rubix_cube_t *rubix_cube) {

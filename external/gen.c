@@ -1,0 +1,68 @@
+#include <stdio.h>
+#include <assert.h>
+#include "gen.h"
+
+void write_table_to_file(const unsigned char table[PART1_NUM_PERMUTATIONS]) {
+    FILE *fp = fopen(PART1_TABLE_FILE, "w"); 
+    assert(fp != NULL);
+    for (int i = 0; i < PART1_NUM_PERMUTATIONS; i++) {
+        fprintf(fp, "%c", table[i]);
+    }
+    fclose(fp);
+}
+
+unsigned short get_index(const unsigned char perm[NUM_EDGES]) {
+    unsigned short idx = 0;
+    for (int i = 0; i < NUM_EDGES; i++) {
+        idx |= (perm[i] << i);
+    }
+    return idx;
+}
+
+void generate_stage1_tables(rubix_cube_t cube) {
+    moves_t moves[PART1_MOVES] = { L, R, F, B, U, D }; 
+    unsigned char permutations[PART1_NUM_PERMUTATIONS] = { 0 };
+
+    queue_t queue;
+    initQueue(&queue);
+
+    permutations[0] = 1; 
+    enqueue(&queue, cube);
+
+    unsigned short idx;
+    rubix_cube_t tmp, tmp2;
+
+    while (!isEmpty(&queue)) {
+        tmp = dequeue(&queue);
+
+        for (int i = 0; i < PART1_MOVES; i++) {
+            tmp2 = tmp;
+
+            idx = get_index(tmp2.edge_orientation);
+
+            if (permutations[idx] == UNVISITED) {
+                permutations[idx] = 1;  // Mark as visited
+                enqueue(&queue, tmp2);
+            }
+        }
+    }
+}
+
+void gen_tables(void) {
+    rubix_cube_t cube = {
+        .corner_orientation = { 0, 0, 0, 0, 0, 0, 0, 0 },
+        .corner_positions = { UFR, UFL, UBL, UBR, DFR, DFL, DBL, DBR },
+        .edge_orientation = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        .edge_positions = { UF, UL, UB, UR, DF, DL, DB, DR, FL, BL, BR, FR },
+    };
+
+    unsigned char idx = 0;  
+    for (int i = 0; i < 6; i++) {
+        for (int j = 0; j < 9; j++) {
+            cube.tile_colors[idx] = i;
+            idx++;
+        }
+    }
+
+    generate_stage1_tables(cube);
+}

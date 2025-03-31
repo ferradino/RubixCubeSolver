@@ -15,9 +15,11 @@ robot_t robot_init() {
   return robot;
 }
 
+/* 
 void solve_cube(char **moves, robot_t *robot) {
 
 }
+*/
 
 void rotate_basket(motor_t *motor, int degrees) { 
   rotate(motor, degrees); 

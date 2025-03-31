@@ -10,14 +10,8 @@
 
 /*
  * Cube Face Notation
- *   - F : front
- *   - B : back
- *   - U : up
- *   - D : down
- *   - L : left
- *   - R : right
  */
-typedef enum FACE { U, D, F, L, B, R } face_t;
+typedef enum FACE { UP, DOWN, FRONT, LEFT, BACK, RIGHT } face_t;
 
 /*
  * Tile Notation
@@ -83,6 +77,9 @@ rubix_cube_t rubix_cube_init(robot_t *robot);
 
 /* Read in all the faces and their colors */
 void read_rubix_cube_tile_colors(robot_t *robot, rubix_cube_t *rubix_cube);
+
+/* Takes in a move and performs move on cube */
+void make_move(rubix_cube_t *rubix_cube, moves_t moves);
 
 /* 
  * Rubix Cube Turns

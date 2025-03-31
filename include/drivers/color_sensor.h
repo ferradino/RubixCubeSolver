@@ -7,9 +7,9 @@ typedef enum {
     WHITE,
     YELLOW,
     BLUE,
-    RED,
-    GREEN,
     ORANGE,
+    GREEN,
+    RED,
 } color_t;
 
 typedef struct RGB {

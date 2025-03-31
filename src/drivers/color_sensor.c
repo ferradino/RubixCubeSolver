@@ -22,7 +22,7 @@ short get_sensor_number(const char *port) {
         }
 
         ssize_t num_bytes = read(fd, address, 256);
-        assert(num_bytes >= 0);
+        assert(num_bytes != -1); // Ensure read was successful
         close(fd);
 
         address[num_bytes] = '\0';

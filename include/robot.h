@@ -16,6 +16,8 @@
 #define COLOR_SENSOR_MOTOR_PORT "OUTC"
 #define COLOR_SENSOR_PORT "INA"
 
+typedef enum MOVES { U, U2, Up, D, D2, Dp, R, R2, Rp, L, L2, Lp, F, F2, Fp, B, B2, Bp } moves_t;
+
 typedef struct Robot {
   color_sensor_t color_sensor;
   motor_t color_sensor_motor;

@@ -3,7 +3,10 @@
 #include "../include/robot.h"
 #include "../include/solve.h"
 
+#include "../external/gen.h"
+
 int main(void) {
+  /*
   // Initialize the robot
   printf("**** Starting Robot! ****\n");
   robot_t robot = robot_init();
@@ -20,6 +23,9 @@ int main(void) {
 
   // Done
   printf("**** Rubix Cube Has Been Solved! ****\n");
+  */
+
+  gen_tables();
 
   return 0;
 }
