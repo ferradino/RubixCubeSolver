@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include "../include/cube.h"
 
-#define MAX_SIZE 3000000
+#define MAX_SIZE 5000
 
 /*
  * Queue Struct used for BFS.

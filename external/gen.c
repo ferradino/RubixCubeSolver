@@ -2,11 +2,11 @@
 #include <assert.h>
 #include "gen.h"
 
-void write_table_to_file(const unsigned char table[PART1_NUM_PERMUTATIONS]) {
+void write_table_to_file(const unsigned char lookup[PART1_NUM_PERMUTATIONS]) {
     FILE *fp = fopen(PART1_TABLE_FILE, "w"); 
     assert(fp != NULL);
     for (int i = 0; i < PART1_NUM_PERMUTATIONS; i++) {
-        fprintf(fp, "%c", table[i]);
+        fprintf(fp, "%c", lookup[i]);
     }
     fclose(fp);
 }
@@ -19,7 +19,7 @@ unsigned short get_index(const unsigned char perm[NUM_EDGES]) {
     return idx;
 }
 
-void generate_stage_one_tables(rubix_cube_t cube) {
+void generate_stage_one_table(rubix_cube_t cube) {
     moves_t moves[PART1_MOVES] = { L, R, F, B, U, D }; 
     unsigned char lookup[PART1_NUM_PERMUTATIONS];
     unsigned char permutations[PART1_NUM_PERMUTATIONS];
@@ -49,7 +49,7 @@ void generate_stage_one_tables(rubix_cube_t cube) {
 
             if (permutations[idx] == UNVISITED) {
                 permutations[idx] = 1;
-                lookup[idx] = (moves[i] + 2);
+                lookup[idx] = (moves[i] + (unsigned char) 2);
                 enqueue(&queue, tmp2);
             }
         }
@@ -76,5 +76,5 @@ void gen_tables(void) {
 
     printf("calling gen 1 tables");
 
-    generate_stage_one_tables(cube);
+    generate_stage_one_table(cube);
 }
