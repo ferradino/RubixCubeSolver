@@ -321,7 +321,7 @@ void make_move(rubix_cube_t *rubix_cube, moves_t move) {
 void c_left_turn(rubix_cube_t *rubix_cube) {
   edge_t edge_pos_temp;
   corner_t corner_pos_temp;
-  unsigned char corner_temp;  
+  unsigned char corner_temp, edge_temp;  
   color_t color_temp;
 
   /* Update Corner Position */
@@ -344,6 +344,13 @@ void c_left_turn(rubix_cube_t *rubix_cube) {
   rubix_cube->corner_orientation[UBL] = (rubix_cube->corner_orientation[DBL] + 2) % 3;
   rubix_cube->corner_orientation[DBL] = (rubix_cube->corner_orientation[DFL] + 2) % 3;
   rubix_cube->corner_orientation[DFL] = (corner_temp + 1) % 3;
+
+  /* Update Edge Orientation */
+  edge_temp = rubix_cube->edge_orientation[UL];
+  rubix_cube->edge_orientation[UL] = rubix_cube->edge_orientation[BL];
+  rubix_cube->edge_orientation[BL] = rubix_cube->edge_orientation[DL];
+  rubix_cube->edge_orientation[DL] = rubix_cube->edge_orientation[FL];
+  rubix_cube->edge_orientation[FL] = edge_temp ;
 
   /* Update tile color */
   color_temp = rubix_cube->tile_colors[wBL];
@@ -393,7 +400,7 @@ void c_left_double_turn(rubix_cube_t *rubix_cube) {
 void c_right_turn(rubix_cube_t *rubix_cube) {
   edge_t edge_pos_temp;
   corner_t corner_pos_temp;
-  unsigned char corner_temp;  
+  unsigned char corner_temp, edge_temp;  
   color_t color_temp;
 
   /* Update Corner Position */
@@ -416,6 +423,13 @@ void c_right_turn(rubix_cube_t *rubix_cube) {
   rubix_cube->corner_orientation[DFR] = (rubix_cube->corner_orientation[DBR] + 2) % 3;
   rubix_cube->corner_orientation[DBR] = (rubix_cube->corner_orientation[UBR] + 1) % 3;
   rubix_cube->corner_orientation[UBR] = (corner_temp + 1) % 3;
+
+  /* Update Edge Orientation */
+  edge_temp = rubix_cube->edge_orientation[UR];
+  rubix_cube->edge_orientation[UR] = rubix_cube->edge_orientation[BR];
+  rubix_cube->edge_orientation[BR] = rubix_cube->edge_orientation[DR];
+  rubix_cube->edge_orientation[DR] = rubix_cube->edge_orientation[FR];
+  rubix_cube->edge_orientation[FR] = edge_pos_temp ;
 
   /* Update tile color */
   color_temp = rubix_cube->tile_colors[wTR];
