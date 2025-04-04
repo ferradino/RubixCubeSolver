@@ -20,7 +20,7 @@ unsigned short get_index(const unsigned char *array, const int n) {
 }
 
 void generate_stage_one_table(rubix_cube_t cube) {
-    moves_t moves[NUM_MOVES] = { L, R, F, B, U, D }; 
+    moves_t moves[NUM_MOVES] = { L, R, F, B, U, D }; // make inverse move
     unsigned char lookup[PART1_NUM_PERMUTATIONS];
     unsigned char permutations[PART1_NUM_PERMUTATIONS];
 
@@ -32,14 +32,17 @@ void generate_stage_one_table(rubix_cube_t cube) {
     initQueue(&queue);
 
     permutations[0] = 1; 
-    enqueue(&queue, cube);
+    enqueue(&queue, cube); // store an integer instead
 
     unsigned short idx;
     rubix_cube_t tmp, tmp2;
 
     while (!isEmpty(&queue)) {
         tmp = dequeue(&queue);
-
+        
+        //convert int to cube state
+        // if odd number of 1 bits, the 12 edge is bad
+        
         for (int i = 0; i < NUM_MOVES; i++) {
             tmp2 = tmp;
 
@@ -49,7 +52,7 @@ void generate_stage_one_table(rubix_cube_t cube) {
             if (permutations[idx] == UNVISITED) {
                 permutations[idx] = 1;
                 lookup[idx] = (moves[i] + (unsigned char) 2);
-                enqueue(&queue, tmp2);
+                enqueue(&queue, tmp2); // enqueue index
             }
         }
     }
@@ -57,8 +60,10 @@ void generate_stage_one_table(rubix_cube_t cube) {
     write_table_to_file(lookup, PART1_TABLE_FILE, PART1_NUM_PERMUTATIONS);
 }
 
+
+// Blue and Green sticker must be on either blue/green face for the corner
 void generate_stage_two_table(rubix_cube_t cube) {
-    moves_t moves[NUM_MOVES] = { L, R, F, B, U2, D2 }; 
+    moves_t moves[NUM_MOVES] = { L, R, F, B, U2, D2 }; // fix these moves
     unsigned char lookup[PART2_NUM_PERMUTATIONS];
     unsigned char permutations[PART2_NUM_PERMUTATIONS];
 
@@ -69,6 +74,12 @@ void generate_stage_two_table(rubix_cube_t cube) {
     queue_t queue;
     initQueue(&queue);
 
+    // Algorithms for taking combinations and making them positions (indexs)
+    // corner is 7 base 3 * 495
+    // kunth books have this algorithm (volume 4)
+    // algorithms C
+    // art of computer programming volume 4 fascile generating all partitions
+    // look for gzip not necessarily pdf (also postscript)
     permutations[0] = 1; 
     enqueue(&queue, cube);
 
@@ -96,6 +107,7 @@ void generate_stage_two_table(rubix_cube_t cube) {
     write_table_to_file(lookup, PART2_TABLE_FILE, PART2_NUM_PERMUTATIONS);
 }
 
+// Corner in correct position and edges are in correct orbit (or slice)
 void generate_stage_three_table(rubix_cube_t cube) {
     moves_t moves[NUM_MOVES] = { L, R, F2, B2, U2, D2 }; 
     unsigned char lookup[PART3_NUM_PERMUTATIONS];

@@ -481,6 +481,7 @@ void c_down_turn(rubix_cube_t *rubix_cube) {
   rubix_cube->edge_positions[DB] = rubix_cube->edge_positions[DR];
   rubix_cube->edge_positions[DR] = edge_pos_temp ;
 
+  // Just subtact from 1
   /* Update edge orientation */
   edge_temp = rubix_cube->edge_orientation[DF];
   rubix_cube->edge_orientation[DF] = (rubix_cube->edge_orientation[DL] + 1) % 2;
@@ -552,6 +553,7 @@ void c_up_turn(rubix_cube_t *rubix_cube) {
   rubix_cube->edge_positions[UB] = rubix_cube->edge_positions[UL];
   rubix_cube->edge_positions[UL] = edge_pos_temp ;
 
+  // subtract from 1
   /* Update edge orientation */
   edge_temp = rubix_cube->edge_orientation[UF];
   rubix_cube->edge_orientation[UF] = (rubix_cube->edge_orientation[UR] + 1) % 2;
