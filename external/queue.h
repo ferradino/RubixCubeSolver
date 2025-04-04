@@ -1,6 +1,8 @@
+
 #ifndef __QUEUE_H
 #define __QUEUE_H
 
+#include <stdint.h>
 #include <stdbool.h>
 #include "../include/cube.h"
 
@@ -12,7 +14,7 @@
  * - Tracks the front (head) and back (tail) indices.
  */
 typedef struct Queue {
-  rubix_cube_t values[MAX_SIZE];
+  int32_t values[MAX_SIZE];
   int head;
   int tail;
 } queue_t;
@@ -38,16 +40,16 @@ bool isFull(queue_t *queue);
 /*
  * Add an item to the back of the queue.
  */
-void enqueue(queue_t *queue, rubix_cube_t cube);
+void enqueue(queue_t *queue, int32_t value);
 
 /*
  * Remove an item from the front of the queue.
  */
-rubix_cube_t dequeue(queue_t *queue);
+int32_t dequeue(queue_t *queue);
 
 /*
  * Return the first item in the queue without removing it.
  */
-rubix_cube_t peek(queue_t *queue);
+int32_t peek(queue_t *queue);
 
 #endif

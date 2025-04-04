@@ -338,7 +338,7 @@ void c_left_turn(rubix_cube_t *rubix_cube) {
   rubix_cube->edge_positions[DL] = rubix_cube->edge_positions[FL];
   rubix_cube->edge_positions[FL] = edge_pos_temp ;
 
-  /* Update corner orientation */
+  /* Update Corner Orientation */
   corner_temp = rubix_cube->corner_orientation[UFL];
   rubix_cube->corner_orientation[UFL] = (rubix_cube->corner_orientation[UBL] + 1) % 3;
   rubix_cube->corner_orientation[UBL] = (rubix_cube->corner_orientation[DBL] + 2) % 3;
@@ -429,7 +429,7 @@ void c_right_turn(rubix_cube_t *rubix_cube) {
   rubix_cube->edge_orientation[UR] = rubix_cube->edge_orientation[BR];
   rubix_cube->edge_orientation[BR] = rubix_cube->edge_orientation[DR];
   rubix_cube->edge_orientation[DR] = rubix_cube->edge_orientation[FR];
-  rubix_cube->edge_orientation[FR] = edge_pos_temp ;
+  rubix_cube->edge_orientation[FR] = edge_temp ;
 
   /* Update tile color */
   color_temp = rubix_cube->tile_colors[wTR];
@@ -478,7 +478,7 @@ void c_right_double_turn(rubix_cube_t *rubix_cube) {
 void c_down_turn(rubix_cube_t *rubix_cube) {
   edge_t edge_pos_temp;
   corner_t corner_pos_temp;
-  unsigned char edge_temp;  
+  unsigned char corner_temp, edge_temp;  
   color_t color_temp;
 
   /* Update Corner Position */
@@ -495,13 +495,19 @@ void c_down_turn(rubix_cube_t *rubix_cube) {
   rubix_cube->edge_positions[DB] = rubix_cube->edge_positions[DR];
   rubix_cube->edge_positions[DR] = edge_pos_temp ;
 
-  // Just subtact from 1
+  /* Update Corner Orientation */
+  corner_temp = rubix_cube->corner_orientation[DFL];
+  rubix_cube->corner_orientation[DFL] = rubix_cube->corner_orientation[DBL];
+  rubix_cube->corner_orientation[DBL] = rubix_cube->corner_orientation[DBR];
+  rubix_cube->corner_orientation[DBR] = rubix_cube->corner_orientation[DFR];
+  rubix_cube->corner_orientation[DFR] = corner_pos_temp;
+
   /* Update edge orientation */
   edge_temp = rubix_cube->edge_orientation[DF];
-  rubix_cube->edge_orientation[DF] = (rubix_cube->edge_orientation[DL] + 1) % 2;
-  rubix_cube->edge_orientation[DL] = (rubix_cube->edge_orientation[DB] + 1) % 2;
-  rubix_cube->edge_orientation[DB] = (rubix_cube->edge_orientation[DR] + 1) % 2;
-  rubix_cube->edge_orientation[DR] = (edge_temp + 1) % 2;
+  rubix_cube->edge_orientation[DF] = 1 - rubix_cube->edge_orientation[DL];
+  rubix_cube->edge_orientation[DL] = 1 - rubix_cube->edge_orientation[DB];
+  rubix_cube->edge_orientation[DB] = 1 - rubix_cube->edge_orientation[DR];
+  rubix_cube->edge_orientation[DR] = 1 - edge_temp;
 
   /* Update tile color */
   color_temp = rubix_cube->tile_colors[bBR];
@@ -550,7 +556,7 @@ void c_down_double_turn(rubix_cube_t *rubix_cube) {
 void c_up_turn(rubix_cube_t *rubix_cube) { 
   edge_t edge_pos_temp;
   corner_t corner_pos_temp;
-  unsigned char edge_temp;  
+  unsigned char corner_temp, edge_temp;  
   color_t color_temp;
 
   /* Update Corner Position */
@@ -567,13 +573,19 @@ void c_up_turn(rubix_cube_t *rubix_cube) {
   rubix_cube->edge_positions[UB] = rubix_cube->edge_positions[UL];
   rubix_cube->edge_positions[UL] = edge_pos_temp ;
 
-  // subtract from 1
+  /* Update Corner Orientation */
+  corner_temp = rubix_cube->corner_orientation[UFL];
+  rubix_cube->corner_orientation[UFL] = rubix_cube->corner_orientation[UFR];
+  rubix_cube->corner_orientation[UFR] = rubix_cube->corner_orientation[UBR];
+  rubix_cube->corner_orientation[UBR] = rubix_cube->corner_orientation[UBL];
+  rubix_cube->corner_orientation[UBL] = corner_pos_temp;
+
   /* Update edge orientation */
   edge_temp = rubix_cube->edge_orientation[UF];
-  rubix_cube->edge_orientation[UF] = (rubix_cube->edge_orientation[UR] + 1) % 2;
-  rubix_cube->edge_orientation[UR] = (rubix_cube->edge_orientation[UB] + 1) % 2;
-  rubix_cube->edge_orientation[UB] = (rubix_cube->edge_orientation[UL] + 1) % 2;
-  rubix_cube->edge_orientation[UL] = (edge_temp + 1) % 2;
+  rubix_cube->edge_orientation[UF] = 1 - rubix_cube->edge_orientation[UR];
+  rubix_cube->edge_orientation[UR] = 1 - rubix_cube->edge_orientation[UB];
+  rubix_cube->edge_orientation[UB] = 1 - rubix_cube->edge_orientation[UL];
+  rubix_cube->edge_orientation[UL] = 1 - edge_temp;
 
   /* Update tile color */
   color_temp = rubix_cube->tile_colors[bTL];
@@ -649,10 +661,10 @@ void c_front_turn(rubix_cube_t *rubix_cube) {
 
   /* Update edge orientation */
   edge_temp = rubix_cube->edge_orientation[UF];
-  rubix_cube->edge_orientation[UF] = (rubix_cube->edge_orientation[FL] + 1) % 2;
-  rubix_cube->edge_orientation[FL] = (rubix_cube->edge_orientation[DF] + 1) % 2;
-  rubix_cube->edge_orientation[DF] = (rubix_cube->edge_orientation[FR] + 1) % 2;
-  rubix_cube->edge_orientation[FR] = (edge_temp + 1) % 2;
+  rubix_cube->edge_orientation[UF] = rubix_cube->edge_orientation[FL];
+  rubix_cube->edge_orientation[FL] = rubix_cube->edge_orientation[DF];
+  rubix_cube->edge_orientation[DF] = rubix_cube->edge_orientation[FR];
+  rubix_cube->edge_orientation[FR] = edge_temp;
 
   /* Update tile color */
   color_temp = rubix_cube->tile_colors[wBL];
@@ -728,10 +740,10 @@ void c_back_turn(rubix_cube_t *rubix_cube) {
 
   /* Update edge orientation */
   edge_temp = rubix_cube->edge_orientation[UB];
-  rubix_cube->edge_orientation[UB] = (rubix_cube->edge_orientation[BR] + 1) % 2;
-  rubix_cube->edge_orientation[BR] = (rubix_cube->edge_orientation[DB] + 1) % 2;
-  rubix_cube->edge_orientation[DB] = (rubix_cube->edge_orientation[BL] + 1) % 2;
-  rubix_cube->edge_orientation[BL] = (edge_temp + 1) % 2;
+  rubix_cube->edge_orientation[UB] = rubix_cube->edge_orientation[BR];
+  rubix_cube->edge_orientation[BR] = rubix_cube->edge_orientation[DB];
+  rubix_cube->edge_orientation[DB] = rubix_cube->edge_orientation[BL];
+  rubix_cube->edge_orientation[BL] = edge_temp;
 
   /* Update tile color */
   color_temp = rubix_cube->tile_colors[wTL];
