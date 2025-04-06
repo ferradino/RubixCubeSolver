@@ -6,7 +6,7 @@ void write_table_to_file(const int32_t *lookup, const char *file, const int32_t 
     FILE *fp = fopen(STAGE1_TABLE_FILE, "w"); 
     assert(fp != NULL);
     for (int i = 0; i < STAGE1_NUM_PERMUTATIONS; i++) {
-        fprintf(fp, "%c", lookup[i]);
+        fprintf(fp, "%d\n", lookup[i]);
     }
     fclose(fp);
 }
@@ -22,7 +22,7 @@ int32_t get_index(const unsigned char *array, const uint8_t n) {
 void get_state(unsigned char *array, const uint8_t n, const int32_t idx) {
     unsigned char count = 0;
     for (int i = n - 2; i >= 0; i--) {
-      array[i] = (idx >> i);
+      array[i] = (idx & ( 1 << i)) >> i;
       if (array[i] == 1) {
         count++;
       }
@@ -30,6 +30,8 @@ void get_state(unsigned char *array, const uint8_t n, const int32_t idx) {
 
     if ((count % 2) == 1) {
       array[n-1] = 1;
+    } else {
+      array[n-1] = 0;
     }
 }
 
