@@ -41,7 +41,8 @@ color_t read_corner_tile_color(robot_t *robot);
  *  - "Prime Turn" indicates a counterclockwise rotation (90 degress)
  *  - "Double Turn" is a double rotation (180 degrees)
 */
-void solve_cube(char** moves, robot_t *robot);
+void solve_cube(robot_t *robot, moves_t moves[256], unsigned char move_count);
+void r_make_move(robot_t *robot, moves_t move);
 void r_left_turn(robot_t *robot);
 void r_left_prime_turn(robot_t *robot);
 void r_left_double_turn(robot_t *robot);

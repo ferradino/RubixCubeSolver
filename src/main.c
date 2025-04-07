@@ -20,6 +20,9 @@ int main(void) {
 
   // Solve
   printf("**** Solving Cube! ****\n");
+  moves_t solution[256]; 
+  unsigned char move_count = solve(&rubix_cube, solution);
+  solve_cube(&robot, solution, move_count);
 
   // Done
   printf("**** Rubix Cube Has Been Solved! ****\n");

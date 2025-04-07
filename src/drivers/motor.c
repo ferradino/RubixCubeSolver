@@ -72,7 +72,7 @@ void set_speed(motor_t *motor, int speed) {
 
     char buffer[BUFFER_SIZE];
     sprintf(buffer, "%d", speed); 
-    write(fd, buffer, BUFFER_SIZE);
+    assert(write(fd, buffer, BUFFER_SIZE) != -1);
     close(fd);
 }
 
@@ -88,7 +88,7 @@ void set_run_to_position(motor_t *motor, const int degrees) {
     char buffer[BUFFER_SIZE];
     sprintf(buffer, "%d", degrees); 
 
-    write(fd, buffer, BUFFER_SIZE);
+    assert(write(fd, buffer, BUFFER_SIZE) != -1);
     close(fd);
 }
 
@@ -101,7 +101,7 @@ void run_command(motor_t *motor, const char *command) {
         exit(EXIT_FAILURE);
     }
 
-    write(fd, command, strlen(command));
+    assert(write(fd, command, strlen(command)) != -1);
     close(fd);
     wait_for_motor_to_stop(motor);
 }
@@ -120,7 +120,7 @@ void wait_for_motor_to_stop(motor_t *motor) {
             exit(EXIT_FAILURE);
         }
 
-        read(fd, state, BUFFER_SIZE);
+        assert(read(fd, state, BUFFER_SIZE) != -1);
         state[strcspn(state, "\n")] = '\0';
 
         close(fd);

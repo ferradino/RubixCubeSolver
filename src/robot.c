@@ -15,11 +15,34 @@ robot_t robot_init() {
   return robot;
 }
 
-/* 
-void solve_cube(char **moves, robot_t *robot) {
-
+void r_make_move(robot_t *robot, moves_t move) {
+  switch (move) {
+    case U: r_up_turn(robot); break;
+    case U2: r_up_double_turn(robot); break;
+    case Up: r_up_prime_turn(robot); break;
+    case D: r_down_turn(robot); break;
+    case D2: r_down_double_turn(robot); break;
+    case Dp: r_down_prime_turn(robot); break;
+    case R: r_right_turn(robot); break;
+    case R2: r_right_double_turn(robot); break;
+    case Rp: r_right_prime_turn(robot); break;
+    case L: r_left_turn(robot); break;
+    case L2: r_left_double_turn(robot); break;
+    case Lp: r_left_prime_turn(robot); break;
+    case F: r_front_turn(robot); break;
+    case F2: r_front_double_turn(robot); break;
+    case Fp: r_front_prime_turn(robot); break;
+    case B: r_back_turn(robot); break;
+    case B2: r_back_double_turn(robot); break;
+    case Bp: r_back_prime_turn(robot); break;
+  }
 }
-*/
+
+void solve_cube(robot_t *robot, moves_t moves[256], unsigned char move_count) {
+  for (int i = 0; i < move_count; i++) {
+    r_make_move(robot, moves[i]);
+  }
+}
 
 void rotate_basket(motor_t *motor, int degrees) { 
   rotate(motor, degrees); 

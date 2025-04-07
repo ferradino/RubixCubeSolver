@@ -89,9 +89,9 @@ void read_color_values(color_sensor_t *sensor) {
         exit(EXIT_FAILURE);
     }
 
-    read(fd, r, BUFFER_SIZE);
-    read(fd1, g, BUFFER_SIZE);
-    read(fd2, b, BUFFER_SIZE);
+    assert(read(fd, r, BUFFER_SIZE) != -1);
+    assert(read(fd1, g, BUFFER_SIZE) != -1);
+    assert(read(fd2, b, BUFFER_SIZE) != -1);
 
     close(fd);
     close(fd1);
