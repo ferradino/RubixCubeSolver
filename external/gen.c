@@ -48,7 +48,7 @@ void generate_stage_one_table(rubix_cube_t cube) {
     queue_t queue;
     initQueue(&queue);
 
-    permutations[0] = 1; 
+    permutations[0] = VISITED; 
     enqueue(&queue, (int32_t) 0); // store an integer instead
 
     int32_t idx;
@@ -77,7 +77,6 @@ void generate_stage_one_table(rubix_cube_t cube) {
 
     write_table_to_file(lookup, STAGE1_TABLE_FILE, STAGE1_NUM_PERMUTATIONS);
 }
-
 
 void swap(edge_t *edges, unsigned char j) {
   edge_t tmp = edges[j];
@@ -318,7 +317,7 @@ void gen_tables(void) {
     }
 
     generate_stage_one_table(cube);
-    generate_stage_two_table(cube);
+    // generate_stage_two_table(cube);
     // generate_stage_three_table(cube);
     // generate_stage_four_table(cube);
 }

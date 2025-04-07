@@ -1,7 +1,7 @@
-#include <stdio.h>
 #include "../include/cube.h"
 #include "../include/robot.h"
 #include "../include/solve.h"
+#include <stdio.h>
 
 #include "../external/gen.h"
 
@@ -20,7 +20,7 @@ int main(void) {
 
   // Solve
   printf("**** Solving Cube! ****\n");
-  moves_t solution[256]; 
+  moves_t solution[256];
   unsigned char move_count = solve(&rubix_cube, solution);
   solve_cube(&robot, solution, move_count);
 
