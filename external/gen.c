@@ -107,15 +107,19 @@ int32_t get_index_s2(const unsigned char *corner_orientations, const edge_t *edg
   const int32_t C4 = 4, C3 = 3, C2 = 2, C1 = 1; 
   int32_t idx, factor = 1;
 
+  // get index of corners
   for (int i = 0; i < NUM_CORNERS - 1; i++) {
     idx += (factor * corner_orientations[i]);
     factor *= 3;
   }
 
+  // sort the edges in the UD slice
   const unsigned char n = 4;
   edge_t tmp[] = { edge_positions[UF], edge_positions[DF], edge_positions[DB], edge_positions[UB] };
   sort(tmp, n);
 
+
+  // remember which value came from which edge
   edge_t tmp_pos[4];
   factor = 1;
   for (int i = 0; i < 4; i++) {
@@ -129,12 +133,15 @@ int32_t get_index_s2(const unsigned char *corner_orientations, const edge_t *edg
       tmp_pos[i] = UB;
     }
 
+    // combine values to one number to store in array
     (*pos) += (factor * tmp_pos[i]);
     factor *= 12;
   }
 
+  // get the combinatorial index of the edges
   int32_t c =  (combination(tmp[3], C1) + combination(tmp[2], C4) + combination(tmp[1], C3) + combination(tmp[0], C2));
 
+  // return index of cube state
   return (c * (int32_t) 2187) + idx;
 }
 
@@ -142,21 +149,25 @@ void get_state_s2(unsigned char *corner_orientations, edge_t *edge_positions, in
   int32_t base3 = (idx % 2187);
   int32_t sum;
 
+  // Get corner orientations from cube state
   for (int i = 0; i < NUM_CORNERS - 1; i++) {
     corner_orientations[i] = (unsigned char) (base3 % 3);
     sum += corner_orientations[i];
     base3 /= 3;
   }
 
+  // Determine orientation of final corner
   corner_orientations[NUM_CORNERS - 1] = (3 - sum % 3) % 3;
    
 
+  // Get the value each edge is supposed to hold
   edge_t edges[4];
   for (int i = 0; i < 4; i++) {
     edges[i] = (pos % NUM_EDGES);
     pos /= NUM_EDGES;
   }
   
+  // Decode the rest of the index value and place edges in the correct spot
   uint32_t c;
   idx /= 2187;
   for (int i = 4; i > 0; i--) {
@@ -186,9 +197,7 @@ void generate_stage_two_table(rubix_cube_t cube) {
     queue_t queue;
     initQueue(&queue);
 
-    permutations[0] = 1; 
-    enqueue(&queue, (int32_t) 0); // fix the starting point
-    enqueue(&queue, (int32_t) (combination(12, 4) - 1)); // fix the starting point
+    // TODO: Add code for initial enqueue
 
     unsigned short idx;
     int32_t pos;
@@ -219,12 +228,12 @@ void generate_stage_two_table(rubix_cube_t cube) {
     write_table_to_file(lookup, STAGE2_TABLE_FILE, STAGE2_NUM_PERMUTATIONS);
 }
 
-/*
 // Corner in correct position and edges are in correct orbit (or slice)
 void generate_stage_three_table(rubix_cube_t cube) {
-    moves_t moves[NUM_MOVES] = { L, R, F2, B2, U2, D2 }; 
-    unsigned char lookup[STAGE3_NUM_PERMUTATIONS];
-    unsigned char permutations[STAGE3_NUM_PERMUTATIONS];
+    moves_t moves[NUM_MOVES_S3] = { L, L2, Lp, R, R2, Rp, F2, B2, U2, D2 };
+    moves_t i_moves[NUM_MOVES_S3] = { Lp, L2, L, Rp, R2, R, F2, B2, U2, D2 };
+    int32_t lookup[STAGE3_NUM_PERMUTATIONS];
+    int32_t permutations[STAGE3_NUM_PERMUTATIONS];
 
     for (int i = 0; i < STAGE3_NUM_PERMUTATIONS; i++) {
       permutations[i] = UNVISITED;
@@ -233,26 +242,30 @@ void generate_stage_three_table(rubix_cube_t cube) {
     queue_t queue;
     initQueue(&queue);
 
-    permutations[0] = 1; 
-    enqueue(&queue, cube);
+    // TODO: Add code for initial enqueue
 
     unsigned short idx;
+    int32_t pos;
     rubix_cube_t tmp, tmp2;
 
     while (!isEmpty(&queue)) {
-        tmp = dequeue(&queue);
+        idx = dequeue(&queue);
+        pos = dequeue(&queue);
 
-        for (int i = 0; i < NUM_MOVES; i++) {
+        get_state_s2(tmp.corner_orientation, tmp.edge_positions, idx, pos);
+
+        for (int i = 0; i < NUM_MOVES_S3; i++) {
             tmp2 = tmp;
 
             make_move(&tmp2, moves[i]);
 
-            idx = get_index(tmp2.edge_orientation, STAGE3_NUM_PERMUTATIONS);
+            idx = get_index_s2(tmp2.corner_orientation, tmp2.edge_positions, &pos);
 
             if (permutations[idx] == UNVISITED) {
                 permutations[idx] = 1;
-                lookup[idx] = (moves[i] + (unsigned char) 2);
-                enqueue(&queue, tmp2);
+                lookup[idx] = i_moves[i];
+                enqueue(&queue, idx);
+                enqueue(&queue, pos);
             }
         }
     }
@@ -260,45 +273,50 @@ void generate_stage_three_table(rubix_cube_t cube) {
     write_table_to_file(lookup, STAGE3_TABLE_FILE, STAGE3_NUM_PERMUTATIONS);
 }
 
-void generate_stage_four_table(rubix_cube_t cube) {
-    moves_t moves[NUM_MOVES] = { L2, R2, F2, B2, U2, D2 }; 
-    unsigned char lookup[STAGE4_NUM_PERMUTATIONS];
-    unsigned char permutations[STAGE4_NUM_PERMUTATIONS];
+int32_t get_index_s4(const edge_t *edge_positions);
+void get_state_s4(edge_t *edge_positions, int32_t idx);
 
-    for (int i = 0; i < STAGE1_NUM_PERMUTATIONS; i++) {
+void generate_stage_four_table(rubix_cube_t cube) {
+    moves_t moves[NUM_MOVES_S4] = { L2, R2, F2, B2, U2, D2 };
+    moves_t i_moves[NUM_MOVES_S4] = { L2, R2, F2, B2, U2, D2 };
+    int32_t lookup[STAGE4_NUM_PERMUTATIONS];
+    int32_t permutations[STAGE4_NUM_PERMUTATIONS];
+
+    for (int i = 0; i < STAGE4_NUM_PERMUTATIONS; i++) {
       permutations[i] = UNVISITED;
     }
 
     queue_t queue;
     initQueue(&queue);
 
-    permutations[0] = 1; 
-    enqueue(&queue, cube);
+    // TODO: Add code for initial enqueue
 
     unsigned short idx;
+    int32_t pos;
     rubix_cube_t tmp, tmp2;
 
     while (!isEmpty(&queue)) {
-        tmp = dequeue(&queue);
+        idx = dequeue(&queue);
 
-        for (int i = 0; i < NUM_MOVES; i++) {
+        get_state_s4(tmp.edge_positions, idx);
+
+        for (int i = 0; i < NUM_MOVES_S4; i++) {
             tmp2 = tmp;
 
             make_move(&tmp2, moves[i]);
 
-            idx = get_index(tmp2.edge_orientation, STAGE4_NUM_PERMUTATIONS);
+            idx = get_index_s4(tmp2.edge_positions);
 
             if (permutations[idx] == UNVISITED) {
                 permutations[idx] = 1;
-                lookup[idx] = (moves[i] + (unsigned char) 2);
-                enqueue(&queue, tmp2);
+                lookup[idx] = i_moves[i];
+                enqueue(&queue, idx);
             }
         }
     }
 
     write_table_to_file(lookup, STAGE4_TABLE_FILE, STAGE4_NUM_PERMUTATIONS);
 }
-*/
 
 void gen_tables(void) {
     rubix_cube_t cube = {
@@ -317,7 +335,5 @@ void gen_tables(void) {
     }
 
     generate_stage_one_table(cube);
-    // generate_stage_two_table(cube);
-    // generate_stage_three_table(cube);
-    // generate_stage_four_table(cube);
+    generate_stage_two_table(cube);
 }
