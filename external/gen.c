@@ -252,14 +252,14 @@ void generate_stage_three_table(rubix_cube_t cube) {
         idx = dequeue(&queue);
         pos = dequeue(&queue);
 
-        get_state_s2(tmp.corner_orientation, tmp.edge_positions, idx, pos);
+        get_state_s3(tmp.corner_positions, tmp.edge_positions, idx, pos);
 
         for (int i = 0; i < NUM_MOVES_S3; i++) {
             tmp2 = tmp;
 
             make_move(&tmp2, moves[i]);
 
-            idx = get_index_s2(tmp2.corner_orientation, tmp2.edge_positions, &pos);
+            idx = get_index_s3(tmp2.corner_positions, tmp2.edge_positions, &pos);
 
             if (permutations[idx] == UNVISITED) {
                 permutations[idx] = 1;
