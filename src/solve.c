@@ -12,6 +12,7 @@ void read_file(int32_t *lookup, const char file[18], const int32_t n) {
   fclose(fp);
 }
 
+// ADD CONSTANTS for GOAL STATES
 void stage1(rubix_cube_t *rubix_cube, moves_t *solution, unsigned char *count) {
   int32_t lookup[STAGE1_NUM_PERMUTATIONS];
   read_file(lookup, STAGE1_FILE, STAGE1_NUM_PERMUTATIONS);

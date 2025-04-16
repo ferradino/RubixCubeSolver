@@ -27,11 +27,11 @@ void generate_stage_three_table(rubix_cube_t cube);
 void generate_stage_four_table(rubix_cube_t cube);
 
 int32_t get_index_s1(const unsigned char *array);
-int32_t get_index_s2(const unsigned char *corner_orientations, const edge_t *edge_positions, int32_t *pos);
+int32_t get_index_s2(const unsigned char *corner_orientations, const edge_t *edge_positions, unsigned char *slice, int32_t *pos);
 int32_t get_index_s3(const corner_t *corner_positions, const edge_t *edge_positions, int32_t *pos);
 int32_t get_index_s4(const edge_t *edge_positions);
 void get_state_s1(unsigned char *array, const int32_t idx);
-void get_state_s2(unsigned char *corner_orientations, edge_t *edge_positions, int32_t idx, int32_t pos);
+void get_state_s2(unsigned char *corner_orientations, edge_t *edge_positions, unsigned char *slice, int32_t idx, int32_t pos);
 void get_state_s3(corner_t *corner_positions, edge_t *edge_positions, int32_t idx, int32_t pos);
 void get_state_s4(edge_t *edge_positions, int32_t idx);
 

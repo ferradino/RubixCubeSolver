@@ -103,49 +103,31 @@ int32_t combination(int32_t n, int32_t k) {
   return factorial(n) / (factorial(k) * factorial(n - k));
 }
 
-int32_t get_index_s2(const unsigned char *corner_orientations, const edge_t *edge_positions, int32_t *pos) {
+int32_t get_index_s2(const unsigned char *corner_orientations, const edge_t *edge_positions, unsigned char *slice, int32_t *pos) {
   const int32_t C4 = 4, C3 = 3, C2 = 2, C1 = 1; 
   int32_t idx, factor = 1;
 
   // get index of corners
+  // !!!! Use korner's method instead
   for (int i = 0; i < NUM_CORNERS - 1; i++) {
     idx += (factor * corner_orientations[i]);
     factor *= 3;
   }
 
-  // sort the edges in the UD slice
   const unsigned char n = 4;
   edge_t tmp[] = { edge_positions[UF], edge_positions[DF], edge_positions[DB], edge_positions[UB] };
   sort(tmp, n);
 
-
-  // remember which value came from which edge
-  edge_t tmp_pos[4];
-  factor = 1;
-  for (int i = 0; i < 4; i++) {
-    if (tmp[i] == edge_positions[UF]) {
-      tmp_pos[i] = UF;
-    } else if (tmp[i] == edge_positions[DF]) {
-      tmp_pos[i] = DF;
-    } else if (tmp[i] == edge_positions[DB]) {
-      tmp_pos[i] = DB;
-    } else {
-      tmp_pos[i] = UB;
-    }
-
-    // combine values to one number to store in array
-    (*pos) += (factor * tmp_pos[i]);
-    factor *= 12;
-  }
-
   // get the combinatorial index of the edges
-  int32_t c =  (combination(tmp[3], C1) + combination(tmp[2], C4) + combination(tmp[1], C3) + combination(tmp[0], C2));
+  int32_t c = (combination(tmp[3], C1) + combination(tmp[2], C4) + combination(tmp[1], C3) + combination(tmp[0], C2));
+
+  (*pos) = c;
 
   // return index of cube state
   return (c * (int32_t) 2187) + idx;
 }
 
-void get_state_s2(unsigned char *corner_orientations, edge_t *edge_positions, int32_t idx, int32_t pos) { 
+void get_state_s2(unsigned char *corner_orientations, edge_t *edge_positions, unsigned char *slice, int32_t idx, int32_t pos) { 
   int32_t base3 = (idx % 2187);
   int32_t sum;
 
@@ -180,7 +162,6 @@ void get_state_s2(unsigned char *corner_orientations, edge_t *edge_positions, in
     }
     idx -= c;
   }
-
 }
 
 // Blue and Green sticker must be on either blue/green face for the corner
@@ -189,6 +170,9 @@ void generate_stage_two_table(rubix_cube_t cube) {
     moves_t i_moves[NUM_MOVES_S2] = { Lp, L2, L, Rp, R2, R, Fp, F2, F, Bp, B2, B, U2, D2 };
     int32_t lookup[STAGE2_NUM_PERMUTATIONS];
     int32_t permutations[STAGE2_NUM_PERMUTATIONS];
+    unsigned char slice[NUM_EDGES] = { 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0};
+
+    const uint32_t goal_state = 43740;
 
     for (int i = 0; i < STAGE2_NUM_PERMUTATIONS; i++) {
       permutations[i] = UNVISITED;
@@ -197,30 +181,34 @@ void generate_stage_two_table(rubix_cube_t cube) {
     queue_t queue;
     initQueue(&queue);
 
-    // TODO: Add code for initial enqueue
+    enqueue(&queue, goal_state);
 
     unsigned short idx;
-    int32_t pos;
     rubix_cube_t tmp, tmp2;
 
     while (!isEmpty(&queue)) {
         idx = dequeue(&queue);
-        pos = dequeue(&queue);
 
-        get_state_s2(tmp.corner_orientation, tmp.edge_positions, idx, pos);
+        get_state_s2(tmp.corner_orientation, tmp.edge_positions, slice, idx);
 
         for (int i = 0; i < NUM_MOVES_S2; i++) {
             tmp2 = tmp;
 
             make_move(&tmp2, moves[i]);
 
-            idx = get_index_s2(tmp2.corner_orientation, tmp2.edge_positions, &pos);
+            for (int j = 0; j < NUM_EDGES; j++) {
+              slice[i] = 0;
+              if (tmp2.edge_positions[i] == UF || tmp2.edge_positions[i] == DF || tmp2.edge_positions[i] == DB || tmp2.edge_positions[i] == UB) {
+                slice[i] = 1;
+              }
+            }
+
+            idx = get_index_s2(tmp2.corner_orientation, tmp2.edge_positions, slice);
 
             if (permutations[idx] == UNVISITED) {
-                permutations[idx] = 1;
+                permutations[idx] = VISITED;
                 lookup[idx] = i_moves[i];
                 enqueue(&queue, idx);
-                enqueue(&queue, pos);
             }
         }
     }
@@ -229,6 +217,8 @@ void generate_stage_two_table(rubix_cube_t cube) {
 }
 
 // Corner in correct position and edges are in correct orbit (or slice)
+// This is permutations!!!
+// Also in book!!!
 void generate_stage_three_table(rubix_cube_t cube) {
     moves_t moves[NUM_MOVES_S3] = { L, L2, Lp, R, R2, Rp, F2, B2, U2, D2 };
     moves_t i_moves[NUM_MOVES_S3] = { Lp, L2, L, Rp, R2, R, F2, B2, U2, D2 };
@@ -273,6 +263,27 @@ void generate_stage_three_table(rubix_cube_t cube) {
     write_table_to_file(lookup, STAGE3_TABLE_FILE, STAGE3_NUM_PERMUTATIONS);
 }
 
+// Corner is 4th stage can have only 3 positions it can go to
+// 4 positions - the 4 positions that are half turn on any face
+// Orbit has 24 permutations
+
+// 96 - comes from two sets of 4 corner orbit permutations. Other orbit can only have a certain set of permutations (1 of 6 possible)
+// (4! * 4!) / 6 = 96
+//
+// get the permutation of both 4 corner orbits (value from 0 - 23 for both, multiply them, and then divide by 1 of 6 permutation of one of the orbits)
+
+
+// Edges have 3 orbits (middle slice on each orbit)
+// 2 of the axis is independent (3 is almost)
+// (4! * 4! * 4!) / 2
+
+// index if 4 values (corner, and the 3 edges)
+// corner * 6912 + (xslice * 288 + yslice * 12 + zslice) assuming 0 slice counts only to 11
+
+// This is permutations!!!
+// Also in book!!
+// Factoradic Representation
+// First place is 0!, 1!, 2!, 3!, 4! ... (it is for both) Korner's method again
 int32_t get_index_s4(const edge_t *edge_positions);
 void get_state_s4(edge_t *edge_positions, int32_t idx);
 
@@ -298,14 +309,14 @@ void generate_stage_four_table(rubix_cube_t cube) {
     while (!isEmpty(&queue)) {
         idx = dequeue(&queue);
 
-        get_state_s4(tmp.edge_positions, idx);
+        get_state_s4(tmp.edge_positions, tmp.corner_positions, idx);
 
         for (int i = 0; i < NUM_MOVES_S4; i++) {
             tmp2 = tmp;
 
             make_move(&tmp2, moves[i]);
 
-            idx = get_index_s4(tmp2.edge_positions);
+            idx = get_index_s4(tmp2.edge_positions, tmp2.corner_positions);
 
             if (permutations[idx] == UNVISITED) {
                 permutations[idx] = 1;
@@ -337,3 +348,9 @@ void gen_tables(void) {
     generate_stage_one_table(cube);
     generate_stage_two_table(cube);
 }
+
+// PowerPoint on Project - (finals week)
+// Either W, TH, F after 1pm and let Dr. Bob know by Monday (21st)
+// No more then a hour (assuming people show up lol)
+// What the project was about
+// Tell about the issues, how did you deal with them, and how could someone modify it (or finish it)
