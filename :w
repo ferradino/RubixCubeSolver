@@ -3,7 +3,7 @@
 #include "../include/solve.h"
 #include "../external/gen.h"
 
-void read_file(int32_t *lookup, const char file[PATH_LENGTH], const int32_t n) {
+void read_file(int32_t *lookup, const char file[18], const int32_t n) {
   FILE *fp = fopen(file, "r");
   assert(fp != NULL);
   for (int i = 0; i < n; i++) {
@@ -12,6 +12,7 @@ void read_file(int32_t *lookup, const char file[PATH_LENGTH], const int32_t n) {
   fclose(fp);
 }
 
+// ADD CONSTANTS for GOAL STATES
 void stage1(rubix_cube_t *rubix_cube, moves_t *solution, unsigned char *count) {
   int32_t lookup[STAGE1_NUM_PERMUTATIONS];
   read_file(lookup, STAGE1_FILE, STAGE1_NUM_PERMUTATIONS);
@@ -26,20 +27,12 @@ void stage1(rubix_cube_t *rubix_cube, moves_t *solution, unsigned char *count) {
 }
 
 void stage2(rubix_cube_t *rubix_cube, moves_t *solution, unsigned char *count) {
-  uint8_t slice[NUM_EDGES];
   int32_t lookup[STAGE2_NUM_PERMUTATIONS];
   read_file(lookup, STAGE2_FILE, STAGE2_NUM_PERMUTATIONS);
 
   int32_t idx = -1; 
-  while (idx != STAGE2_GOAL_STATE) { 
-    // find which edges old the UD slice edges
-    for (int i = 0; i < NUM_EDGES; i++) {
-      slice[i] = 0;
-      if (rubix_cube->edge_positions[i] == UF || rubix_cube->edge_positions[i] == DF || rubix_cube->edge_positions[i] == DB || rubix_cube->edge_positions[i] == UB) {
-        slice[i] = 1;
-      }
-    }
-    idx = get_index_s2(rubix_cube->edge_orientation, slice); 
+  while (idx != 0) { // Change this
+    // idx = get_index_s1(rubix_cube->edge_orientation); 
     moves_t move = lookup[idx];
     make_move(rubix_cube, move);
     (*count)++;
@@ -51,8 +44,8 @@ void stage3(rubix_cube_t *rubix_cube, moves_t *solution, unsigned char *count) {
   read_file(lookup, STAGE3_FILE, STAGE3_NUM_PERMUTATIONS);
 
   int32_t idx = -1; 
-  while (idx != STAGE3_GOAL_STATE) {
-    idx = get_index_s3(rubix_cube->corner_positions, rubix_cube->edge_positions); 
+  while (idx != 0) { // Change this
+    // idx = get_index_s1(rubix_cube->edge_orientation); 
     moves_t move = lookup[idx];
     make_move(rubix_cube, move);
     (*count)++;
@@ -64,8 +57,8 @@ void stage4(rubix_cube_t *rubix_cube, moves_t *solution, unsigned char *count) {
   read_file(lookup, STAGE4_FILE, STAGE4_NUM_PERMUTATIONS);
 
   int32_t idx = -1; 
-  while (idx != STAGE4_GOAL_STATE) {
-    idx = get_index_s4(rubix_cube->corner_positions, rubix_cube->edge_positions); 
+  while (idx != 0) { // Change this
+    // idx = get_index_s1(rubix_cube->edge_orientation); 
     moves_t move = lookup[idx];
     make_move(rubix_cube, move);
     (*count)++;
