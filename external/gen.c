@@ -286,19 +286,25 @@ int32_t get_index_s4(const corner_t *corner_positions, const edge_t *edge_positi
          e_orbit_y[4] = { UF, UB, DF, DB },
          e_orbit_z[4] = { FL, BL, BR, FR };
 
-  int32_t e_orbit_x_perm = ((edge_positions[e_orbit_x[0]] * 3 + corner_positions[e_orbit_x[1]]) * 2 + corner_positions[e_orbit_x[2]]) * 1 + corner_positions[e_orbit_x[3]]; 
-  int32_t e_orbit_y_perm = ((edge_positions[e_orbit_y[0]] * 3 + corner_positions[e_orbit_y[1]]) * 2 + corner_positions[e_orbit_y[2]]) * 1 + corner_positions[e_orbit_y[3]]; 
-  int32_t e_orbit_z_perm = ((edge_positions[e_orbit_z[0]] * 3 + corner_positions[e_orbit_z[1]]) * 2 + corner_positions[e_orbit_z[2]]) * 1 + corner_positions[e_orbit_z[3]]; 
+  int32_t e_orbit_x_perm = ((edge_positions[e_orbit_x[0]] * 3 + edge_positions[e_orbit_x[1]]) * 2 + edge_positions[e_orbit_x[2]]) * 1 + edge_positions[e_orbit_x[3]]; 
+  int32_t e_orbit_y_perm = ((edge_positions[e_orbit_y[0]] * 3 + edge_positions[e_orbit_y[1]]) * 2 + edge_positions[e_orbit_y[2]]) * 1 + edge_positions[e_orbit_y[3]]; 
+  int32_t e_orbit_z_perm = ((edge_positions[e_orbit_z[0]] * 3 + edge_positions[e_orbit_z[1]]) * 2 + edge_positions[e_orbit_z[2]]) * 1 + edge_positions[e_orbit_z[3]]; 
 
   /* Ask about doing it this way as well
-  int e_idx = (e_orbit_x_perm * e_orbit_y_perm + e_orbit_z_perm) / 2;
+  int e_idx = (e_orbit_x_perm * e_orbit_y_perm * e_orbit_z_perm) / 2;
   return (c_idx * 6912) + e_idx; */
 
   return ((c_idx * 6912) + (e_orbit_x_perm * 288 + e_orbit_y_perm * 12 + e_orbit_z_perm));
 }
 
 void get_state_s4(corner_t *corner_positions, edge_t *edge_positions, int32_t idx) {
+  uint32_t tmp_orbit = (idx % 6912);
+  uint32_t tmp_corner = (idx - tmp_orbit) / 6912;
 
+  // Get the two corner orbit permutations
+  
+
+  // Get the three edge orbit permutations
 }
 
 void generate_stage_four_table(const rubix_cube_t cube) {
