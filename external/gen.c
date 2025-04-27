@@ -202,7 +202,7 @@ void generate_stage_two_table(const rubix_cube_t cube) {
 int32_t get_index_s3(const corner_t *corner_positions, const edge_t *edge_positions) {}
 void get_state_s3(corner_t *corner_positions, edge_t *edge_positions, int32_t idx) {}
 
-// Corner in correct position and edges are in correct orbit (or slice)
+// Corner in correct position (corner piece must be in its orbit...whic position inside orbit does not matter here) and edges are in correct orbit (or slice)
 // This is permutations!!!
 // Also in book!!!
 void generate_stage_three_table(const rubix_cube_t cube) {
@@ -210,6 +210,7 @@ void generate_stage_three_table(const rubix_cube_t cube) {
     const moves_t i_moves[NUM_MOVES_S3] = { Lp, L2, L, Rp, R2, R, F2, B2, U2, D2 };
     int32_t lookup[STAGE3_NUM_PERMUTATIONS];
     int32_t permutations[STAGE3_NUM_PERMUTATIONS];
+    unsigned char slice[NUM_EDGES] = { 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1};
 
     for (int i = 0; i < STAGE3_NUM_PERMUTATIONS; i++) {
       permutations[i] = UNVISITED;
@@ -226,14 +227,27 @@ void generate_stage_three_table(const rubix_cube_t cube) {
     while (!isEmpty(&queue)) {
         int32_t idx = dequeue(&queue);
 
-        get_state_s3(tmp.corner_positions, tmp.edge_positions, idx);
+        // reset the slice array
+        for (int i = 0; i < NUM_EDGES; i++) {
+          slice[i] = 0;
+        }
+
+        get_state_s3(tmp.corner_positions, tmp.edge_positions, slice, idx);
 
         for (int i = 0; i < NUM_MOVES_S3; i++) {
             rubix_cube_t tmp2 = tmp;
 
             make_move(&tmp2, moves[i]);
 
-            idx = get_index_s3(tmp2.corner_positions, tmp2.edge_positions);
+            // find which edges old the LR or FB slice edges
+            for (int i = 0; i < NUM_EDGES; i++) {
+              slice[i] = 0;
+              if (tmp2.edge_positions[i] != UF && tmp2.edge_positions[i] != DF && tmp2.edge_positions[i] != DB && tmp2.edge_positions[i] != UB) {
+                slice[i] = 1;
+              }
+            }
+
+            idx = get_index_s3(tmp2.corner_positions, tmp2.edge_positions, slice);
 
             if (permutations[idx] == UNVISITED) {
                 permutations[idx] = 1;
@@ -280,6 +294,7 @@ int32_t get_index_s4(const corner_t *corner_positions, const edge_t *edge_positi
   int32_t c_orbit_perm = ((corner_positions[c_orbit[0]] * 3 + corner_positions[c_orbit[1]]) * 2 + corner_positions[c_orbit[2]]) * 1 + corner_positions[c_orbit[3]]; 
   int32_t c_orbit_two_perm = ((corner_positions[c_orbit_two[0]] * 3 + corner_positions[c_orbit_two[1]]) * 2 + corner_positions[c_orbit_two[2]]) * 1 + corner_positions[c_orbit_two[3]]; 
 
+  // make list of all the possible orbits
   int32_t c_idx = (c_orbit_perm * c_orbit_two_perm) / 6; // Ask about the 6
 
   edge_t e_orbit_x[4] = { UL, UR, DL, DR },
@@ -290,21 +305,34 @@ int32_t get_index_s4(const corner_t *corner_positions, const edge_t *edge_positi
   int32_t e_orbit_y_perm = ((edge_positions[e_orbit_y[0]] * 3 + edge_positions[e_orbit_y[1]]) * 2 + edge_positions[e_orbit_y[2]]) * 1 + edge_positions[e_orbit_y[3]]; 
   int32_t e_orbit_z_perm = ((edge_positions[e_orbit_z[0]] * 3 + edge_positions[e_orbit_z[1]]) * 2 + edge_positions[e_orbit_z[2]]) * 1 + edge_positions[e_orbit_z[3]]; 
 
-  /* Ask about doing it this way as well
-  int e_idx = (e_orbit_x_perm * e_orbit_y_perm * e_orbit_z_perm) / 2;
-  return (c_idx * 6912) + e_idx; */
-
   return ((c_idx * 6912) + (e_orbit_x_perm * 288 + e_orbit_y_perm * 12 + e_orbit_z_perm));
 }
 
 void get_state_s4(corner_t *corner_positions, edge_t *edge_positions, int32_t idx) {
-  uint32_t tmp_orbit = (idx % 6912);
-  uint32_t tmp_corner = (idx - tmp_orbit) / 6912;
+  uint32_t tmp_orbit_edge = (idx % 6912);
+  uint32_t tmp_orbit_corner  = idx / 6912;
 
   // Get the two corner orbit permutations
+  corner_t c_orbit[4] = { UFL, UBR, DFR, DBL },
+           c_orbit_two[4] = { UFR, UBL, DFL, DBR };
   
 
   // Get the three edge orbit permutations
+  // follow similar process for edge permutations
+  int32_t e_orbit_x_perm = tmp_orbit_edge / 288;
+  tmp_orbit_edge %= 288; 
+
+  int32_t e_orbit_y_perm = tmp_orbit_edge / 12;
+  int32_t e_orbit_z_perm = tmp_orbit_edge % 12;
+
+  edge_t e_orbit_x[4] = { UL, UR, DL, DR },
+         e_orbit_y[4] = { UF, UB, DF, DB },
+         e_orbit_z[4] = { FL, BL, BR, FR };
+
+  // follow once again this similar process for each edge_positions
+  uint32_t tmp;
+  for (int i = 3; i >= 0; i--) {
+  }
 }
 
 void generate_stage_four_table(const rubix_cube_t cube) {
