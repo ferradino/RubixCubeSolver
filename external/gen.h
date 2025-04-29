@@ -1,6 +1,8 @@
 #ifndef __GEN_H
 #define __GEN_H
 
+#include <stdio.h>
+#include <assert.h>
 #include "queue.h"
 #include "../include/cube.h"
 
@@ -25,30 +27,6 @@
 #define STAGE4_TABLE_FILE "./tables/stage4.txt"
 #define PATH_LENGTH 20
 
-const corner_t c_orbit[4] = { UFL, UBR, DFR, DBL },
-         c_orbit_two[4] = { UFR, UBL, DFL, DBR };
-
-const edge_t e_slice_x[4] = { UL, UR, DL, DR },
-       e_slice_y[4] = { UF, UB, DF, DB },
-       e_slice_z[4] = { FL, BL, BR, FR };
-
 enum STATUS { UNVISITED, VISITED };
-
-void gen_tables(void);
-void generate_stage_one_table(rubix_cube_t cube);
-void generate_stage_two_table(rubix_cube_t cube);
-void generate_stage_three_table(rubix_cube_t cube);
-void generate_stage_four_table(rubix_cube_t cube);
-
-int32_t get_index_s1(const unsigned char *array);
-int32_t get_index_s2(const unsigned char *corner_orientations, unsigned char *slice);
-int32_t get_index_s3(unsigned char *orbit, unsigned char *slice);
-int32_t get_index_s4(const corner_t *corner_position, const edge_t *edge_positions);
-void get_state_s1(unsigned char *array, const int32_t idx);
-void get_state_s2(unsigned char *corner_orientations, unsigned char *slice, int32_t idx);
-void get_state_s3(unsigned char *orbit, unsigned char *slice, int32_t idx);
-void get_state_s4(corner_t *corner_positions, edge_t *edge_positions, int32_t idx);
-
-void write_table_to_file(const int32_t *lookup, const char file[PATH_LENGTH], const int32_t n);
 
 #endif

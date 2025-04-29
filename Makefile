@@ -2,18 +2,16 @@
 # CC = arm-linux-gnueabi-gcc
 CC = gcc
 # CFLAGS = -Wall -Wextra -Werror -O2 -I ./src -I ./include -I ./external
-CFLAGS = -O2 -g -I ./src -I ./include -I ./external
+CFLAGS = -O2 -g -I ./src -I ./include
 
 # Directories
 SRC_DIR = src
-EXTERNAL_DIR = external
 OBJ_DIR = build/obj
 BIN_DIR = build/bin
 
 # Source files
 SRCS = $(wildcard $(SRC_DIR)/**/*.c)
 SRCS += $(wildcard $(SRC_DIR)/*.c)
-SRCS += $(wildcard $(EXTERNAL_DIR)/*.c)
 
 # Object files 
 OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o)
@@ -27,7 +25,6 @@ all: $(TARGET)
 # Create directories if they don't exist
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
-	mkdir -p $(OBJ_DIR)/$(EXTERNAL_DIR)
 
 $(BIN_DIR):
 	mkdir -p $(BIN_DIR)

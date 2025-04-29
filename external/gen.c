@@ -2,6 +2,15 @@
 #include <assert.h>
 #include "gen.h"
 
+const corner_t 
+        c_orbit[4] = { UFL, UBR, DFR, DBL },
+        c_orbit_two[4] = { UFR, UBL, DFL, DBR };
+
+const edge_t 
+        e_slice_x[4] = { UL, UR, DL, DR },
+        e_slice_y[4] = { UF, UB, DF, DB },
+        e_slice_z[4] = { FL, BL, BR, FR };
+
 void write_table_to_file(const int32_t *lookup, const char file[PATH_LENGTH], const int32_t n) {
     FILE *fp = fopen(file, "w"); 
     assert(fp != NULL);
@@ -21,8 +30,8 @@ int32_t get_index_s1(const unsigned char *edge_orientation) {
 
 void get_state_s1(unsigned char *edge_orientation, const int32_t idx) {
     unsigned char count = 0;
-    for (int i = NUM_EDGES  - 2; i >= 0; i--) {
-      edge_orientation[i] = (idx & (1 << i)) >> i;
+    for (int i = 0; i < NUM_EDGES; i++) {
+      edge_orientation[i] = (idx >> i) & 1;
       if (edge_orientation[i] == 1) {
         count++;
       }
@@ -125,14 +134,14 @@ void get_state_s2(unsigned char *corner_orientations, unsigned char *slice, int3
   }
 
   // Determine orientation of final corner
-  corner_orientations[NUM_CORNERS - 1] = (base - sum % base) % base;
+  corner_orientations[NUM_CORNERS - 1] = (base - (sum % base)) % base;
   
   // Get the edges where the UD slice edges are located
   // Mark with a 1
   uint32_t c;
   idx /= 2187;
   for (int i = 4; i > 0; i--) {
-    for (int j = NUM_EDGES - 1; j >= 0; j--) {
+    for (int j = NUM_EDGES; j >= 0; j--) {
       c = combination(j, i); 
       if (c <= idx) {
         slice[j] = 1;
@@ -463,7 +472,7 @@ void gen_tables(void) {
     generate_stage_one_table(cube);
     generate_stage_two_table(cube);
     // generate_stage_three_table(cube);
-    generate_stage_four_table(cube);
+    // generate_stage_four_table(cube);
 }
 
 // PowerPoint on Project - (finals week)
