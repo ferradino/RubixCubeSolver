@@ -1,4 +1,5 @@
 #include "gen.h"
+#include "../include/cube.h"
 
 const corner_t 
         c_orbit[4] = { UFL, UBR, DFR, DBL },

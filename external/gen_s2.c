@@ -1,4 +1,5 @@
 #include "gen.h"
+#include "../include/cube.h"
 
 int32_t factorial(int32_t n) {
     if (n == 0) return 1;
@@ -19,27 +20,19 @@ int32_t factorial(int32_t n) {
 }
   
   int32_t get_index_s2(const unsigned char *corner_orientations, unsigned char *slice) {
-    const int32_t C4 = 4, C3 = 3, C2 = 2, C1 = 1; 
-    int32_t x = 3;
-  
     // get index of corners (Horner's Method)
     int32_t idx = corner_orientations[0];
     for (int i = 1; i < NUM_CORNERS - 1; i++) {
-      idx = (idx * x) + corner_orientations[i];
+      idx = (idx * 3) + corner_orientations[i];
     }
   
     // find which edge holds the edges we want and make sure they are sorted
-    unsigned char n = 4;
-    edge_t tmp[n];
-    for (int i = 0; i < NUM_EDGES; i++) {
+    int32_t n = 4, c = 0;
+    for (int i = NUM_EDGES - 1; i >= 0; i--) {
       if (slice[i] == 1) {
-        tmp[n-1] = i;
-        n--;
+        c += combination(i, n--);
       }
     }
-  
-    // get index of edges (combinatorial indexing)
-    int32_t c = (combination(tmp[3], C1) + combination(tmp[2], C2) + combination(tmp[1], C3) + combination(tmp[0], C4));
   
     // return index of cube state
     return (c * (int32_t) 2187) + idx;

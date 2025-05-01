@@ -177,9 +177,9 @@ void stage4(rubix_cube_t *rubix_cube, moves_t *solution, unsigned char *count) {
 unsigned char solve(rubix_cube_t *rubix_cube, moves_t *solution) {
   unsigned char count = 0;
   stage1(rubix_cube, solution, &count);
-  // stage2(rubix_cube, solution, &count);
-  // stage3(rubix_cube, solution, &count);
-  // stage4(rubix_cube, solution, &count);
+  stage2(rubix_cube, solution, &count);
+  stage3(rubix_cube, solution, &count);
+  stage4(rubix_cube, solution, &count);
   return count;
 }
 
