@@ -1,6 +1,6 @@
 #include "gen.h"
 
-void write_table_to_file(const int32_t *lookup, const char file[PATH_LENGTH], const int32_t n) {
+void write_table_to_file(const moves_t *lookup, const char file[PATH_LENGTH], const int32_t n) {
     FILE *fp = fopen(file, "w"); 
     assert(fp != NULL);
     for (int i = 0; i < n; i++) {
@@ -36,8 +36,8 @@ void get_state_s1(unsigned char *edge_orientation, const int32_t idx) {
 void generate_stage_one_table(const rubix_cube_t cube) {
     const moves_t moves[NUM_MOVES_S1] = { L, L2, Lp, R, R2, Rp, F, F2, Fp, B, B2, Bp, U, U2, Up, D, D2, Dp }; 
     const moves_t i_moves[NUM_MOVES_S1] = { Lp, L2, L, Rp, R2, R, Fp, F2, F, Bp, B2, B, Up, U2, U, Dp, D2, D };
-    int32_t lookup[STAGE1_NUM_PERMUTATIONS];
-    int32_t permutations[STAGE1_NUM_PERMUTATIONS];
+    int8_t permutations[STAGE1_NUM_PERMUTATIONS];
+    moves_t lookup[STAGE1_NUM_PERMUTATIONS];
 
     for (int i = 0; i < STAGE1_NUM_PERMUTATIONS; i++) {
       permutations[i] = UNVISITED;
@@ -82,12 +82,6 @@ int main(void) {
         .edge_orientation = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
         .edge_positions = { UF, UL, UB, UR, DF, DL, DB, DR, FL, BL, BR, FR },
     };
-
-    for (int i = 0; i < NUM_FACES; i++) {
-        for (int j = 0; j < (NUM_TILES / NUM_FACES); j++) {
-            cube.tile_colors[(NUM_FACES * i) + j] = i;
-        }
-    }
 
     generate_stage_one_table(cube);
 

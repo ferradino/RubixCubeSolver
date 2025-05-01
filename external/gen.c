@@ -11,7 +11,7 @@ const edge_t
         e_slice_y[4] = { UF, UB, DF, DB },
         e_slice_z[4] = { FL, BL, BR, FR };
 
-void write_table_to_file(const int32_t *lookup, const char file[PATH_LENGTH], const int32_t n) {
+void write_table_to_file(const int8_t *lookup, const char file[PATH_LENGTH], const int32_t n) {
     FILE *fp = fopen(file, "w"); 
     assert(fp != NULL);
     for (int i = 0; i < n; i++) {
@@ -47,8 +47,8 @@ void get_state_s1(unsigned char *edge_orientation, const int32_t idx) {
 void generate_stage_one_table(const rubix_cube_t cube) {
     const moves_t moves[NUM_MOVES_S1] = { L, L2, Lp, R, R2, Rp, F, F2, Fp, B, B2, Bp, U, U2, Up, D, D2, Dp }; 
     const moves_t i_moves[NUM_MOVES_S1] = { Lp, L2, L, Rp, R2, R, Fp, F2, F, Bp, B2, B, Up, U2, U, Dp, D2, D };
-    int32_t lookup[STAGE1_NUM_PERMUTATIONS];
-    int32_t permutations[STAGE1_NUM_PERMUTATIONS];
+    int8_t lookup[STAGE1_NUM_PERMUTATIONS];
+    int8_t permutations[STAGE1_NUM_PERMUTATIONS];
 
     for (int i = 0; i < STAGE1_NUM_PERMUTATIONS; i++) {
       permutations[i] = UNVISITED;
@@ -149,6 +149,15 @@ void get_state_s2(unsigned char *corner_orientations, unsigned char *slice, int3
       }
     }
     idx -= c;
+  }
+}
+
+int32_t encode_edges(edge_t *edges) {
+  int e = 0;
+  // get index of corners (Horner's Method)
+  e = edges[0];
+  for (int i = 1; i < NUM_EDGES - 1; i++) {
+    e = (e * x) + corner_orientations[i];
   }
 }
 

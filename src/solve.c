@@ -12,6 +12,19 @@ const edge_t
         e_slice_y[4] = { UF, UB, DF, DB },
         e_slice_z[4] = { FL, BL, BR, FR };
 
+moves_t get_move(const char file[PATH_LENGTH], const int32_t n) {
+  moves_t move;
+
+  FILE *fp = fopen(file, "r");
+  assert(fp != NULL);
+  for (int i = 0; i < n; i++) {
+    assert(fscanf(fp, "%u", &move) == 1);
+  }
+  fclose(fp);
+
+  return move;
+}
+
 int32_t factorial(int32_t n) {
     if (n == 0) return 1;
     return n * factorial(n-1);
@@ -21,14 +34,6 @@ int32_t combination(int32_t n, int32_t k) {
   return factorial(n) / (factorial(k) * factorial(n - k));
 }
 
-void read_file(int32_t *lookup, const char file[PATH_LENGTH], const int32_t n) {
-  FILE *fp = fopen(file, "r");
-  assert(fp != NULL);
-  for (int i = 0; i < n; i++) {
-    assert(fscanf(fp, "%d", &lookup[i]) == 1);
-  }
-  fclose(fp);
-}
 
 int32_t get_index_s1(const unsigned char *edge_orientation) {
   int32_t idx = 0;
@@ -39,13 +44,10 @@ int32_t get_index_s1(const unsigned char *edge_orientation) {
 }
 
 void stage1(rubix_cube_t *rubix_cube, moves_t *solution, unsigned char *count) {
-  int32_t lookup[STAGE1_NUM_PERMUTATIONS];
-  read_file(lookup, STAGE1_FILE, STAGE1_NUM_PERMUTATIONS);
-
   int32_t idx = -1; 
   while (idx != STAGE1_GOAL_STATE) {
     idx = get_index_s1(rubix_cube->edge_orientation); 
-    moves_t move = lookup[idx];
+    moves_t move = get_move(STAGE1_FILE, idx);
     make_move(rubix_cube, move);
     (*count)++;
   }
@@ -74,8 +76,6 @@ int32_t get_index_s2(const unsigned char *corner_orientations, unsigned char *sl
 
 void stage2(rubix_cube_t *rubix_cube, moves_t *solution, unsigned char *count) {
   uint8_t slice[NUM_EDGES];
-  int32_t lookup[STAGE2_NUM_PERMUTATIONS];
-  read_file(lookup, STAGE2_FILE, STAGE2_NUM_PERMUTATIONS);
 
   int32_t idx = -1; 
   while (idx != STAGE2_GOAL_STATE) { 
@@ -87,7 +87,7 @@ void stage2(rubix_cube_t *rubix_cube, moves_t *solution, unsigned char *count) {
       }
     }
     idx = get_index_s2(rubix_cube->edge_orientation, slice); 
-    moves_t move = lookup[idx];
+    moves_t move = get_move(STAGE2_FILE, idx);
     make_move(rubix_cube, move);
     (*count)++;
   }
@@ -130,13 +130,10 @@ int32_t get_index_s3(unsigned char *orbit, unsigned char *slice) {
 }
 
 void stage3(rubix_cube_t *rubix_cube, moves_t *solution, unsigned char *count) {
-  int32_t lookup[STAGE3_NUM_PERMUTATIONS];
-  read_file(lookup, STAGE3_FILE, STAGE3_NUM_PERMUTATIONS);
-
   int32_t idx = -1; 
   while (idx != STAGE3_GOAL_STATE) {
     idx = get_index_s3(rubix_cube->corner_positions, rubix_cube->edge_positions); 
-    moves_t move = lookup[idx];
+    moves_t move = get_move(STAGE3_FILE, idx);
     make_move(rubix_cube, move);
     (*count)++;
   }
@@ -162,13 +159,10 @@ int32_t get_index_s4(const corner_t *corner_positions, const edge_t *edge_positi
 }
 
 void stage4(rubix_cube_t *rubix_cube, moves_t *solution, unsigned char *count) {
-  int32_t lookup[STAGE4_NUM_PERMUTATIONS];
-  read_file(lookup, STAGE4_FILE, STAGE4_NUM_PERMUTATIONS);
-
   int32_t idx = -1; 
   while (idx != STAGE4_GOAL_STATE) {
     idx = get_index_s4(rubix_cube->corner_positions, rubix_cube->edge_positions); 
-    moves_t move = lookup[idx];
+    moves_t move = get_move(STAGE4_FILE, idx);
     make_move(rubix_cube, move);
     (*count)++;
   }

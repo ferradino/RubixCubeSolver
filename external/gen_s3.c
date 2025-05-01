@@ -1,5 +1,4 @@
 #include "gen.h"
-#include "../include/cube.h"
 
 const corner_t 
         c_orbit[4] = { UFL, UBR, DFR, DBL },
@@ -9,7 +8,7 @@ const edge_t e_slice_x[4] = { UL, UR, DL, DR },
        e_slice_y[4] = { UF, UB, DF, DB },
        e_slice_z[4] = { FL, BL, BR, FR };
 
-void write_table_to_file(const int32_t *lookup, const char file[PATH_LENGTH], const int32_t n) {
+void write_table_to_file(const moves_t *lookup, const char file[PATH_LENGTH], const int32_t n) {
   FILE *fp = fopen(file, "w"); 
   assert(fp != NULL);
   for (int i = 0; i < n; i++) {
@@ -18,13 +17,11 @@ void write_table_to_file(const int32_t *lookup, const char file[PATH_LENGTH], co
   fclose(fp);
 }
 
-int32_t factorial(int32_t n) {
-    if (n == 0) return 1;
-    return n * factorial(n-1);
-}
-
 int32_t combination(int32_t n, int32_t k) {
-  return factorial(n) / (factorial(k) * factorial(n - k));
+  if (n < k)
+    return 0;
+
+  return (f_table[n] / f_table[k]) * f_table[n - k];
 }
 
 int32_t get_index_s3(unsigned char *orbit, unsigned char *slice) {
@@ -59,10 +56,13 @@ int32_t get_index_s3(unsigned char *orbit, unsigned char *slice) {
                   combination(e_tmp[3], C5) + combination(e_tmp[2], C6) + combination(e_tmp[1], C7) + combination(e_tmp[0], C8));
   
     // return index of cube state
-    return (e * (int32_t) 2187) + c; // Need to figure what to replace 2187 with
+    return (e * (int32_t) 4900) + c;
   }
   
-  void get_state_s3(unsigned char *orbit, unsigned char *slice, int32_t idx) {}
+  void get_state_s3(unsigned char *orbit, unsigned char *slice, int32_t idx) {
+    int32_t c = idx % 4900;
+    int32_t e = idx / 4900;
+  }
   
   // Corner in correct position (corner piece must be in its orbit...whic position inside orbit does not matter here) and edges are in correct orbit (or slice)
   // This is permutations!!!
@@ -70,8 +70,8 @@ int32_t get_index_s3(unsigned char *orbit, unsigned char *slice) {
   void generate_stage_three_table(const rubix_cube_t cube) {
       const moves_t moves[NUM_MOVES_S3] = { L, L2, Lp, R, R2, Rp, F2, B2, U2, D2 };
       const moves_t i_moves[NUM_MOVES_S3] = { Lp, L2, L, Rp, R2, R, F2, B2, U2, D2 };
-      int32_t lookup[STAGE3_NUM_PERMUTATIONS];
-      int32_t permutations[STAGE3_NUM_PERMUTATIONS];
+      moves_t lookup[STAGE3_NUM_PERMUTATIONS];
+      int8_t permutations[STAGE3_NUM_PERMUTATIONS];
       unsigned char orbit[NUM_CORNERS] = { 1, 1, 1, 1, 1, 1, 1, 1 };
       unsigned char slice[NUM_EDGES] = { 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1};
   
@@ -82,7 +82,7 @@ int32_t get_index_s3(unsigned char *orbit, unsigned char *slice) {
       queue_t queue;
       initQueue(&queue);
   
-      lookup[STAGE3_GOAL_STATE] = VISITED;
+      permutations[STAGE3_GOAL_STATE] = VISITED;
       enqueue(&queue, STAGE3_GOAL_STATE);
   
       rubix_cube_t tmp = cube;
@@ -164,12 +164,6 @@ int main(void) {
       .edge_orientation = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
       .edge_positions = { UF, UL, UB, UR, DF, DL, DB, DR, FL, BL, BR, FR },
   };
-
-  for (int i = 0; i < NUM_FACES; i++) {
-      for (int j = 0; j < (NUM_TILES / NUM_FACES); j++) {
-          cube.tile_colors[(NUM_FACES * i) + j] = i;
-      }
-  }
 
   generate_stage_three_table(cube);
 

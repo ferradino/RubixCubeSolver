@@ -340,8 +340,8 @@ void c_left_turn(rubix_cube_t *rubix_cube) {
 
   /* Update Corner Orientation */
   corner_temp = rubix_cube->corner_orientation[UFL];
-  rubix_cube->corner_orientation[UFL] = (rubix_cube->corner_orientation[UBL] + 1) % 3;
-  rubix_cube->corner_orientation[UBL] = (rubix_cube->corner_orientation[DBL] + 2) % 3;
+  rubix_cube->corner_orientation[UFL] = (rubix_cube->corner_orientation[UBL] + 2) % 3;
+  rubix_cube->corner_orientation[UBL] = (rubix_cube->corner_orientation[DBL] + 1) % 3;
   rubix_cube->corner_orientation[DBL] = (rubix_cube->corner_orientation[DFL] + 2) % 3;
   rubix_cube->corner_orientation[DFL] = (corner_temp + 1) % 3;
 
