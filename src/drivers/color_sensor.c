@@ -31,6 +31,8 @@ short get_sensor_number(const char *port) {
         curr_port++;
         curr_port[strcspn(curr_port, "\n")] = 0;
 
+        printf("%s\n", curr_port);
+
         if (strcmp(curr_port, port) == 0) {
             sensor_number = i;
             printf("Found sensor-> connected to port: %s\n", port);

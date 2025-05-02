@@ -103,7 +103,9 @@ void run_command(motor_t *motor, const char *command) {
 
     assert(write(fd, command, strlen(command)) != -1);
     close(fd);
+
     wait_for_motor_to_stop(motor);
+    usleep(500 * 1000);
 }
 
 void wait_for_motor_to_stop(motor_t *motor) {
@@ -124,5 +126,5 @@ void wait_for_motor_to_stop(motor_t *motor) {
         state[strcspn(state, "\n")] = '\0';
 
         close(fd);
-    } while (strcmp(state, running) == 0 && strcmp(state, stalled) != 0);
+    } while (strcmp(state, running) == 0);
 }

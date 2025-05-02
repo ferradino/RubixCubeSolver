@@ -7,14 +7,14 @@
 #include "drivers/color_sensor.h"
 
 #define C_EIGTH_TURN 130
-#define C_QUARTER_TURN 265
-#define CC_QUARTER_TURN -265
-#define HALF_TURN 535
+#define C_QUARTER_TURN 255
+#define CC_QUARTER_TURN -290
+#define HALF_TURN 510
 
-#define BASKET_MOTOR_PORT "OUTA"
-#define ARM_MOTOR_PORT "OUTB"
-#define COLOR_SENSOR_MOTOR_PORT "OUTC"
-#define COLOR_SENSOR_PORT "INA"
+#define BASKET_MOTOR_PORT "outA"
+#define ARM_MOTOR_PORT "outB"
+#define COLOR_SENSOR_MOTOR_PORT "outC"
+#define COLOR_SENSOR_PORT "in4"
 
 typedef enum MOVES { U, U2, Up, D, D2, Dp, R, R2, Rp, L, L2, Lp, F, F2, Fp, B, B2, Bp } moves_t;
 

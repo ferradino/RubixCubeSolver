@@ -1,4 +1,5 @@
 #include "../include/robot.h"
+#include <unistd.h>
 
 robot_t robot_init() {
   robot_t robot = {
@@ -9,7 +10,7 @@ robot_t robot_init() {
   };
 
   robot.color_sensor_motor.speed = 200;
-  robot.basket_motor.speed = 300;
+  robot.basket_motor.speed = 225;
   robot.arm_motor.speed = 200;
 
   return robot;
@@ -59,7 +60,18 @@ void rotate_cube(robot_t *robot, int degrees) {
 
 void flip_cube(motor_t *motor) {
   cover(motor);
+  usleep(50 * 1000);
   flip(motor);
+  usleep(50 * 1000);
+  motor->speed = 100;
+  tap(motor);
+  motor->speed = 175;
+  usleep(50 * 1000);
+  flip(motor);
+  usleep(50 * 1000);
+  cover(motor);
+  motor->speed = 200;
+  usleep(50 * 1000);
   open_arm(motor);
 }
 
@@ -103,165 +115,161 @@ void r_left_turn(robot_t *robot) {
   motor_t *arm = &(robot->arm_motor);
   motor_t *basket = &(robot->basket_motor);
 
-  rotate_basket(basket, CC_QUARTER_TURN);
+  rotate_basket(basket, C_QUARTER_TURN);
   flip_cube(arm);
 
-  rotate_cube(robot, C_QUARTER_TURN);
-  rotate_basket(basket, CC_QUARTER_TURN);
-
+  rotate_cube(robot, CC_QUARTER_TURN);
   rotate_basket(basket, HALF_TURN);
+
   flip_cube(arm);
 
-  rotate_basket(basket, CC_QUARTER_TURN);
+  rotate_basket(basket, C_QUARTER_TURN);
 }
 
 void r_left_prime_turn(robot_t *robot) {
   motor_t *arm = &(robot->arm_motor);
   motor_t *basket = &(robot->basket_motor);
 
-  rotate_basket(basket, CC_QUARTER_TURN);
-  flip_cube(arm);
-
-  rotate_cube(robot, CC_QUARTER_TURN);
   rotate_basket(basket, C_QUARTER_TURN);
-
-  rotate_basket(basket, HALF_TURN);
   flip_cube(arm);
 
-  rotate_basket(basket, CC_QUARTER_TURN);
+  rotate_cube(robot, C_QUARTER_TURN);
+  rotate_basket(basket, HALF_TURN);
+
+  flip_cube(arm);
+
+  rotate_basket(basket, C_QUARTER_TURN);
 }
 
 void r_left_double_turn(robot_t *robot) {
   motor_t *arm = &(robot->arm_motor);
   motor_t *basket = &(robot->basket_motor);
 
-  rotate_basket(basket, CC_QUARTER_TURN);
+  rotate_basket(basket, C_QUARTER_TURN);
   flip_cube(arm);
 
   rotate_cube(robot, HALF_TURN);
+  rotate_basket(basket, HALF_TURN);
 
   flip_cube(arm);
-  rotate_basket(basket, HALF_TURN);
+
+  rotate_basket(basket, C_QUARTER_TURN);
 }
 
 void r_right_turn(robot_t *robot) {
   motor_t *arm = &(robot->arm_motor);
   motor_t *basket = &(robot->basket_motor);
 
-  rotate_basket(basket, C_QUARTER_TURN);
+  rotate_basket(basket, CC_QUARTER_TURN);
   flip_cube(arm);
 
   rotate_cube(robot, CC_QUARTER_TURN);
-  rotate_basket(basket, C_QUARTER_TURN);
-
   rotate_basket(basket, HALF_TURN);
+
   flip_cube(arm);
 
-  rotate_basket(basket, C_QUARTER_TURN);
+  rotate_basket(basket, CC_QUARTER_TURN);
 }
 
 void r_right_prime_turn(robot_t *robot) {
   motor_t *arm = &(robot->arm_motor);
   motor_t *basket = &(robot->basket_motor);
 
-  rotate_basket(basket, C_QUARTER_TURN);
+  rotate_basket(basket, CC_QUARTER_TURN);
   flip_cube(arm);
 
   rotate_cube(robot, C_QUARTER_TURN);
-  rotate_basket(basket, CC_QUARTER_TURN);
-
   rotate_basket(basket, HALF_TURN);
+
   flip_cube(arm);
 
-  rotate_basket(basket, C_QUARTER_TURN);
+  rotate_basket(basket, CC_QUARTER_TURN);
 }
 
 void r_right_double_turn(robot_t *robot) {
   motor_t *arm = &(robot->arm_motor);
   motor_t *basket = &(robot->basket_motor);
 
-  rotate_basket(basket, C_QUARTER_TURN);
-  flip_cube(arm);
-
-  rotate_cube(robot, HALF_TURN);
-
-  flip_cube(arm);
-  rotate_basket(basket, C_QUARTER_TURN);
-}
-
-void r_down_turn(robot_t *robot) {
-  motor_t *arm = &(robot->arm_motor);
-  motor_t *basket = &(robot->basket_motor);
-
-  flip_cube(arm);
-  flip_cube(arm);
-
-  rotate_cube(robot, C_QUARTER_TURN);
   rotate_basket(basket, CC_QUARTER_TURN);
-
-  flip_cube(arm);
-  flip_cube(arm);
-}
-
-void r_down_prime_turn(robot_t *robot) {
-  motor_t *arm = &(robot->arm_motor);
-  motor_t *basket = &(robot->basket_motor);
-
-  flip_cube(arm);
-  flip_cube(arm);
-
-  rotate_cube(robot, CC_QUARTER_TURN);
-  rotate_basket(basket, C_QUARTER_TURN);
-
-  flip_cube(arm);
-  flip_cube(arm);
-}
-
-void r_down_double_turn(robot_t *robot) {
-  motor_t *arm = &(robot->arm_motor);
-  motor_t *basket = &(robot->basket_motor);
-
-  flip_cube(arm);
   flip_cube(arm);
 
   rotate_cube(robot, HALF_TURN);
   rotate_basket(basket, HALF_TURN);
 
   flip_cube(arm);
-  flip_cube(arm);
+
+  rotate_basket(basket, CC_QUARTER_TURN);
 }
 
 void r_up_turn(robot_t *robot) {
+  motor_t *arm = &(robot->arm_motor);
   motor_t *basket = &(robot->basket_motor);
 
+  flip_cube(arm);
+  flip_cube(arm);
+
   rotate_cube(robot, C_QUARTER_TURN);
-  rotate_basket(basket, CC_QUARTER_TURN);
+
+  flip_cube(arm);
+  flip_cube(arm);
+
 }
 
 void r_up_prime_turn(robot_t *robot) {
+  motor_t *arm = &(robot->arm_motor);
   motor_t *basket = &(robot->basket_motor);
 
+  flip_cube(arm);
+  flip_cube(arm);
+
   rotate_cube(robot, CC_QUARTER_TURN);
-  rotate_basket(basket, C_QUARTER_TURN);
+
+  flip_cube(arm);
+  flip_cube(arm);
 }
 
 void r_up_double_turn(robot_t *robot) {
+  motor_t *arm = &(robot->arm_motor);
+  motor_t *basket = &(robot->basket_motor);
+
+  flip_cube(arm);
+  flip_cube(arm);
+
+  rotate_cube(robot, HALF_TURN);
+
+  flip_cube(arm);
+  flip_cube(arm);
+}
+
+void r_down_turn(robot_t *robot) {
+  motor_t *basket = &(robot->basket_motor);
+
+  rotate_cube(robot, CC_QUARTER_TURN);
+}
+
+void r_down_prime_turn(robot_t *robot) {
+  motor_t *basket = &(robot->basket_motor);
+
+  rotate_cube(robot, C_QUARTER_TURN);
+}
+
+void r_down_double_turn(robot_t *robot) {
   motor_t *basket = &(robot->basket_motor);
 
   rotate_cube(robot, HALF_TURN);
-  rotate_basket(basket, HALF_TURN);
 }
 
 void r_front_turn(robot_t *robot) {
   motor_t *arm = &(robot->arm_motor);
   motor_t *basket = &(robot->basket_motor);
 
+  rotate_basket(basket, HALF_TURN);
+
   flip_cube(arm);
 
-  rotate_cube(robot, C_QUARTER_TURN);
-  rotate_basket(basket, CC_QUARTER_TURN);
-
+  rotate_cube(robot, CC_QUARTER_TURN);
   rotate_basket(basket, HALF_TURN);
+
   flip_cube(arm);
 }
 
@@ -269,18 +277,21 @@ void r_front_prime_turn(robot_t *robot) {
   motor_t *arm = &(robot->arm_motor);
   motor_t *basket = &(robot->basket_motor);
 
+  rotate_basket(basket, HALF_TURN);
+
   flip_cube(arm);
 
-  rotate_cube(robot, CC_QUARTER_TURN);
-  rotate_basket(basket, C_QUARTER_TURN);
-
+  rotate_cube(robot, C_QUARTER_TURN);
   rotate_basket(basket, HALF_TURN);
+
   flip_cube(arm);
 }
 
 void r_front_double_turn(robot_t *robot) {
   motor_t *arm = &(robot->arm_motor);
   motor_t *basket = &(robot->basket_motor);
+
+  rotate_basket(basket, HALF_TURN);
 
   flip_cube(arm);
 
@@ -294,39 +305,37 @@ void r_back_turn(robot_t *robot) {
   motor_t *arm = &(robot->arm_motor);
   motor_t *basket = &(robot->basket_motor);
   
-  rotate_basket(basket, HALF_TURN);
   flip_cube(arm);
 
-  rotate_cube(robot, C_QUARTER_TURN);
-  rotate_basket(basket, CC_QUARTER_TURN);
-
+  rotate_cube(robot, CC_QUARTER_TURN);
   rotate_basket(basket, HALF_TURN);
+
   flip_cube(arm);
+  rotate_basket(basket, HALF_TURN);
 }
 
 void r_back_prime_turn(robot_t *robot) {
   motor_t *arm = &(robot->arm_motor);
   motor_t *basket = &(robot->basket_motor);
 
-  rotate_basket(basket, HALF_TURN);
   flip_cube(arm);
 
-  rotate_cube(robot, CC_QUARTER_TURN);
-  rotate_basket(basket, C_QUARTER_TURN);
-
+  rotate_cube(robot, C_QUARTER_TURN);
   rotate_basket(basket, HALF_TURN);
+
   flip_cube(arm);
+  rotate_basket(basket, HALF_TURN);
 }
 
 void r_back_double_turn(robot_t *robot) {
   motor_t *arm = &(robot->arm_motor);
   motor_t *basket = &(robot->basket_motor);
 
-  rotate_basket(basket, HALF_TURN);
   flip_cube(arm);
 
   rotate_cube(robot, HALF_TURN);
-
   rotate_basket(basket, HALF_TURN);
+
   flip_cube(arm);
+  rotate_basket(basket, HALF_TURN);
 }

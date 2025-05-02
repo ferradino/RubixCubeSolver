@@ -3,9 +3,9 @@
 
 #include "motor.h"
 
-#define CENTER_TILE_POS -735
-#define EDGE_TILE_POS -610
-#define CORNER_TILE_POS -585
+#define CENTER_TILE_POS -695
+#define EDGE_TILE_POS -580
+#define CORNER_TILE_POS -505
 #define SENSOR_STARTING_POS 0
 
 void hover_center_tile(motor_t *motor);
